@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';  // Dodaj ovo
 import { HttpClientModule } from '@angular/common/http';  // Za rad sa HTTP-om
 
 import { AppComponent } from './app.component';
+import { PostComponent } from './feature-modules/post/post.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PostComponent
   ],
   imports: [
     BrowserModule,

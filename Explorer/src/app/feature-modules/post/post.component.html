@@ -1,0 +1,13 @@
+<div *ngIf="posts.length > 0; else noPosts">
+    <div *ngFor="let post of posts" class="post">
+      <h2>{{ post.description }}</h2>
+      <img *ngIf="post.imageUrl" [src]="post.imageUrl" alt="Post image" />
+      <p>Likes: {{ post.likes }}</p>
+      <button *ngIf="!post.deleted">Like</button>
+    </div>
+  </div>
+  
+  <ng-template #noPosts>
+    <p>No posts available.</p>
+  </ng-template>
+  
