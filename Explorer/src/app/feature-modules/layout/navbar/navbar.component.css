@@ -1,7 +1,7 @@
 /* Navbar styling */
 .navbar {
-    background-color: white; 
-    color: #004D3B;
+    background-color: pink; /* Pastel pink */
+    color: lightblue;
     justify-content: space-between;
     padding: 10px 20px;
 }
@@ -24,31 +24,34 @@
 
 /* Custom styles for raised buttons */
 .mat-raised-button {
-    background-color: transparent; 
-    color: #004D3B; 
-    border: none; 
+    background-color: #b2d8d8; /* Soft pastel blue */
+    color: #7c8fa0; /* Darker pastel blue-grey text */
+    border: none;
 }
 
 .mat-raised-button:hover {
-    background-color: #bbe6e4 !important;  
+    background-color: #d2eff1 !important; /* Lighter pastel blue on hover */
 }
 
 /* Custom styles for normal buttons */
 .mat-button:hover {
-    background-color: #bbe6e4 !important; 
+    background-color: #ffd4e5 !important; /* Light pastel pink on hover */
 }
 
 .custom-button {
-    background-color: transparent; 
-    color: #004D3B; 
-    border: none; 
+    background-color: #ffd4e5; /* Pastel pink */
+    color: #7c8fa0; /* Darker pastel blue-grey for text */
+    border: none;
 }
 
-.custom-button:hover{
-    background-color: #bbe6e4 !important; 
+.custom-button:hover {
+    background-color: #ffe3f1 !important; /* Lighter pastel pink on hover */
 }
+
+/* Toolbar content */
 #toolbar-content {
     display: flex;
-    align-items: center; /* Aligns items vertically in the center */
-    gap: 1rem; /* Adds spacing between the <p> and the button */
-  }
+    align-items: center;
+    gap: 1rem;
+    color: lightblue; /* Pastel blue-grey for text */
+}
