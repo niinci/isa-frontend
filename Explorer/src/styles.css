@@ -2,3 +2,16 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Promeni boje za mat-mini-fab dugme sa success atributom */
+.mat-mini-fab.mat-success {
+    background-color: green !important;  /* Pozadinska boja zelena */
+    color: white !important;             /* Tekst/ikona bela */
+}
+
+/* Hover efekat za success dugme */
+.mat-mini-fab.mat-success:hover {
+    background-color: darkgreen !important;  /* Tamnija zelena pri hover-u */
+}
+
+
