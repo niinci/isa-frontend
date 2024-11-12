@@ -8,13 +8,15 @@ import { Login } from '../auth/model/login.model';
 import { LoginComponent } from '../auth/login/login.component';
 import { CreatePostComponent } from 'src/app/feature-modules/create-post/create-post.component';
 import { RegistrationComponent } from '../auth/registration/registration.component';
+import { ProfileComponent } from 'src/app/user-profile/user-profile.component';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'posts', component: PostComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'create-post', component: CreatePostComponent}
-  {path: 'register', component: RegistrationComponent}
+  {path: 'create-post', component: CreatePostComponent},
+  {path: 'register', component: RegistrationComponent},
+  {path: 'profile', component: ProfileComponent}
 ];
 
 @NgModule({

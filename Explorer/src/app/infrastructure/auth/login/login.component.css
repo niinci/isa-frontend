@@ -16,13 +16,13 @@ p {
 }
 
 .pink-button {
-    background-color: #ffd4e5 !important; /* Pastel pink background */
-    color: #ffffff !important; /* White text */
-    border-color: transparent !important; /* Ensure no border */
-    box-shadow: none !important; /* Remove default shadow */
+    background-color: #ffd4e5 !important; 
+    color: #ffffff !important; 
+    border-color: transparent !important; 
+    box-shadow: none !important; 
 }
 
 .pink-button:hover {
-    background-color: #ffc1d4 !important; /* Slightly darker pastel pink on hover */
+    background-color: #ffc1d4 !important; 
 }
 

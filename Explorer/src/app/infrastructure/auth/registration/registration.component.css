@@ -22,7 +22,7 @@
 }
 
 .mat-form-field.mat-focused .mat-form-field-label {
-    color: #00796b !important; /* Highlight label on focus */
+    color: #e7a0b2 !important; /* Highlight label on focus */
 }
 
 /* Increase input field size */
@@ -55,7 +55,7 @@
     width: 100%;
     font-size: 18px;
     padding: 15px 0;
-    background-color: #00796b;
+    background-color: #e7a0b2;
     color: #ffffff;
     border-radius: 8px;
     cursor: pointer;
@@ -67,5 +67,6 @@
 }
 
 .submit-button:hover:not(:disabled) {
-    background-color: #004d3b;
+    background-color:#e7a0b2;
+    
 }
