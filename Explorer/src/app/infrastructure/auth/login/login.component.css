@@ -1,15 +1,28 @@
+/* Form styling */
 form {
-    margin-top:150px;
+    margin-top: 150px;
     display: flex;
     justify-content: center;
 }
 
 div {
     width: 400px;
-    display:flex;
+    display: flex;
     flex-direction: column;
 }
 
 p {
     margin-top: 10px;
 }
+
+.pink-button {
+    background-color: #ffd4e5 !important; /* Pastel pink background */
+    color: #ffffff !important; /* White text */
+    border-color: transparent !important; /* Ensure no border */
+    box-shadow: none !important; /* Remove default shadow */
+}
+
+.pink-button:hover {
+    background-color: #ffc1d4 !important; /* Slightly darker pastel pink on hover */
+}
+
