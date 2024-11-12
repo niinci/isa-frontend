@@ -8,12 +8,14 @@ import { PostComponent } from './feature-modules/post/post.component';
 import { AppRoutingModule } from './infrastructure/routing/app-routing.module';
 import { AuthModule } from './infrastructure/auth/auth.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { CreatePostComponent } from './feature-modules/create-post/create-post.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PostComponent
+    PostComponent,
+    CreatePostComponent
   ],
   imports: [
     BrowserModule,
@@ -22,8 +24,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     LayoutModule,
     AppRoutingModule,
     AuthModule,
-    BrowserAnimationsModule
-
+    BrowserAnimationsModule,
+    ReactiveFormsModule
 
   ],
   providers: [],
