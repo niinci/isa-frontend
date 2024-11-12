@@ -5,9 +5,8 @@ export class Comment {
     content: string;
     userId: number;
     post: Post;
-    
+
     constructor() {
-      this.userId = 0;
+        this.userId = 0;
     }
-  }
-  
+}

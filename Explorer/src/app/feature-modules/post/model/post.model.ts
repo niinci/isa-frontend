@@ -1,5 +1,4 @@
 import { Comment } from "./comment.model";
-
 export class Post {
   id: number;
   description: string;
@@ -7,7 +6,6 @@ export class Post {
   likes: number;  
   comments: Comment[];  
   deleted: boolean;  
-
   constructor() {
     this.likes = 0;  
     this.comments = [];  
