@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './infrastructure/auth/auth.service';
+import { FormGroup, FormControl } from "@angular/forms";
+import { Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-root',
@@ -17,7 +19,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.checkIfUserExists();
   }
-  
+
   private checkIfUserExists(): void {
     this.authService.checkIfUserExists();
   }
