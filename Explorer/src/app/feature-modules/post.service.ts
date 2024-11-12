@@ -8,7 +8,7 @@ import { Post } from './post/model/post.model';
 })
 export class PostService {
 
-  private apiUrl = 'http://localhost:8080/api/posts'; // URL tvoje Spring Boot aplikacije
+  private apiUrl = 'http://localhost:8080/api/posts/sorted'; // URL tvoje Spring Boot aplikacije
 
   constructor(private http: HttpClient) { }
 
