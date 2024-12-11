@@ -1,31 +1,25 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Post } from './post/model/post.model';
-import { CreatPost } from './post/model/createPost.model';
+import { CreatePost } from './post/model/createPost.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
 
-  private apiUrl = 'http://localhost:8080/api/posts/sorted'; // URL tvoje Spring Boot aplikacije
+  private apiUrl = 'http://localhost:8080/api/posts'; // URL tvoje Spring Boot aplikacije
 
   constructor(private http: HttpClient) { }
 
   getAllPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(this.apiUrl);
+    return this.http.get<Post[]>(this.apiUrl + '/sorted');
   }
 
-  createPost(createPost: CreatPost, imageFile: File | null): Observable<Post> {
-    const formData: FormData = new FormData();
+  createPost(postDTO: CreatePost, imageBase64: string): Observable<any> {
+    postDTO.imageBase64 = imageBase64;
 
-    formData.append('createPost', JSON.stringify(createPost));
-
-    if (imageFile) {
-      formData.append('image', imageFile, imageFile.name);
-    }
-
-    return this.http.post<Post>(this.apiUrl, formData);
+    return this.http.post<CreatePost>(this.apiUrl, postDTO);
   }
 }

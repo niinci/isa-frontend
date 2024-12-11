@@ -50,6 +50,7 @@
     border-color: rgb(143, 83, 93);
     padding: 0.5rem 1rem;
     border-radius: 4px;
+    cursor: pointer;
 }
 
 /* Dugme za komentar sa svetlijom roza pozadinom */
@@ -60,6 +61,7 @@
     padding: 0.5rem 1rem;
     border-radius: 4px;
     margin-right: 1rem; /* Dodaje razmak između Like i Comment dugmadi */
+    cursor: pointer;
 }
 
 /* Razmak između dugmadi */

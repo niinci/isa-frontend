@@ -1,4 +1,5 @@
 <div class="container my-4">
+  <button *ngIf="isLoggedIn" class="btn btn-primary" (click)="openCreatePostDialog()">Create Your Post</button>
   <div *ngIf="posts.length > 0; else noPosts">
     <div class="row row-cols-1 row-cols-md-3 g-4">
       <div *ngFor="let post of posts" class="col">

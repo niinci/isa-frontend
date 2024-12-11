@@ -1,7 +1,6 @@
 import { Comment } from './comment.model'; 
 
-export class CreatPost {
-  id: number;
+export class CreatePost {
   description: string;
   imageUrl: string;
   likes: number;
@@ -10,6 +9,7 @@ export class CreatPost {
   longitude: number;
   latitude: number;
   createdAt: string;  
+  imageBase64: string;
 
   constructor(
     id: number = 0,
@@ -22,7 +22,6 @@ export class CreatPost {
     latitude: number = 0.0,
     createdAt: string = ''
   ) {
-    this.id = id;
     this.description = description;
     this.imageUrl = imageUrl;
     this.likes = likes;

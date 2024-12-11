@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Post } from './model/post.model';
-import { PostService } from '../post.service';
+import { Post } from '../model/post.model';
+import { PostService } from '../../post.service';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CreatePostComponent } from '../create-post/create-post.component';
 
 @Component({
   selector: 'xp-post',
@@ -17,7 +19,8 @@ export class PostComponent implements OnInit {
 
   constructor(
     private postService: PostService,
-    private authService: AuthService
+    private authService: AuthService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -63,6 +66,16 @@ export class PostComponent implements OnInit {
       // Proceed with commenting functionality (this part can be customized to add a comment)
       console.log('Proceed to comment on post', post.id);
     }
+  }
+
+  openCreatePostDialog(): void {
+    const dialogRef = this.dialog.open(CreatePostComponent, {
+      width: '500px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog was closed');
+    });
   }
   
 
