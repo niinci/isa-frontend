@@ -9,6 +9,9 @@ import { LoginComponent } from '../auth/login/login.component';
 import { CreatePostComponent } from 'src/app/feature-modules/create-post/create-post.component';
 import { RegistrationComponent } from '../auth/registration/registration.component';
 import { ProfileComponent } from 'src/app/user-profile/user-profile.component';
+import { ChatComponent } from 'src/app/feature-modules/chat/chat.component';
+import { TrendsComponent } from 'src/app/feature-modules/trends/trends.component';
+import { NearbyPostsComponent } from 'src/app/feature-modules/nearby-posts/nearby-posts.component';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -16,7 +19,10 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'create-post', component: CreatePostComponent},
   {path: 'register', component: RegistrationComponent},
-  {path: 'profile', component: ProfileComponent}
+  {path: 'profile', component: ProfileComponent},
+  {path: 'chat', component: ChatComponent},
+  {path: 'trends', component: TrendsComponent},
+  {path: 'nearby-posts', component: NearbyPostsComponent}
 ];
 
 @NgModule({
