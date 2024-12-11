@@ -1,16 +1,23 @@
-<mat-toolbar color="primary">
-    <div>
-  
-        <div id="toolbar-content">
-        
-          <button *ngIf="user && user.username === ''" color="accent" mat-raised-button [routerLink]="['/login']" routerLinkActive="active">Login</button>
-          <button *ngIf="user && user.username !== ''" color="accent" mat-raised-button (click)="onLogout()">Logout</button>
-          <button *ngIf="user && user.role === 'administrator'" color="accent" mat-raised-button [routerLink]="['/user-account']" routerLinkActive="active">All Accounts</button>
-          <button color="accent" mat-raised-button [routerLink]="['/posts']" routerLinkActive="active">Posts</button>
-          <button *ngIf="user" color="accent" mat-raised-button [routerLink]="['/my-posts']" routerLinkActive="active">My posts</button>   
-          <button *ngIf="user && user.username === ''" color="accent" mat-raised-button [routerLink]="['/register']" routerLinkActive="active">Register</button>     
-        
-        </div>
+<div class="navbar">
+  <div id="navbar-content">
+    <button color="accent" [routerLink]="['/home']" routerLinkActive="active" class="navbar-button">
+      <mat-icon>home</mat-icon>
+    </button>
+    <div class="navbar-buttons">
+      <button *ngIf="user && user.role === 'administrator'" color="accent" [routerLink]="['/user-account']" routerLinkActive="active" class="navbar-button">All Accounts</button>
+      <button color="accent" [routerLink]="['/posts']" routerLinkActive="active" class="navbar-button">Posts</button>
+      <button *ngIf="user" color="accent" [routerLink]="['/my-posts']" routerLinkActive="active" class="navbar-button">My posts</button>
+      <button *ngIf="user && user.username !== ''" color="accent" [routerLink]="['/trends']" routerLinkActive="active" class="navbar-button">Trends</button> 
+      <button *ngIf="user && user.username !== ''" color="accent" [routerLink]="['/nearby-posts']" routerLinkActive="active" class="navbar-button">Nearby Posts</button> 
     </div>
-  </mat-toolbar>
-  
+    <button *ngIf="user && user.username === ''" color="accent" [routerLink]="['/login']" routerLinkActive="active" class="navbar-button">Login</button>
+    <button *ngIf="user && user.username !== ''" color="accent" (click)="onLogout()" class="navbar-button">Logout</button>
+    <button *ngIf="user && user.username === ''" color="accent" [routerLink]="['/register']" routerLinkActive="active" class="navbar-button">Register</button>
+    <button class="navbar-button" *ngIf="user && user.username !== ''" [routerLink]="['/chat']" >
+      <mat-icon>chat</mat-icon>
+    </button>
+    <button class="navbar-button" *ngIf="user && user.username !== ''" [routerLink]="['/profile']" >
+      <mat-icon>account_circle</mat-icon>
+    </button>
+  </div>
+</div>
