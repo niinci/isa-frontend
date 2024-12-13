@@ -14,6 +14,7 @@ import { TrendsComponent } from 'src/app/feature-modules/trends/trends.component
 import { NearbyPostsComponent } from 'src/app/feature-modules/nearby-posts/nearby-posts.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   {path: 'home', component: HomeComponent},
   {path: 'posts', component: PostComponent},
   {path: 'login', component: LoginComponent},
