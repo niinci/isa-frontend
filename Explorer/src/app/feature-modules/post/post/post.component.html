@@ -7,7 +7,7 @@
           <div class="card-body">
             <h2 class="card-title">{{ post.description }}</h2>
 
-            <img *ngIf="post.imageUrl" [src]="post.imageUrl" class="card-img-top mb-3" alt="Post image" style="max-height: 300px; object-fit: cover; border-radius: 8px;">
+            <img *ngIf="post.imageUrl" [src]="getPostImageUrl(post.imageUrl)" class="card-img-top mb-3" alt="Post image" style="max-height: 300px; object-fit: cover; border-radius: 8px;">
 
             <p class="card-text">
               <strong>Likes:</strong> {{ post.likes }}

@@ -49,6 +49,8 @@ export class CreatePostComponent implements OnInit {
       };
       reader.readAsDataURL(file);
     }
+    const localImageUrl = URL.createObjectURL(file); 
+    this.postForm.patchValue({ imageUrl: localImageUrl });
     this.imageUploaded = true;
   }
 
@@ -72,7 +74,7 @@ export class CreatePostComponent implements OnInit {
 
     const createPost: CreatePost = {
       description: this.postForm.value.description,
-      imageUrl: '',   
+      imageUrl: this.postForm.value.imageUrl,   
       likes: 0,   
       comments: [],   
       userId: 3,   
@@ -85,7 +87,8 @@ export class CreatePostComponent implements OnInit {
     this.postService.createPost(createPost, this.imageBase64).subscribe({
       next: (createdPost) => {
         console.log('Post created successfully:', createdPost);
-        this.dialogRef.close();  
+        this.dialogRef.close(); 
+        window.location.reload(); 
       },
       error: (error) => {
         console.error('Error creating post:', error);

@@ -78,5 +78,8 @@ export class PostComponent implements OnInit {
     });
   }
   
+  getPostImageUrl(imageName: string): string {
+    return `http://localhost:8080/${imageName}`;
+  }
 
 }
