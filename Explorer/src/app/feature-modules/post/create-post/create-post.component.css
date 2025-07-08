@@ -1,0 +1,122 @@
+#map {
+    height: 400px;
+    width: 100%;
+    display: block;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    max-width: 800px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffeef1; 
+}
+
+h2 {
+    text-align: center;
+    color: #540e0e;
+    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: 600;
+    color: #540e0e;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+input.form-control, textarea.form-control {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
+}
+
+input.form-control:focus, textarea.form-control:focus {
+    border-color: #540e0e;
+    outline: none;
+}
+
+button.btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #540e0e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.btn:hover {
+    background-color: #b00e0e;
+}
+
+button.btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.addImageBtn {
+    width: 100%;
+    padding: 12px;
+    background-color: #540e0e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 200;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.addImageBtn:hover {
+    background-color: #b00e0e;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    button.btn {
+        font-size: 16px;
+    }
+}
+
+.map-container {
+    position: relative;
+    width: 95%;
+    height: 150px;
+    background-color: var(--background-color-alt);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .map-container app-map {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1);
+  }

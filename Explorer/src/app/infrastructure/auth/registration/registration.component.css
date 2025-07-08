@@ -1,11 +1,72 @@
-form {
-    margin-top:150px;
+/* Container styling */
+.form-container {
     display: flex;
     justify-content: center;
+    padding: 20px;
+    background-color: #f7f9fc;
 }
 
-div {
-    width: 400px;
-    display:flex;
-    flex-direction: column;
+.registration-form {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+}
+
+/* Field styling */
+.mat-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.mat-form-field.mat-focused .mat-form-field-label {
+    color: #e7a0b2 !important; /* Highlight label on focus */
+}
+
+/* Increase input field size */
+.mat-input-element {
+    font-size: 16px;
+    padding: 12px 14px;
+}
+
+/* Label and legend styling */
+.mat-form-field-label {
+    font-size: 16px;
+}
+
+.address-group legend {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Error message styling */
+.error {
+    color: #e57373;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Submit button styling */
+.submit-button {
+    width: 100%;
+    font-size: 18px;
+    padding: 15px 0;
+    background-color: #e7a0b2;
+    color: #ffffff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-button:disabled {
+    background-color: #cccccc;
+}
+
+.submit-button:hover:not(:disabled) {
+    background-color:#e7a0b2;
+    
 }

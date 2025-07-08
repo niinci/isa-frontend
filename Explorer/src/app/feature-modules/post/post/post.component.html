@@ -1,0 +1,39 @@
+<div class="container my-4">
+  <button *ngIf="isLoggedIn" class="btn btn-primary" (click)="openCreatePostDialog()">Create Your Post</button>
+  <div *ngIf="posts.length > 0; else noPosts">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <div *ngFor="let post of posts" class="col">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h2 class="card-title">{{ post.description }}</h2>
+
+            <img *ngIf="post.imageUrl" [src]="getPostImageUrl(post.imageUrl)" class="card-img-top mb-3" alt="Post image" style="max-height: 300px; object-fit: cover; border-radius: 8px;">
+
+            <p class="card-text">
+              <strong>Likes:</strong> {{ post.likes }}
+            </p>
+
+            <!-- Prikaz poruke ako korisnik nije prijavljen, samo za konkretan post -->
+            <div *ngIf="messages.get(post.id)" class="alert alert-warning p-2">
+              {{ messages.get(post.id) }}
+            </div>
+
+            <button *ngIf="!post.deleted" class="btn btn-primary" (click)="likePost(post)">
+              {{ likedPosts.get(post.id) ? 'Unlike' : 'Like' }}
+            </button>
+
+            <button *ngIf="!post.deleted" class="btn btn-secondary mt-2" (click)="commentOnPost(post)">
+              Comment
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noPosts>
+    <div class="text-center my-4">
+      <p class="text-muted">No posts available.</p>
+    </div>
+  </ng-template>
+</div>

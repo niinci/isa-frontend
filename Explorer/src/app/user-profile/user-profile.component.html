@@ -1,0 +1,203 @@
+<!-- user-profile.component.html -->
+ <div class="profile-page">
+  <div class="banner"></div>
+<div class="profile-container">
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="loading-container">
+    <p>Loading profile...</p>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="error" class="error-container">
+    <p>{{ error }}</p>
+    <button (click)="getUser()" class="btn btn-primary">Retry</button>
+  </div>
+
+  <!-- Profile content - samo ako user nije null -->
+  <div *ngIf="user && !isLoading && !error">
+    <div class="profile-header">
+      <div class="profile-info">
+        <!-- Koristite safe navigation operator (?.) -->
+        <h1 class="user-name">{{ user?.firstName || 'N/A' }}</h1>
+        <p class="user-bio">{{ user?.lastName || 'N/A' }}</p>
+        <div class="user-details" *ngIf="user?.address">
+          <p class="user-location">{{ user?.address?.city || 'N/A' }}, {{ user?.address?.country || 'N/A' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <nav class="tab-nav">
+      <button 
+        class="tab-button" 
+        [class.active]="activeTab === 'profile'"
+        (click)="setActiveTab('profile')">
+        Profile
+      </button>
+      <button 
+        class="tab-button" 
+        [class.active]="activeTab === 'posts'"
+        (click)="setActiveTab('posts')">
+        Posts
+      </button>
+      <button 
+        class="tab-button" 
+        [class.active]="activeTab === 'followers'"
+        (click)="setActiveTab('followers')">
+        Followers
+      </button>
+      <button 
+        class="tab-button" 
+        [class.active]="activeTab === 'following'"
+        (click)="setActiveTab('following')">
+        Following
+      </button>
+      <button 
+        class="tab-button" 
+        [class.active]="activeTab === 'settings'"
+        (click)="setActiveTab('settings')">
+        Settings
+      </button>
+    </nav>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+      <!-- Profile Tab -->
+      <div *ngIf="activeTab === 'profile'" class="profile-tab">
+        <h2>Profile Information</h2>
+        <p><strong>Name:</strong> {{ user?.firstName || 'N/A' }} {{ user?.lastName || 'N/A' }}</p>
+        <p><strong>Email:</strong> {{ email || 'N/A' }}</p>
+        <p *ngIf="user?.address">
+          <strong>Address:</strong> 
+          {{ user?.address?.street || 'N/A' }} {{ user?.address?.number || 'N/A' }}, 
+          {{ user?.address?.city || 'N/A' }}, {{ user?.address?.country || 'N/A' }}
+        </p>
+      </div>
+
+      <!-- Posts Tab -->
+      <div *ngIf="activeTab === 'posts'" class="posts-tab">
+        <h2>Posts</h2>
+        <div *ngIf="postsLoading" class="loading">Loading posts...</div>
+        <div *ngIf="!postsLoading && userPosts.length === 0" class="no-content">
+          No posts yet.
+        </div>
+        <div *ngFor="let post of userPosts" class="post-item">
+          <p>{{ post?.content || 'No content' }}</p>
+        </div>
+      </div>
+
+      <!-- Followers Tab -->
+      <div *ngIf="activeTab === 'followers'" class="followers-tab">
+        <h2>Followers</h2>
+        <div *ngIf="followersLoading" class="loading">Loading followers...</div>
+        <div *ngIf="!followersLoading && followers.length === 0" class="no-content">
+          No followers yet.
+        </div>
+        <div *ngFor="let follower of followers" class="follower-item">
+          <p>{{ follower?.username || 'Unknown' }}</p>
+        </div>
+      </div>
+
+      <!-- Following Tab -->
+      <div *ngIf="activeTab === 'following'" class="following-tab">
+        <h2>Following</h2>
+        <div *ngIf="followingLoading" class="loading">Loading following...</div>
+        <div *ngIf="!followingLoading && following.length === 0" class="no-content">
+          Not following anyone yet.
+        </div>
+        <div *ngFor="let followedUser of following" class="following-item">
+          <p>{{ followedUser?.username || 'Unknown' }}</p>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div *ngIf="activeTab === 'settings'" class="settings-tab">
+        <h2>Settings</h2>
+        
+        <!-- Profile Edit Section -->
+        <div class="settings-section">
+          <h3>Edit Profile</h3>
+          <button 
+            *ngIf="!isEditingProfile" 
+            (click)="isEditingProfile = true"
+            class="btn btn-primary">
+            Edit Profile
+          </button>
+          
+          <form *ngIf="isEditingProfile" [formGroup]="profileEditForm" (ngSubmit)="onProfileEditSubmit()">
+            <div class="form-group">
+              <label>First Name:</label>
+              <input type="text" formControlName="firstName" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Last Name:</label>
+              <input type="text" formControlName="lastName" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Street:</label>
+              <input type="text" formControlName="street" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>City:</label>
+              <input type="text" formControlName="city" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Country:</label>
+              <input type="text" formControlName="country" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Number:</label>
+              <input type="text" formControlName="number" class="form-control">
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-success" [disabled]="!profileEditForm.valid">
+                Save Changes
+              </button>
+              <button type="button" (click)="cancelEdit()" class="btn btn-secondary">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Password Change Section -->
+        <div class="settings-section">
+          <h3>Change Password</h3>
+          <button 
+            *ngIf="!isChangingPassword" 
+            (click)="isChangingPassword = true"
+            class="btn btn-primary">
+            Change Password
+          </button>
+          
+          <form *ngIf="isChangingPassword" [formGroup]="passwordForm" (ngSubmit)="onPasswordSubmit()">
+            <div class="form-group">
+              <label>Current Password:</label>
+              <input type="password" formControlName="currentPassword" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>New Password:</label>
+              <input type="password" formControlName="newPassword" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Confirm Password:</label>
+              <input type="password" formControlName="confirmPassword" class="form-control">
+            </div>
+            <div *ngIf="passwordForm.hasError('mismatch')" class="error-message">
+              Passwords do not match
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-success" [disabled]="!passwordForm.valid">
+                Change Password
+              </button>
+              <button type="button" (click)="cancelPasswordChange()" class="btn btn-secondary">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
