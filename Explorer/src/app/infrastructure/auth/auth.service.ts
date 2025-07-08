@@ -1,3 +1,4 @@
+// auth.service.ts - Privremeno rešenje bez backend metoda
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -10,6 +11,9 @@ import { AuthenticationResponse } from './model/authentication-response.model';
 import { User } from './model/user.model';
 import { Registration } from './model/registration.model';
 import { UserInfo } from './model/userInfo.model';
+import { PasswordChange } from './model/password-change.model';
+import { ProfileEdit } from './model/profile-edit.model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +41,7 @@ export class AuthService {
         }),
         tap((authenticationResponse: AuthenticationResponse) => {
           this.tokenStorage.saveAccessToken(authenticationResponse.accessToken);
+          console.log("Token savedddddd:", authenticationResponse.accessToken);
           this.setUser();
         })
       );
@@ -69,6 +74,10 @@ export class AuthService {
     return this.http.get<UserInfo>(`${environment.apiHost}userAccount/getUserInfo?email=${emailParam}`);
   }
 
+  getLogedUser(): any {
+    return this.user$.getValue();
+  }
+
   // Check if user exists method
   checkIfUserExists(): void {
     const accessToken = this.tokenStorage.getAccessToken();
@@ -79,34 +88,71 @@ export class AuthService {
   }
 
   // Set user from decoded token
-  private setUser(): void {
-    const accessToken = this.tokenStorage.getAccessToken() || "";
-
-    if (!accessToken) {
-      console.error('Access token not found.');
-      return;
-    }
-
-    const decodedToken = this.jwtHelper.decodeToken(accessToken);
-    console.log('Decoded token:', decodedToken);
-
-    const user: User = {
-      id: +decodedToken.userId,
-      username: decodedToken.sub,
-      role: decodedToken.role || decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
-    };
-
-    if (isNaN(user.id)) {
-      console.error("User ID is missing or invalid in the decoded token.");
-      user.id = 0; // Set to 0 if the ID is invalid
-    }
-
-    console.log('Setting user:', user);
-    this.user$.next(user);
-  }
+  public setUser(): Promise<void> {
+    return new Promise((resolve) => {
+      const accessToken = this.tokenStorage.getAccessToken() || "";
+  
+      if (!accessToken) {
+        console.error('Access token not found.');
+        return resolve();
+      }
+  
+      const decodedToken = this.jwtHelper.decodeToken(accessToken);
+      console.log('Decoded token:', decodedToken);
+  
+      const user: User = {
+        id: +decodedToken.userId,
+        username: decodedToken.sub,
+        role: decodedToken.role || decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+      };
+  
+      if (isNaN(user.id)) {
+        console.error("User ID is missing or invalid in the decoded token.");
+        user.id = 0;
+      }
+  
+      console.log('Setting user:', user);
+      this.user$.next(user);
+  
+      resolve();
+    });
+  }  
 
   // Getter for current user ID
   getCurrentUserId(): number {
     return this.user$.value.id;
   }
+
+  getUserPosts(email: string): Observable<any[]> {
+    // Mock metoda - vraća prazan niz
+    return new Observable(observer => {
+      observer.next([]);
+      observer.complete();
+    });
+  }
+
+  getFollowers(email: string): Observable<any[]> {
+    // Mock metoda - vraća prazan niz
+    return new Observable(observer => {
+      observer.next([]);
+      observer.complete();
+    });
+  }
+
+  getFollowing(email: string): Observable<any[]> {
+    // Mock metoda - vraća prazan niz
+    return new Observable(observer => {
+      observer.next([]);
+      observer.complete();
+    });
+  }
+
+  changePassword(passwordData: PasswordChange): Observable<any> {
+    return this.http.put(`${environment.apiHost}/users/change-password`, passwordData);
+  }
+
+  updateProfile(userId: number, profileData: ProfileEdit): Observable<UserInfo> {
+    return this.http.put<UserInfo>(`${environment.apiHost}/users/${userId}`, profileData);
+  }
+
 }
