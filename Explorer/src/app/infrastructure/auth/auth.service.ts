@@ -1,3 +1,4 @@
+// auth.service.ts - Privremeno rešenje bez backend metoda
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -10,6 +11,9 @@ import { AuthenticationResponse } from './model/authentication-response.model';
 import { User } from './model/user.model';
 import { Registration } from './model/registration.model';
 import { UserInfo } from './model/userInfo.model';
+import { PasswordChange } from './model/password-change.model';
+import { ProfileEdit } from './model/profile-edit.model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -98,7 +102,7 @@ export class AuthService {
 
     if (isNaN(user.id)) {
       console.error("User ID is missing or invalid in the decoded token.");
-      user.id = 0; // Set to 0 if the ID is invalid
+      user.id = 0;
     }
 
     console.log('Setting user:', user);
@@ -109,4 +113,37 @@ export class AuthService {
   getCurrentUserId(): number {
     return this.user$.value.id;
   }
+
+  getUserPosts(email: string): Observable<any[]> {
+    // Mock metoda - vraća prazan niz
+    return new Observable(observer => {
+      observer.next([]);
+      observer.complete();
+    });
+  }
+
+  getFollowers(email: string): Observable<any[]> {
+    // Mock metoda - vraća prazan niz
+    return new Observable(observer => {
+      observer.next([]);
+      observer.complete();
+    });
+  }
+
+  getFollowing(email: string): Observable<any[]> {
+    // Mock metoda - vraća prazan niz
+    return new Observable(observer => {
+      observer.next([]);
+      observer.complete();
+    });
+  }
+
+  changePassword(passwordData: PasswordChange): Observable<any> {
+    return this.http.put(`${environment.apiHost}/users/change-password`, passwordData);
+  }
+
+  updateProfile(userId: number, profileData: ProfileEdit): Observable<UserInfo> {
+    return this.http.put<UserInfo>(`${environment.apiHost}/users/${userId}`, profileData);
+  }
+
 }

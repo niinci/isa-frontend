@@ -1,3 +1,4 @@
+/* user-profile.component.css */
 /* Background and Page Setup */
 .profile-page {
   display: flex;
@@ -23,6 +24,31 @@
   z-index: -1;  
 }
 
+/* Loading and Error States */
+.loading-message, .error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  margin-top: 130px;
+  text-align: center;
+}
+
+.loading-message p {
+  color: #ff66b3;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.error-message p {
+  color: #ff3366;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
 /* Profile Card */
 .profile-card {
   display: flex;
@@ -32,7 +58,7 @@
   background: #fff; 
   border-radius: 12px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-  max-width: 350px;
+  max-width: 400px;
   width: 90%;
   text-align: center;
   margin-top: 130px;  
@@ -59,19 +85,42 @@
   font-weight: bold;
 }
 
-.user-bio {
+.user-email {
   color: #ff66b3;  
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   margin-bottom: 1rem;
-  
+  font-style: italic;
 }
 
-.user-location, .user-email {
+.user-location {
   color: #ff99cc;  
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   margin-bottom: 0.5rem;
 }
 
+.user-stats {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #fff5f8;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.followers-count {
+  color: #ff66b3;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Profile Actions */
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  width: 100%;
+}
 
 button {
   background-color: #ff3366;  
@@ -80,13 +129,29 @@ button {
   padding: 0.8rem 1.5rem;
   font-size: 1rem;
   border-radius: 25px;
-  margin-top: 1rem;
   cursor: pointer;
   transition: background-color 0.3s;
+  width: 100%;
 }
 
 button:hover {
   background-color: #ed6595;  
+}
+
+.edit-profile-btn {
+  background-color: #ff70a6;
+}
+
+.view-posts-btn {
+  background-color: #f72e74;
+}
+
+.view-followers-btn {
+  background-color: #ff99cc;
+}
+
+.view-following-btn {
+  background-color: #ffb3d6;
 }
 
 /* Responsiveness */
@@ -100,5 +165,22 @@ button:hover {
       width: 120px;
       height: 120px;
       margin-top: -60px;
+  }
+
+  .profile-actions {
+      flex-direction: column;
+  }
+}
+
+@media (min-width: 769px) {
+  .profile-actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+  }
+
+  .profile-actions button {
+      flex: 1;
+      min-width: 120px;
   }
 }
