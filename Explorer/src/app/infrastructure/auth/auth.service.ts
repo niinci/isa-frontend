@@ -41,6 +41,7 @@ export class AuthService {
         }),
         tap((authenticationResponse: AuthenticationResponse) => {
           this.tokenStorage.saveAccessToken(authenticationResponse.accessToken);
+          console.log("Token savedddddd:", authenticationResponse.accessToken);
           this.setUser();
         })
       );
@@ -73,6 +74,10 @@ export class AuthService {
     return this.http.get<UserInfo>(`${environment.apiHost}userAccount/getUserInfo?email=${emailParam}`);
   }
 
+  getLogedUser(): any {
+    return this.user$.getValue();
+  }
+
   // Check if user exists method
   checkIfUserExists(): void {
     const accessToken = this.tokenStorage.getAccessToken();
@@ -83,31 +88,35 @@ export class AuthService {
   }
 
   // Set user from decoded token
-  private setUser(): void {
-    const accessToken = this.tokenStorage.getAccessToken() || "";
-
-    if (!accessToken) {
-      console.error('Access token not found.');
-      return;
-    }
-
-    const decodedToken = this.jwtHelper.decodeToken(accessToken);
-    console.log('Decoded token:', decodedToken);
-
-    const user: User = {
-      id: +decodedToken.userId,
-      username: decodedToken.sub,
-      role: decodedToken.role || decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
-    };
-
-    if (isNaN(user.id)) {
-      console.error("User ID is missing or invalid in the decoded token.");
-      user.id = 0;
-    }
-
-    console.log('Setting user:', user);
-    this.user$.next(user);
-  }
+  public setUser(): Promise<void> {
+    return new Promise((resolve) => {
+      const accessToken = this.tokenStorage.getAccessToken() || "";
+  
+      if (!accessToken) {
+        console.error('Access token not found.');
+        return resolve();
+      }
+  
+      const decodedToken = this.jwtHelper.decodeToken(accessToken);
+      console.log('Decoded token:', decodedToken);
+  
+      const user: User = {
+        id: +decodedToken.userId,
+        username: decodedToken.sub,
+        role: decodedToken.role || decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+      };
+  
+      if (isNaN(user.id)) {
+        console.error("User ID is missing or invalid in the decoded token.");
+        user.id = 0;
+      }
+  
+      console.log('Setting user:', user);
+      this.user$.next(user);
+  
+      resolve();
+    });
+  }  
 
   // Getter for current user ID
   getCurrentUserId(): number {

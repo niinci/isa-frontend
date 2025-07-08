@@ -22,4 +22,11 @@ export class PostService {
 
     return this.http.post<CreatePost>(this.apiUrl, postDTO);
   }
+
+  likePost(postId: number): Observable<{ liked: boolean }> {
+    return this.http.post<{ liked: boolean }>(`${this.apiUrl}/${postId}/like`, {});
+  }
+  getLikedPosts(userId: number): Observable<Post[]> {
+    return this.http.get<Post[]>(this.apiUrl + "/liked");
+  }
 }

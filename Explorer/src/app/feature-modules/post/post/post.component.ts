@@ -16,6 +16,8 @@ export class PostComponent implements OnInit {
   isLoggedIn = false;
   likedPosts = new Map<number, boolean>(); // Praćenje lajkovanja posta po ID-u
   messages = new Map<number, string>();    // Poruke za prijavu po ID-u posta
+  userId: number | null = null;
+
 
   constructor(
     private postService: PostService,
@@ -24,14 +26,20 @@ export class PostComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Praćenje statusa prijave korisnika
     this.authService.user$.subscribe(user => {
-      this.isLoggedIn = !!user.username; // Ako korisnik ima username, smatramo da je prijavljen
+      this.isLoggedIn = !!user.username;
+      if (this.isLoggedIn) {
+        this.userId = user.id;  // Pretpostavljam da user objekat ima id polje
+      } else {
+        this.userId = null;
+      }
     });
-
-    // Učitavanje postova
+  
     this.loadPosts();
+    this.loadLikedPosts();
   }
+  
+  
 
   loadPosts(): void {
     this.postService.getAllPosts().subscribe(
@@ -44,18 +52,38 @@ export class PostComponent implements OnInit {
     );
   }
 
-  likePost(post: Post) {
+  likePost(post: Post): void {
+    console.log('likePost called for post:', post.id);
+
     if (!this.isLoggedIn) {
-      // Prikaz poruke samo za konkretan post na koji korisnik pokušava da lajkuje
-      this.messages.set(post.id, 'You need to log in to like post');
-      setTimeout(() => this.messages.delete(post.id), 3000); // Poruka nestaje nakon 3 sekunde
+      this.messages.set(post.id, 'You need to log in to like this post');
+      setTimeout(() => this.messages.delete(post.id), 3000);
     } else {
-      // Dodavanje ili oduzimanje lajka za dati post
-      const isLiked = this.likedPosts.get(post.id) || false;
-      this.likedPosts.set(post.id, !isLiked);
-      post.likes += isLiked ? -1 : 1;
+      if (this.userId == null) return;
+      console.log('User isLoggedIn:', this.isLoggedIn, 'userId:', this.userId);
+
+      this.postService.likePost(post.id).subscribe({
+        next: (response) => {
+          const liked = response.liked;
+          this.likedPosts.set(post.id, liked);
+          post.likes += liked ? 1 : -1;
+        },
+        error: () => {
+          this.messages.set(post.id, 'An error occurred while liking the post');
+          setTimeout(() => this.messages.delete(post.id), 3000);
+        }
+      });
     }
   }
+  
+  loadLikedPosts(): void {
+    if (this.userId == null) return;
+  
+    this.postService.getLikedPosts(this.userId).subscribe(posts => {
+      posts.forEach(post => this.likedPosts.set(post.id, true));
+    });
+  }
+  
   
   commentOnPost(post: Post): void {
     if (!this.isLoggedIn) {
