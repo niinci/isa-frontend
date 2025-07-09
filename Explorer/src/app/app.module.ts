@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';  // Dodaj ovo
-import { HttpClientModule } from '@angular/common/http';  // Za rad sa HTTP-om
+import { HTTP_INTERCEPTORS,HttpClientModule } from '@angular/common/http';  // Za rad sa HTTP-om
 import { LayoutModule } from './feature-modules/layout/layout.module';
 import { AppComponent } from './app.component';
 import { PostComponent } from './feature-modules/post/post/post.component';
@@ -14,6 +14,8 @@ import { TrendsComponent } from './feature-modules/trends/trends.component';
 import { NearbyPostsComponent } from './feature-modules/nearby-posts/nearby-posts.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PostModule } from './feature-modules/post/post.module';
+import { AuthInterceptor } from './auth.interceptor';
+
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { PostModule } from './feature-modules/post/post.module';
     PostModule
 
   ],
-  providers: [],
+  providers: [
+  {  provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
