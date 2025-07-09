@@ -1,12 +1,14 @@
-import { Post } from "./post.model";
-
 export class Comment {
-    id: number;
-    content: string;
-    userId: number;
-    post: Post;
+    id!: number;
+    content!: string;
+    userId!: number;
+    postId!: number;  // Samo ID posta, bez cele Post instance
+
 
     constructor() {
         this.userId = 0;
+        this.postId = 0;
+        this.content = '';
     }
 }
+
