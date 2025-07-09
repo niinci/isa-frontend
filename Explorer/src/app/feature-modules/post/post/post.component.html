@@ -26,6 +26,12 @@
       {{ likedPosts.get(post.id) ? 'Unlike' : 'Like' }}
     </button>              
         
+    <!-- Prikaz dugmadi za izmenu i brisanje samo ako je korisnik autor -->
+      <div >
+        <button class="btn btn-outline-warning btn-sm" (click)="editPost(post)">✏️ Izmeni</button>
+        <button class="btn btn-outline-danger btn-sm" (click)="deletePost(post.id)">🗑️ Obriši</button>
+      </div>
+
              <!-- OVDE UBACI KOMPONENTU ZA KOMENTARE -->
              <xp-comment [postId]="post.id"></xp-comment>
           </div>

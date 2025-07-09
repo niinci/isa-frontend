@@ -113,4 +113,33 @@ export class PostComponent implements OnInit {
     return `http://localhost:8080/${imageName}`;
   }
 
+  editPost(post: Post): void {
+  const updatedDescription = prompt('Izmeni opis posta:', post.description);
+
+  if (updatedDescription && updatedDescription.trim() !== '' && updatedDescription !== post.description) {
+    const postDTO = { description: updatedDescription }; // možeš dodati i druge podatke ako backend zahteva
+    this.postService.updatePost(post.id, postDTO).subscribe({
+      next: (updatedPost) => {
+        post.description = updatedPost.description;
+      },
+      error: (err) => {
+        console.error('Greška pri izmeni posta:', err);
+      }
+    });
+  }
+}
+
+deletePost(postId: number): void {
+  if (confirm('Da li sigurno želiš da obrišeš ovaj post?')) {
+    this.postService.deletePost(postId).subscribe({
+      next: () => {
+        this.posts = this.posts.filter(p => p.id !== postId);
+      },
+      error: (err) => {
+        console.error('Greška pri brisanju posta:', err);
+      }
+    });
+  }
+}
+
 }
