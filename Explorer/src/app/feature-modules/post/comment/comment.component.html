@@ -1,0 +1,31 @@
+<div class="comment-section">
+    <!-- Prikaz komentara -->
+    <div *ngIf="comments.length > 0; else noComments">
+      <div *ngFor="let comment of comments" class="comment-card">
+        <p class="comment-content">{{ comment.content }}</p>
+        <p class="comment-meta">Korisnik ID: {{ comment.userId }}</p>
+      </div>
+    </div>
+  
+    <!-- Ako nema komentara -->
+    <ng-template #noComments>
+      <p class="no-comments">Još uvek nema komentara.</p>
+    </ng-template>
+  
+    <hr />
+  
+    <!-- Forma za dodavanje novog komentara -->
+    <div class="add-comment-form">
+      <textarea
+        [(ngModel)]="newComment.content"
+        placeholder="Unesi komentar..."
+        rows="3"
+        class="comment-textarea"
+      ></textarea>
+  
+      <button (click)="submitComment()" [disabled]="!newComment.content?.trim()" class="submit-button">
+        Dodaj komentar
+      </button>
+    </div>
+  </div>
+  

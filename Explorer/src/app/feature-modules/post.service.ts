@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Post } from './post/model/post.model';
 import { CreatePost } from './post/model/createPost.model';
+import { Comment } from './post/model/comment.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { CreatePost } from './post/model/createPost.model';
 export class PostService {
 
   private apiUrl = 'http://localhost:8080/api/posts'; // URL tvoje Spring Boot aplikacije
+  private commentsUrl = 'http://localhost:8080/api/comments';
 
   constructor(private http: HttpClient) { }
 
@@ -28,5 +30,21 @@ export class PostService {
   }
   getLikedPosts(userId: number): Observable<Post[]> {
     return this.http.get<Post[]>(this.apiUrl + "/liked");
+  }
+  getCommentsByPost(postId: number): Observable<Comment[]> {
+    return this.http.get<any[]>(`${this.commentsUrl}/post/${postId}`).pipe(
+      map(comments => comments.map(c => {
+        const comment = new Comment();
+        comment.id= c.id;
+        comment.content = c.content;
+        comment.userId = c.userId;
+        comment.postId = postId; // ili c.postId ako dolazi iz backend-a
+        return comment;
+      }))
+    );
+  }
+
+  addComment(postId: number, comment: Comment): Observable<Comment> {
+    return this.http.post<Comment>(`${this.commentsUrl}/post/${postId}`, comment);
   }
 }

@@ -20,10 +20,9 @@ import { AuthInterceptor } from './auth.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
-    PostComponent,
     ChatComponent,
     TrendsComponent,
-    NearbyPostsComponent
+    NearbyPostsComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,8 +34,6 @@ import { AuthInterceptor } from './auth.interceptor';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     MatDialogModule,
-    PostModule
-
   ],
   providers: [
   {  provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

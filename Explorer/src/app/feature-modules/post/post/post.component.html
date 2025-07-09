@@ -18,13 +18,16 @@
               {{ messages.get(post.id) }}
             </div>
 
-            <button *ngIf="!post.deleted" class="btn btn-primary" (click)="likePost(post)">
-              {{ likedPosts.get(post.id) ? 'Unlike' : 'Like' }}
-            </button>
-
-            <button *ngIf="!post.deleted" class="btn btn-secondary mt-2" (click)="commentOnPost(post)">
-              Comment
-            </button>
+            <button *ngIf="!post.deleted"
+            class="btn d-flex align-items-center gap-2"
+            [ngClass]="likedPosts.get(post.id) ? 'btn-outline-danger' : 'btn-outline-primary'"
+            (click)="likePost(post)">
+      <i [ngClass]="likedPosts.get(post.id) ? 'bi bi-hand-thumbs-down-fill' : 'bi bi-hand-thumbs-up-fill'"></i>
+      {{ likedPosts.get(post.id) ? 'Unlike' : 'Like' }}
+    </button>              
+        
+             <!-- OVDE UBACI KOMPONENTU ZA KOMENTARE -->
+             <xp-comment [postId]="post.id"></xp-comment>
           </div>
         </div>
       </div>
