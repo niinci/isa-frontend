@@ -17,6 +17,8 @@ export class CommentComponent implements OnInit {
   comments: Comment[] = [];
   newComment: Comment = new Comment();
   commentsLoaded = false;
+  username: string = '';
+
 
   constructor(
     private route: ActivatedRoute,
@@ -25,6 +27,12 @@ export class CommentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    console.log('CommentComponent ngOnInit pokrenut, postId:', this.postId);
+    this.authService.user$.subscribe(user => {
+      this.username = user.username;
+    });    
+
     if (!this.postId || isNaN(this.postId)) {
       console.error('Nevalidan postId:', this.postId);
       return;
@@ -43,7 +51,6 @@ export class CommentComponent implements OnInit {
 
   loadComments(): void {
     if (this.commentsLoaded || !this.postId) return;
-
     this.postService.getCommentsByPost(this.postId).subscribe({
       next: (comments) => {
         this.comments = comments;
@@ -53,6 +60,9 @@ export class CommentComponent implements OnInit {
         this.newComment = new Comment();
         this.newComment.postId = this.postId;
         this.newComment.userId = this.authService.getCurrentUserId();
+        this.newComment.username = this.username;
+        console.log('xxxxxxxxxxxx:', this.username);
+        console.log('Učitani komentari:', this.comments);
       },
       error: (err) => {
         console.error('Greška pri učitavanju komentara:', err);
@@ -66,6 +76,7 @@ export class CommentComponent implements OnInit {
       next: (createdComment) => {
         this.comments.push(createdComment);
         this.newComment.content = '';
+      //  this.newComment.username = this.username;
       },
       error: (err) => {
         console.error('Greška pri dodavanju komentara:', err);

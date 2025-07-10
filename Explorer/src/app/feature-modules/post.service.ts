@@ -38,7 +38,8 @@ export class PostService {
         comment.id= c.id;
         comment.content = c.content;
         comment.userId = c.userId;
-        comment.postId = postId; // ili c.postId ako dolazi iz backend-a
+        comment.postId = c.postId; // bolje iz backend-a nego fiksno postId
+        comment.username = c.username;  // OVDE
         return comment;
       }))
     );
