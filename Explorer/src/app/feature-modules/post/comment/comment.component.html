@@ -3,8 +3,8 @@
     <div *ngIf="comments.length > 0; else noComments">
       <div *ngFor="let comment of comments" class="comment-card">
         <p class="comment-content">{{ comment.content }}</p>
-        <p class="comment-meta">Korisnik ID: {{ comment.userId }}</p>
-      </div>
+        <p class="comment-meta">Autor: {{ comment.username }} </p>
+        </div>
     </div>
   
     <!-- Ako nema komentara -->

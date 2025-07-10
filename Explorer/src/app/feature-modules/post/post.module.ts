@@ -3,15 +3,15 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CreatePostComponent } from './create-post/create-post.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommentComponent } from './comment/comment.component';
 import { FormsModule } from '@angular/forms';
 import { PostComponent } from './post/post.component';
+import { CommentComponent } from './comment/comment.component';
 
 @NgModule({
   declarations: [
     CreatePostComponent,
-    CommentComponent,
-    PostComponent
+    PostComponent,
+    CommentComponent
   ],
   imports: [
     CommonModule,
