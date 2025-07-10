@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Comment } from '../model/comment.model';
 import { PostService } from '../../post.service';
+import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 
 @Component({
   selector: 'xp-comment',
@@ -19,7 +20,8 @@ export class CommentComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private postService: PostService
+    private postService: PostService,
+    private authService : AuthService
   ) {}
 
   ngOnInit(): void {
@@ -27,10 +29,14 @@ export class CommentComponent implements OnInit {
       console.error('Nevalidan postId:', this.postId);
       return;
     }
-  
+    const userId = this.authService.getCurrentUserId();
+    if (!userId || userId === 0) {
+      console.error('Korisnik nije prijavljen ili ID nije validan.');
+      return;
+    }
+    this.newComment.userId = userId; // test user
     this.loadComments();
   
-    this.newComment.userId = 1; // test user
   }
   
   
@@ -46,7 +52,7 @@ export class CommentComponent implements OnInit {
         // Pripremi novi komentar
         this.newComment = new Comment();
         this.newComment.postId = this.postId;
-        this.newComment.userId = 1; // Test user; zameni stvarnim
+        this.newComment.userId = this.authService.getCurrentUserId();
       },
       error: (err) => {
         console.error('Greška pri učitavanju komentara:', err);
