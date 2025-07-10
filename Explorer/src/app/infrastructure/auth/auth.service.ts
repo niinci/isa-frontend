@@ -19,7 +19,7 @@ import { ProfileEdit } from './model/profile-edit.model';
   providedIn: 'root'
 })
 export class AuthService {
-  user$ = new BehaviorSubject<User>({ username: "", id: 0, role: "" });
+  user$ = new BehaviorSubject<User>({ username: "", id: 0, role: "", email: "" });
   private jwtHelper = new JwtHelperService();
 
   constructor(
@@ -63,7 +63,7 @@ export class AuthService {
   logout(): void {
     this.router.navigate(['/home']).then(() => {
       this.tokenStorage.clear();
-      this.user$.next({ username: "", id: 0, role: "" });
+      this.user$.next({ username: "", id: 0, role: "", email: "" });
     });
   }
 
@@ -83,31 +83,38 @@ export class AuthService {
   }
 
   // Set user from decoded token
-  private setUser(): void {
-    const accessToken = this.tokenStorage.getAccessToken() || "";
+ // Set user from decoded token
+private setUser(): void {
+  const accessToken = this.tokenStorage.getAccessToken() || "";
 
-    if (!accessToken) {
-      console.error('Access token not found.');
-      return;
-    }
-
-    const decodedToken = this.jwtHelper.decodeToken(accessToken);
-    console.log('Decoded token:', decodedToken);
-
-    const user: User = {
-      id: +decodedToken.userId,
-      username: decodedToken.sub,
-      role: decodedToken.role || decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
-    };
-
-    if (isNaN(user.id)) {
-      console.error("User ID is missing or invalid in the decoded token.");
-      user.id = 0;
-    }
-
-    console.log('Setting user:', user);
-    this.user$.next(user);
+  if (!accessToken) {
+    console.error('Access token not found.');
+    return;
   }
+
+  const decodedToken = this.jwtHelper.decodeToken(accessToken);
+  console.log('Decoded token:', decodedToken);
+
+  const userEmail = decodedToken.email 
+    || decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] 
+    || decodedToken.sub || '';
+
+  const user: User = {
+    id: +decodedToken.userId,
+    username: decodedToken.sub,
+    role: decodedToken.role || decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
+    email: userEmail
+  };
+
+  if (isNaN(user.id)) {
+    console.error("User ID is missing or invalid in the decoded token.");
+    user.id = 0;
+  }
+
+  console.log('Setting user:', user);
+  this.user$.next(user);
+}
+
 
   // Getter for current user ID
   getCurrentUserId(): number {
@@ -138,12 +145,27 @@ export class AuthService {
     });
   }
 
-  changePassword(passwordData: PasswordChange): Observable<any> {
-    return this.http.put(`${environment.apiHost}/users/change-password`, passwordData);
-  }
+ changePassword(data: { currentPassword: string; newPassword: string }): Observable<any> {
+  const email = this.user$.value.email || localStorage.getItem('email') || '';
+  return this.http.post(
+    `${environment.apiHost}userAccount/changePassword`,
+    data,
+    { params: { email }, responseType: 'text' }
+  );
+}
 
-  updateProfile(userId: number, profileData: ProfileEdit): Observable<UserInfo> {
-    return this.http.put<UserInfo>(`${environment.apiHost}/users/${userId}`, profileData);
-  }
+updateProfile(userId: number, profileData: any): Observable<any> {
+  const token = this.tokenStorage.getAccessToken();
+
+  const headers = {
+    'Authorization': `Bearer ${token}`
+  };
+
+  return this.http.put(`${environment.apiHost}userAccount/${userId}/profile`, profileData, { headers });
+}
+
+
+
+  
 
 }

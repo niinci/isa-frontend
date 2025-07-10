@@ -15,6 +15,7 @@ import { NearbyPostsComponent } from './feature-modules/nearby-posts/nearby-post
 import { MatDialogModule } from '@angular/material/dialog';
 import { PostModule } from './feature-modules/post/post.module';
 import { AuthInterceptor } from './auth.interceptor';
+import { ProfileComponent } from './user-profile/user-profile.component';
 
 
 @NgModule({

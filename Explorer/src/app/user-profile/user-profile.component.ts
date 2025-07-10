@@ -64,9 +64,9 @@ export class ProfileComponent implements OnInit {
   ) {
     // Initialize forms
     this.passwordForm = this.fb.group({
-      currentPassword: ['', [Validators.required, Validators.minLength(6)]],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
+      currentPassword: ['', [Validators.required, Validators.minLength(1)]],
+      newPassword: ['', [Validators.required, Validators.minLength(1)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(1)]]
     }, { validators: this.passwordMatchValidator });
 
     this.profileEditForm = this.fb.group({
@@ -80,16 +80,28 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.email = this.route.snapshot.paramMap.get('email');
-    this.getUser();
-  }
+  this.email = this.authService.user$.value.email || localStorage.getItem('email');
+console.log('Email:', this.email);
+this.getUser();
+}
+
 
   // Custom validator for password confirmation
   passwordMatchValidator(group: FormGroup) {
-    const newPassword = group.get('newPassword')?.value;
-    const confirmPassword = group.get('confirmPassword')?.value;
-    return newPassword === confirmPassword ? null : { mismatch: true };
+  const newPassword = group.get('newPassword');
+  const confirmPassword = group.get('confirmPassword');
+
+  if (!newPassword || !confirmPassword) return null;
+
+  if (newPassword.value !== confirmPassword.value) {
+    confirmPassword.setErrors({ mismatch: true });
+    return { mismatch: true };
+  } else {
+    confirmPassword.setErrors(null);
+    return null;
   }
+}
+
 
   getUser(): void {
     if (!this.email) return;
@@ -188,55 +200,71 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  onPasswordSubmit(): void {
-    if (this.passwordForm.valid) {
-      const passwordData: TempPasswordChange = this.passwordForm.value;
-      
-      this.authService.changePassword(passwordData).subscribe({
-        next: () => {
-          alert('Password changed successfully');
-          this.isChangingPassword = false;
-          this.passwordForm.reset();
-        },
-        error: (error: any) => {
-          console.error('Error changing password', error);
-          alert('Failed to change password');
-        }
-      });
+onPasswordSubmit(): void {
+  console.log('submit', this.passwordForm.value, this.passwordForm.valid);
+
+  if (this.passwordForm.valid) {
+    const passwordData: TempPasswordChange = this.passwordForm.value;
+
+    // Pošalji sva tri polja jer backend traži i confirmPassword
+    this.authService.changePassword(passwordData).subscribe({
+      next: () => {
+        alert('Password changed successfully');
+        this.isChangingPassword = false;
+        this.passwordForm.reset();
+      },
+      error: (error: any) => {
+        console.error('Error changing password', error);
+        alert(error.error || 'Failed to change password');
+      }
+    });
+  }
+}
+
+  onProfileEditSubmit(): void {
+  if (this.profileEditForm.valid && this.user) {
+    const formData = this.profileEditForm.value;
+    const profileData = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      address: {
+        street: formData.street,
+        city: formData.city,
+        country: formData.country,
+        number: formData.number
+      }
+    };
+    
+    const userId = (this.user as any).id || 1;
+    
+    this.authService.updateProfile(userId, profileData).subscribe({
+      next: (updatedUser: any) => {
+  if (typeof updatedUser.address === 'string') {
+    try {
+      updatedUser.address = JSON.parse(updatedUser.address);
+    } catch {
+      updatedUser.address = null; // ili ostavi staru adresu ako hoćeš
     }
   }
 
-  onProfileEditSubmit(): void {
-    if (this.profileEditForm.valid && this.user) {
-      const formData = this.profileEditForm.value;
-      const profileData = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        address: {
-          street: formData.street,
-          city: formData.city,
-          country: formData.country,
-          number: formData.number
-        }
-      };
-      
-      // Koristimo dummy ID jer UserInfo možda nema id property
-      const userId = (this.user as any).id || 1;
-      
-      this.authService.updateProfile(userId, profileData).subscribe({
-        next: (updatedUser: any) => {
-          // Ažuriramo user objekat
-          this.user = { ...this.user, ...updatedUser };
-          this.isEditingProfile = false;
-          alert('Profile updated successfully');
-        },
-        error: (error: any) => {
-          console.error('Error updating profile', error);
-          alert('Failed to update profile');
-        }
-      });
-    }
+  this.user = { 
+    ...this.user, 
+    ...updatedUser,
+    address: updatedUser.address || profileData.address 
+  };
+
+  this.isEditingProfile = false;
+  alert('Profile updated successfully');
+  this.initializeEditForm();
+},
+      error: (error: any) => {
+        console.error('Error updating profile', error);
+        alert('Failed to update profile');
+      }
+    });
   }
+}
+
 
   cancelEdit(): void {
     this.isEditingProfile = false;
