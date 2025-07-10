@@ -48,6 +48,7 @@ export class PostComponent implements OnInit {
     this.postService.getAllPosts().subscribe(
       (data) => {
         this.posts = data;
+        console.log("Učitani postovi:", this.posts); 
       },
       (error) => {
         console.error('Došlo je do greške pri učitavanju postova!', error);

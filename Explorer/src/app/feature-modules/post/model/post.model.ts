@@ -6,6 +6,8 @@ export class Post {
   likes: number;  
   comments: Comment[];  
   deleted: boolean;  
+  userId: number; 
+
   constructor() {
     this.likes = 0;  
     this.comments = [];  
