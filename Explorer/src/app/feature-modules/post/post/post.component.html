@@ -27,7 +27,8 @@
     </button>              
         
     <!-- Prikaz dugmadi za izmenu i brisanje samo ako je korisnik autor -->
-      <div >
+    <p>post.userId = {{ post.userId }}, userId = {{ userId }}</p>
+      <div *ngIf="post.userId === userId"> >
         <button class="btn btn-outline-warning btn-sm" (click)="editPost(post)">✏️ Izmeni</button>
         <button class="btn btn-outline-danger btn-sm" (click)="deletePost(post.id)">🗑️ Obriši</button>
       </div>

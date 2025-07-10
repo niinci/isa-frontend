@@ -7,6 +7,7 @@ import { MapComponent } from 'src/app/shared/map/map.component';
 import { Position } from '../model/position.model';
 import { UserLocationService } from 'src/app/shared/user-location/user-location.service';
 import { MatDialogRef } from '@angular/material/dialog';
+import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 
 @Component({
   selector: 'xp-create-post',
@@ -19,6 +20,8 @@ export class CreatePostComponent implements OnInit {
   marker: any;
   imageBase64: string | null = null;
   imageUploaded: boolean = false;
+  userId: number | null = null;
+
 
   @ViewChild(MapComponent) map: MapComponent;
 
@@ -27,7 +30,9 @@ export class CreatePostComponent implements OnInit {
     private postService: PostService,
     private router: Router,
     private userLocationService: UserLocationService,
-    private dialogRef: MatDialogRef<CreatePostComponent> 
+    private dialogRef: MatDialogRef<CreatePostComponent>,
+    private authService: AuthService 
+ 
   ) {
     this.postForm = this.fb.group({
       description: ['', Validators.required],
@@ -37,7 +42,13 @@ export class CreatePostComponent implements OnInit {
   }
 
   ngOnInit(): void {
-      
+    this.authService.user$.subscribe(user => {
+      if (user && user.id) {
+        this.userId = user.id;
+      } else {
+        this.userId = null;
+      }
+    });  
   }
 
   onFileChange(event: any): void {
@@ -68,7 +79,7 @@ export class CreatePostComponent implements OnInit {
 
 
   onSubmit(): void {
-    if (this.postForm.invalid || !this.imageBase64) {
+    if (this.postForm.invalid || !this.imageBase64 || this.userId === null) {
       return;
     }
 
@@ -77,7 +88,7 @@ export class CreatePostComponent implements OnInit {
       imageUrl: this.postForm.value.imageUrl,   
       likes: 0,   
       comments: [],   
-      userId: 3,   
+      userId: this.userId, 
       longitude: this.postForm.value.longitude,
       latitude: this.postForm.value.latitude,
       createdAt: new Date() as any,   
