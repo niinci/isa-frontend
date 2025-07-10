@@ -14,18 +14,28 @@
   
     <hr />
   
-    <!-- Forma za dodavanje novog komentara -->
     <div class="add-comment-form">
       <textarea
         [(ngModel)]="newComment.content"
         placeholder="Unesi komentar..."
         rows="3"
         class="comment-textarea"
+        [disabled]="!isLoggedIn"
       ></textarea>
-  
-      <button (click)="submitComment()" [disabled]="!newComment.content?.trim()" class="submit-button">
+    
+      <button
+        (click)="submitComment()"
+        [disabled]="!newComment.content?.trim() || !isLoggedIn"
+        class="submit-button"
+      >
         Dodaj komentar
       </button>
     </div>
+    
+    <div *ngIf="messages" class="alert alert-warning mt-2">
+      {{ messages }}
+    </div>
+    
+    
   </div>
   
