@@ -34,14 +34,16 @@ export class PostComponent implements OnInit {
 
       if (this.isLoggedIn) {
         this.userId = user.id;  // Pretpostavljam da user objekat ima id polje
+        this.loadLikedPosts();
       } else {
         this.userId = null;
+        this.likedPosts.clear();
       }
     });
 
     // Učitavanje postova
     this.loadPosts();
-    this.loadLikedPosts();
+    //this.loadLikedPosts();
   }
 
   loadPosts(): void {
@@ -82,7 +84,10 @@ export class PostComponent implements OnInit {
   }
   
   loadLikedPosts(): void {
-    if (this.userId == null) return;
+    if (!this.isLoggedIn || this.userId == null) {
+      this.likedPosts.clear();
+      return;
+    }
   
     this.postService.getLikedPosts(this.userId).subscribe(posts => {
       posts.forEach(post => this.likedPosts.set(post.id, true));
