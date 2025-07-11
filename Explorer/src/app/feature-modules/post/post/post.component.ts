@@ -73,7 +73,7 @@ export class PostComponent implements OnInit {
         next: (response) => {
           const liked = response.liked;
           this.likedPosts.set(post.id, liked);
-          post.likes += liked ? 1 : -1;
+          post.likesCount += liked ? 1 : -1;
         },
         error: () => {
           this.messages.set(post.id, 'An error occurred while liking the post');

@@ -3,7 +3,7 @@ import { Comment } from './comment.model';
 export class CreatePost {
   description: string;
   imageUrl: string;
-  likes: number;
+  likesCount: number;
   comments: Comment[];
   userId: number;
   longitude: number;
@@ -15,7 +15,7 @@ export class CreatePost {
     id: number = 0,
     description: string = '',
     imageUrl: string = '',
-    likes: number = 0,
+    likesCount: number = 0,
     comments: Comment[] = [],
     userId: number = 0,
     longitude: number = 0.0,
@@ -24,7 +24,7 @@ export class CreatePost {
   ) {
     this.description = description;
     this.imageUrl = imageUrl;
-    this.likes = likes;
+    this.likesCount = likesCount;
     this.comments = comments;
     this.userId = userId;
     this.longitude = longitude;

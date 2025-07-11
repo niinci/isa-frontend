@@ -86,7 +86,7 @@ export class CreatePostComponent implements OnInit {
     const createPost: CreatePost = {
       description: this.postForm.value.description,
       imageUrl: this.postForm.value.imageUrl,   
-      likes: 0,   
+      likesCount: 0,   
       comments: [],   
       userId: this.userId, 
       longitude: this.postForm.value.longitude,

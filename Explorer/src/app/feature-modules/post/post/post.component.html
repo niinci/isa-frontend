@@ -10,7 +10,7 @@
             <img *ngIf="post.imageUrl" [src]="getPostImageUrl(post.imageUrl)" class="card-img-top mb-3" alt="Post image" style="max-height: 300px; object-fit: cover; border-radius: 8px;">
 
             <p class="card-text">
-              <strong>Likes:</strong> {{ post.likes }}
+              <strong>Likes:</strong> {{ post.likesCount }}
             </p>
 
             <!-- Prikaz poruke ako korisnik nije prijavljen, samo za konkretan post -->

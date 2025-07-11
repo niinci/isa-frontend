@@ -3,13 +3,13 @@ export class Post {
   id: number;
   description: string;
   imageUrl: string;  
-  likes: number;  
+  likesCount: number;  
   comments: Comment[];  
   deleted: boolean;  
   userId: number; 
 
   constructor() {
-    this.likes = 0;  
+    this.likesCount = 0;  
     this.comments = [];  
     this.deleted = false;  
   }
