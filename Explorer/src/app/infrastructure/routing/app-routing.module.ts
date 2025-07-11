@@ -12,6 +12,7 @@ import { ProfileComponent } from 'src/app/user-profile/user-profile.component';
 import { ChatComponent } from 'src/app/feature-modules/chat/chat.component';
 import { TrendsComponent } from 'src/app/feature-modules/trends/trends.component';
 import { NearbyPostsComponent } from 'src/app/feature-modules/nearby-posts/nearby-posts.component';
+import { UserAccountComponent } from 'src/app/users-list/users-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -23,7 +24,8 @@ const routes: Routes = [
   {path: 'profile', component: ProfileComponent},
   {path: 'chat', component: ChatComponent},
   {path: 'trends', component: TrendsComponent},
-  {path: 'nearby-posts', component: NearbyPostsComponent}
+  {path: 'nearby-posts', component: NearbyPostsComponent},
+  {path: 'app-user-account', component: UserAccountComponent}
 ];
 
 @NgModule({

@@ -16,7 +16,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { PostModule } from './feature-modules/post/post.module';
 import { AuthInterceptor } from './auth.interceptor';
 import { ProfileComponent } from './user-profile/user-profile.component';
-
+import { UserAccountComponent } from './users-list/users-list.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +24,7 @@ import { ProfileComponent } from './user-profile/user-profile.component';
     ChatComponent,
     TrendsComponent,
     NearbyPostsComponent,
+    UserAccountComponent,
   ],
   imports: [
     BrowserModule,
