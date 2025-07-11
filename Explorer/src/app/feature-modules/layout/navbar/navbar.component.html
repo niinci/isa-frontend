@@ -4,7 +4,7 @@
       <mat-icon>home</mat-icon>
     </button>
     <div class="navbar-buttons">
-      <button *ngIf="user && user.role === 'administrator'" color="accent" [routerLink]="['/user-account']" routerLinkActive="active" class="navbar-button">All Accounts</button>
+      <button *ngIf="user" color="accent" [routerLink]="['/app-user-account']" routerLinkActive="active" class="navbar-button">All Accounts</button>
       <button color="accent" [routerLink]="['/posts']" routerLinkActive="active" class="navbar-button">Posts</button>
       <button *ngIf="user" color="accent" [routerLink]="['/my-posts']" routerLinkActive="active" class="navbar-button">My posts</button>
       <button *ngIf="user && user.username !== ''" color="accent" [routerLink]="['/trends']" routerLinkActive="active" class="navbar-button">Trends</button> 
