@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserAccountService } from '../user-account.service';
+import { AuthService } from '../infrastructure/auth/auth.service';
 @Component({
   selector: 'app-user-account',
   templateUrl: './users-list.component.html',
@@ -19,7 +20,9 @@ export class UserAccountComponent implements OnInit {
     maxPosts: null
   };
 
-  constructor(private userAccountService: UserAccountService) {}
+  constructor(private userAccountService: UserAccountService,
+             public authService : AuthService
+  ) {}
 
   ngOnInit(): void {
     this.loadUsers();
