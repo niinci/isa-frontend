@@ -163,6 +163,18 @@ updateProfile(userId: number, profileData: any): Observable<any> {
 
   return this.http.put(`${environment.apiHost}userAccount/${userId}/profile`, profileData, { headers });
 }
+  isAdmin(): boolean {
+  return this.user$.value.role === 'ADMIN';
+  }
+
+  isUser(): boolean {
+    return this.user$.value.role === 'USER';
+  }
+  
+  isGuest(): boolean {
+    return !this.tokenStorage.getAccessToken();
+  }
+  
 
 
 

@@ -18,7 +18,7 @@ export class NavbarComponent implements OnInit {
     this.showDropdown = this.showDropdown === menu ? null : menu;
 }
 
-  constructor(private authService: AuthService) {}
+  constructor(public authService: AuthService) {}
 
   ngOnInit(): void {
     this.authService.user$.subscribe(user => {
