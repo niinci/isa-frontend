@@ -23,6 +23,7 @@
     "@auth0/angular-jwt": "^5.1.2",
     "@types/leaflet-routing-machine": "^3.2.8",
     "chart.js": "^4.5.0",
+    "leaflet": "^1.9.4",
     "leaflet-routing-machine": "^3.2.12",
     "ng2-charts": "^4.1.1",
     "rxjs": "~7.8.0",
