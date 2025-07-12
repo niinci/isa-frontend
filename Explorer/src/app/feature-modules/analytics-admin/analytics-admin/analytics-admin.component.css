@@ -1,0 +1,48 @@
+:host {
+    display: block;
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f5f7fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+  }
+  
+  h3 {
+    margin-top: 2rem;
+    color: #34495e;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin: 0.3rem 0;
+  }
+  
+  pre {
+    background-color: #272c34;
+    color: #dcdcdc;
+    padding: 15px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 0.9rem;
+    max-height: 200px;
+  }
+  
+  canvas {
+    display: block;
+    max-width: 500px;
+    margin: 2rem auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  

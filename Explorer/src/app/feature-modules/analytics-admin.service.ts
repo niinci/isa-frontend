@@ -12,7 +12,7 @@ export interface AnalyticsCountsDTO {
 }
 
 export interface UserActivityDistributionDTO {
-  postPercentage: number;
+  postMakersPercentage: number;
   commentOnlyPercentage: number;
   inactivePercentage: number;
 }
