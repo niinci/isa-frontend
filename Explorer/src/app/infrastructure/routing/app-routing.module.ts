@@ -13,6 +13,7 @@ import { ChatComponent } from 'src/app/feature-modules/chat/chat.component';
 import { TrendsComponent } from 'src/app/feature-modules/trends/trends.component';
 import { NearbyPostsComponent } from 'src/app/feature-modules/nearby-posts/nearby-posts.component';
 import { UserAccountComponent } from 'src/app/users-list/users-list.component';
+import { AnalyticsAdminComponent } from 'src/app/feature-modules/analytics-admin/analytics-admin/analytics-admin.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -25,7 +26,9 @@ const routes: Routes = [
   {path: 'chat', component: ChatComponent},
   {path: 'trends', component: TrendsComponent},
   {path: 'nearby-posts', component: NearbyPostsComponent},
-  {path: 'app-user-account', component: UserAccountComponent}
+  {path: 'app-user-account', component: UserAccountComponent},
+  {path: 'admin-analytics', component: AnalyticsAdminComponent },
+
 ];
 
 @NgModule({

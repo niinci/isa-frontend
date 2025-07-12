@@ -17,6 +17,9 @@ import { PostModule } from './feature-modules/post/post.module';
 import { AuthInterceptor } from './auth.interceptor';
 import { ProfileComponent } from './user-profile/user-profile.component';
 import { UserAccountComponent } from './users-list/users-list.component';
+import { NgChartsModule } from 'ng2-charts';
+import { AnalyticsAdminComponent } from './feature-modules/analytics-admin/analytics-admin/analytics-admin.component';
+
 
 @NgModule({
   declarations: [
@@ -25,6 +28,7 @@ import { UserAccountComponent } from './users-list/users-list.component';
     TrendsComponent,
     NearbyPostsComponent,
     UserAccountComponent,
+    AnalyticsAdminComponent
   ],
   imports: [
     BrowserModule,
@@ -36,6 +40,7 @@ import { UserAccountComponent } from './users-list/users-list.component';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     MatDialogModule,
+    NgChartsModule, 
   ],
   providers: [
   {  provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

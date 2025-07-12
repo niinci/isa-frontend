@@ -1,0 +1,15 @@
+<h2>Analytics Counts</h2>
+<div *ngIf="counts">
+  <p>Nedeljni komentari: {{ counts.weeklyComments }}</p>
+  <p>Mesecni komentari: {{ counts.monthlyComments }}</p>
+  <p>Godisnji komentari: {{ counts.yearlyComments }}</p>
+  <p>Nedeljni postovi: {{ counts.weeklyPosts }}</p>
+  <p>Mesecni postovi: {{ counts.monthlyPosts }}</p>
+  <p>Godisnji postovi: {{ counts.yearlyPosts }}</p>
+</div>
+
+<h2>Distribucija aktivnosti korisnika</h2>
+<canvas baseChart
+  [data]="userActivityData"
+  [options]="userActivityOptions">
+</canvas>
