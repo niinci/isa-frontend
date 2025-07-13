@@ -1,4 +1,5 @@
 import { Comment } from './comment.model'; 
+import { LocationAddress } from './location-address.model'; 
 
 export class CreatePost {
   description: string;
@@ -10,6 +11,7 @@ export class CreatePost {
   latitude: number;
   createdAt: string;  
   imageBase64: string;
+  locationAddress?: string;
 
   constructor(
     id: number = 0,
@@ -20,7 +22,8 @@ export class CreatePost {
     userId: number = 0,
     longitude: number = 0.0,
     latitude: number = 0.0,
-    createdAt: string = ''
+    createdAt: string = '',
+    locationAddress?: string
   ) {
     this.description = description;
     this.imageUrl = imageUrl;
@@ -30,5 +33,6 @@ export class CreatePost {
     this.longitude = longitude;
     this.latitude = latitude;
     this.createdAt = createdAt;
+    this.locationAddress = locationAddress;
   }
 }

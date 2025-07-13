@@ -8,6 +8,9 @@ import { Position } from '../model/position.model';
 import { UserLocationService } from 'src/app/shared/user-location/user-location.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
+import { LocationAddress } from '../model/location-address.model';
+import * as L from 'leaflet';
+import 'leaflet-control-geocoder';
 
 @Component({
   selector: 'xp-create-post',
@@ -21,9 +24,9 @@ export class CreatePostComponent implements OnInit {
   imageBase64: string | null = null;
   imageUploaded: boolean = false;
   userId: number | null = null;
+  selectedLocationAddress: LocationAddress | undefined;
 
-
-  @ViewChild(MapComponent) map: MapComponent;
+  @ViewChild(MapComponent) mapComponent: MapComponent;
 
   constructor(
     private fb: FormBuilder,
@@ -79,7 +82,7 @@ export class CreatePostComponent implements OnInit {
 
 
   onSubmit(): void {
-    if (this.postForm.invalid || !this.imageBase64 || this.userId === null) {
+    if (this.postForm.invalid || !this.imageBase64 || this.userId === null || !this.selectedLocationAddress) {
       return;
     }
 
@@ -92,8 +95,11 @@ export class CreatePostComponent implements OnInit {
       longitude: this.postForm.value.longitude,
       latitude: this.postForm.value.latitude,
       createdAt: new Date() as any,   
-      imageBase64: this.imageBase64
+      imageBase64: this.imageBase64,
+      locationAddress: JSON.stringify(this.selectedLocationAddress) 
     };
+
+    console.log('--- onSubmit: Objekat posta koji se šalje:', createPost);
 
     this.postService.createPost(createPost, this.imageBase64).subscribe({
       next: (createdPost) => {
@@ -108,9 +114,39 @@ export class CreatePostComponent implements OnInit {
   }
 
   onCoordinatesChange(coordinates: [number, number]): void {
+    const [latitude, longitude] = coordinates;
+  
     this.postForm.patchValue({
-      latitude: coordinates[0],
-      longitude: coordinates[1],
+      latitude: latitude,
+      longitude: longitude,
     });
+  
+    console.log('--- onCoordinatesChange: Koordinate primljene:', { latitude, longitude });
+  
+    const lat = latitude;
+    const lon = longitude;
+  
+    console.log('--- onCoordinatesChange: Pokrećem fetch za reverzno geokodiranje...');
+  
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('--- Fetch uspešan, rezultat:', data);
+  
+        const address = data.address || {};
+        this.selectedLocationAddress = {
+          street: address.road || '',
+          city: address.city || address.town || address.village || '',
+          country: address.country || '',
+          number: address.house_number || ''
+        };
+  
+        console.log('--- Adresa uspešno parsirana:', this.selectedLocationAddress);
+      })
+      .catch((err) => {
+        console.error('--- Greška pri fetchu reverznog geokodiranja:', err);
+        this.selectedLocationAddress = undefined;
+      });
   }
+  
 }
