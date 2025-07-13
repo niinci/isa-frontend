@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { PostService } from '../../post.service';
 import { Router } from '@angular/router';
 import { CreatePost } from '../model/createPost.model';
@@ -11,6 +11,18 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { LocationAddress } from '../model/location-address.model';
 import * as L from 'leaflet';
 import 'leaflet-control-geocoder';
+
+export const atLeastOneLocationRequired: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const formGroup = control as FormGroup;
+  const latitude = formGroup.get('latitude')?.value;
+  const longitude = formGroup.get('longitude')?.value;
+
+  if (latitude !== null && longitude !== null) {
+    return null;  
+  }
+
+  return { atLeastOneLocationRequired: true };
+};
 
 @Component({
   selector: 'xp-create-post',
@@ -43,7 +55,7 @@ export class CreatePostComponent implements OnInit {
       latitude: [null],
       longitude: [null],
       addressInput: ['']
-    });
+    }, { validators: atLeastOneLocationRequired });
   }
 
   ngOnInit(): void {
