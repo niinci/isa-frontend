@@ -27,7 +27,7 @@ export class CreatePostComponent implements OnInit {
   selectedLocationAddress: LocationAddress | undefined;
   selectedFileName: string | null = null;
 
-  @ViewChild(MapComponent) mapComponent: MapComponent;
+  @ViewChild(MapComponent) mapComponent!: MapComponent;
 
   constructor(
     private fb: FormBuilder,
@@ -40,8 +40,9 @@ export class CreatePostComponent implements OnInit {
   ) {
     this.postForm = this.fb.group({
       description: ['', Validators.required],
-      latitude: [null, Validators.required],
-      longitude: [null, Validators.required]
+      latitude: [null],
+      longitude: [null],
+      addressInput: ['']
     });
   }
 
@@ -124,34 +125,12 @@ export class CreatePostComponent implements OnInit {
     this.postForm.patchValue({
       latitude: latitude,
       longitude: longitude,
+      addressInput: '' 
     });
   
     console.log('--- onCoordinatesChange: Koordinate primljene:', { latitude, longitude });
   
-    const lat = latitude;
-    const lon = longitude;
-  
-    console.log('--- onCoordinatesChange: Pokrećem fetch za reverzno geokodiranje...');
-  
-    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log('--- Fetch uspešan, rezultat:', data);
-  
-        const address = data.address || {};
-        this.selectedLocationAddress = {
-          street: address.road || '',
-          city: address.city || address.town || address.village || '',
-          country: address.country || '',
-          number: address.house_number || ''
-        };
-  
-        console.log('--- Adresa uspešno parsirana:', this.selectedLocationAddress);
-      })
-      .catch((err) => {
-        console.error('--- Greška pri fetchu reverznog geokodiranja:', err);
-        this.selectedLocationAddress = undefined;
-      });
+    this.reverseGeocode(latitude, longitude);
   }
 
   onClose(): void {
@@ -159,7 +138,91 @@ export class CreatePostComponent implements OnInit {
   }
 
   onAddressSubmit(): void {
-    
+    const address = this.postForm.get('addressInput')?.value;
+    if (address && address.trim()) {
+      console.log('--- onAddressSubmit: Pokrećem geokodiranje za adresu:', address);
+      this.geocodeAddress(address.trim());
+    } else {
+      alert('Please enter an address to search.');
+    }
+  }
+
+  private geocodeAddress(address: string): void {
+    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then(data => {
+        console.log('--- Geokodiranje uspešno, rezultat:', data);
+        if (data && data.length > 0) {
+          const result = data[0];
+          const lat = parseFloat(result.lat);
+          const lon = parseFloat(result.lon);
+
+          this.postForm.patchValue({
+            latitude: lat,
+            longitude: lon
+          });
+
+          if (this.mapComponent) {
+            this.mapComponent.setMarker(lat, lon);
+            this.mapComponent.centerMap(lat, lon);
+          }
+
+          this.reverseGeocode(lat, lon); 
+
+          console.log('--- Adresa uspešno geokodirana i postavljena na mapi:', { lat, lon });
+        } else {
+          alert('Adresa nije pronađena. Pokušajte ponovo sa preciznijim unosom.');
+          this.postForm.patchValue({ latitude: null, longitude: null }); 
+          this.selectedLocationAddress = undefined;
+          if (this.mapComponent) {
+            this.mapComponent.clearMarker(); 
+          }
+        }
+      })
+      .catch(err => {
+        console.error('--- Greška pri geokodiranju adrese:', err);
+        alert('Došlo je do greške prilikom pretrage adrese. Molimo pokušajte kasnije.');
+        this.postForm.patchValue({ latitude: null, longitude: null });
+        this.selectedLocationAddress = undefined;
+        if (this.mapComponent) {
+          this.mapComponent.clearMarker();
+        }
+      });
+  }
+
+  // Metoda za reverzno geokodiranje (koordinate -> adresa)
+  private reverseGeocode(latitude: number, longitude: number): void {
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log('--- Reverzno geokodiranje uspešno, rezultat:', data);
+        const address = data.address || {};
+        this.selectedLocationAddress = {
+          street: address.road || '',
+          city: address.city || address.town || address.village || '',
+          country: address.country || '',
+          number: address.house_number || ''
+        };
+        const formattedAddress = `${this.selectedLocationAddress.street} ${this.selectedLocationAddress.number}, ${this.selectedLocationAddress.city}, ${this.selectedLocationAddress.country}`.trim();
+        this.postForm.patchValue({ addressInput: formattedAddress });
+
+        console.log('--- Adresa uspešno parsirana:', this.selectedLocationAddress);
+      })
+      .catch((err) => {
+        console.error('--- Greška pri fetchu reverznog geokodiranja:', err);
+        this.selectedLocationAddress = undefined;
+        this.postForm.patchValue({ addressInput: '' }); 
+      });
   }
   
 }
