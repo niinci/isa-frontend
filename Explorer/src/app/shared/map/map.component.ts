@@ -74,4 +74,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     this.coordinatesChange.emit([latlng.lat, latlng.lng]);
   }
+
+  public getMapZoom(): number {
+    if (this.map) {
+      return this.map.getZoom();
+    }
+    return 13; 
+  }
 }
