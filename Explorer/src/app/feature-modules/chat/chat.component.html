@@ -1,1 +1,12 @@
-<p>chat works!</p>
+<div class="chat-container">
+    <h2>Chat grupa #{{chatGroupId}}</h2>
+    <div class="messages">
+      <div *ngFor="let msg of messages">
+        <strong>{{msg.senderUsername}}:</strong> {{msg.content}}
+      </div>
+    </div>
+  
+    <input [(ngModel)]="newMessage" (keyup.enter)="send()" placeholder="Unesite poruku..." />
+    <button (click)="send()">Pošalji</button>
+  </div>
+  

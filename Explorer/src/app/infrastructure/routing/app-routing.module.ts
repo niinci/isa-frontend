@@ -28,6 +28,8 @@ const routes: Routes = [
   {path: 'nearby-posts', component: NearbyPostsComponent},
   {path: 'app-user-account', component: UserAccountComponent},
   {path: 'admin-analytics', component: AnalyticsAdminComponent },
+  {path: 'chat', component: ChatComponent },
+
 
 ];
 

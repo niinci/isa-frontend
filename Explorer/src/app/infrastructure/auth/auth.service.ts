@@ -27,7 +27,11 @@ export class AuthService {
     private tokenStorage: TokenStorage,
     private router: Router
   ) {}
-
+  
+  getToken(): string {
+    return this.tokenStorage.getAccessToken() || '';
+  }
+  
   // Login method
   login(login: Login): Observable<AuthenticationResponse> {
     return this.http
