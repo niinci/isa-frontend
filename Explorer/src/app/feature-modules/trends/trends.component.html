@@ -1,1 +1,43 @@
-<p>trends works!</p>
+<div class="trends-container">
+  <div *ngIf="loading" class="loading">Učitavanje trendova...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div *ngIf="trendsData">
+    <p class="stat">Ukupan broj objava: <strong>{{ trendsData.totalPosts }}</strong></p>
+    <p class="stat">Broj objava u poslednjih mesec dana: <strong>{{ trendsData.postsLastMonth }}</strong></p>
+
+    <div class="columns-container">
+      <div class="column">
+        <h3 class="section-title">💖 Top 5 objava u poslednjih 7 dana</h3>
+        <div *ngFor="let post of trendsData.top5PostsLast7Days" class="post-card">
+          <img *ngIf="post.imageUrl" [src]="post.imageUrl" alt="Post slika" class="post-image" />
+          <p class="post-description">{{ post.description }}</p>
+          <p class="post-likes">❤️ {{ post.likesCount }} lajka</p>
+        </div>
+      </div>
+
+      <div class="column">
+        <h3 class="section-title">🌟 Top 10 objava ikada</h3>
+        <div *ngFor="let post of trendsData.top10PostsEver" class="post-card">
+          <img *ngIf="post.imageUrl" [src]="post.imageUrl" alt="Post slika" class="post-image" />
+          <p class="post-description">{{ post.description }}</p>
+          <p class="post-likes">❤️ {{ post.likesCount }} lajka</p>
+        </div>
+      </div>
+
+      <div class="column">
+        <h3 class="section-title">👑 Top 10 korisnika po lajkovima u poslednjih 7 dana</h3>
+       <ul class="user-list">
+            <li *ngFor="let user of trendsData.top10UsersByLikesGivenLast7Days; let i = index" class="user-item">
+                 <span *ngIf="i === 0">🥇</span>
+                <span *ngIf="i === 1">🥈</span>
+                <span *ngIf="i === 2">🥉</span>
+                <span *ngIf="i > 2">👤</span>
+                 {{ user.username }}
+            </li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</div>
