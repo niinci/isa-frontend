@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
 import * as L from 'leaflet';
 
 @Component({
@@ -12,6 +12,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private mapInitialized = false;
 
   @Output() coordinatesChange = new EventEmitter<[number, number]>();
+
+  @Input() initialLatitude: number | undefined;
+  @Input() initialLongitude: number | undefined;
 
   private initMap(): void {
     if (this.mapInitialized) {
@@ -81,4 +84,43 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     }
     return 13; 
   }
+
+  public setMarker(lat: number, lng: number): void {
+    if (!this.mapInitialized) {
+      console.warn('Map not initialized yet. Cannot set marker.');
+      return;
+    }
+
+    const redDot = L.icon({
+      iconUrl: '../assets/images/red-dot.png',
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+    });
+
+    if (this.marker) {
+      this.map.removeLayer(this.marker);
+    }
+
+    this.marker = L.marker([lat, lng], { icon: redDot }).addTo(this.map);
+    console.log("Marker set at:", lat, lng);
+    this.coordinatesChange.emit([lat, lng]); 
+  }
+
+  public centerMap(lat: number, lng: number, zoom: number = 16): void {
+    if (this.mapInitialized) {
+      this.map.setView([lat, lng], zoom);
+      console.log("Map centered at:", lat, lng, "with zoom:", zoom);
+    } else {
+        console.warn('Map not initialized yet. Cannot center map.');
+    }
+  }
+
+  public clearMarker(): void {
+    if (this.marker) {
+      this.map.removeLayer(this.marker);
+      this.marker = null;
+      console.log("Marker cleared.");
+    }
+  }
 }
+

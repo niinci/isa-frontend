@@ -1,5 +1,8 @@
 <div class="container">
+  <div class="dialog-header">
     <h2>Create Post</h2>
+    <button class="close-button" (click)="onClose()">X</button>
+  </div>
   
     <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
@@ -9,7 +12,16 @@
       <div class="form-group">
         <label for="image" class="addImageBtn">Add Image</label>
         <input type="file" id="image" (change)="onFileChange($event)" class="form-control" accept="image/*" style="display: none;" />
-              </div>
+        <span *ngIf="selectedFileName" class="file-name">{{ selectedFileName }}</span>
+      </div>
+
+      <div class="form-group">
+        <div class="address-input-wrapper">
+          <input type="text" id="addressInput" formControlName="addressInput" class="form-control" placeholder="Address: Street, City, Country (optional)" />
+          <button type="button" class="btn find-address-button" (click)="onAddressSubmit()">
+            Find <span class="material-icons" style="font-size: 18px; margin-right: 6px;">search</span>
+          </button> </div>
+      </div>
 
       <div class="map-container">
         <app-map (coordinatesChange)="onCoordinatesChange($event)"></app-map>
