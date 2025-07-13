@@ -25,6 +25,7 @@ export class CreatePostComponent implements OnInit {
   imageUploaded: boolean = false;
   userId: number | null = null;
   selectedLocationAddress: LocationAddress | undefined;
+  selectedFileName: string | null = null;
 
   @ViewChild(MapComponent) mapComponent: MapComponent;
 
@@ -39,8 +40,8 @@ export class CreatePostComponent implements OnInit {
   ) {
     this.postForm = this.fb.group({
       description: ['', Validators.required],
-      latitude: [null],
-      longitude: [null]
+      latitude: [null, Validators.required],
+      longitude: [null, Validators.required]
     });
   }
 
@@ -62,7 +63,11 @@ export class CreatePostComponent implements OnInit {
         this.imageBase64 = reader.result as string;
       };
       reader.readAsDataURL(file);
+      this.selectedFileName = file.name;
+    }else {
+      this.selectedFileName = null;
     }
+
     const localImageUrl = URL.createObjectURL(file); 
     this.postForm.patchValue({ imageUrl: localImageUrl });
     this.imageUploaded = true;
@@ -147,6 +152,14 @@ export class CreatePostComponent implements OnInit {
         console.error('--- Greška pri fetchu reverznog geokodiranja:', err);
         this.selectedLocationAddress = undefined;
       });
+  }
+
+  onClose(): void {
+    this.dialogRef.close();  
+  }
+
+  onAddressSubmit(): void {
+    
   }
   
 }
