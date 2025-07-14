@@ -4,7 +4,8 @@
       <div *ngFor="let comment of comments" class="comment-card">
         <p class="comment-content">{{ comment.content }}</p>
         <p class="comment-meta">Autor: {{ comment.username }} </p>
-        </div>
+        <p class="comment-time">{{ comment.formattedCommentedAt | date:'medium' }} </p>
+      </div>
     </div>
   
     <!-- Ako nema komentara -->
