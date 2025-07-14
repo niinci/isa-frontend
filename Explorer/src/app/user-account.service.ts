@@ -22,6 +22,11 @@ export class UserAccountService {
   searchByEmail(email: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/search/email`, { params: { email } });
   }
+  searchByUsername(username: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/search/username`, { params: { username } });
+  }
+  
+
   getUsernameById(userId: number): Observable<string> {
     return this.http.get(`${this.apiUrl}/${userId}/username`, { responseType: 'text' });
   }

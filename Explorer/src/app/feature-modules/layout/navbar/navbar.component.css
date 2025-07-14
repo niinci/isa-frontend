@@ -89,3 +89,59 @@
 mat-icon {
     font-size: 30px;
 }
+/* Stil za input polje pretrage */
+.navbar-search-input {
+    width: 250px;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1.5px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .navbar-search-input:focus {
+    border-color: #540e0e; /* tamnoplava boja (ili možeš promeniti po želji) */
+    box-shadow: 0 0 5px #540e0e;
+  }
+  
+  /* Omotač za input i listu da se lepo pozicionira */
+  .search-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-left: 10px;
+    z-index: 1000; /* da se prikaže preko ostalih elemenata */
+  }
+  
+  /* Lista sa rezultatima */
+  .search-results-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 220px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 4px 8px rgba(176, 3, 3, 0.1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  /* Pojedinačni rezultat */
+  .search-result-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: background-color 0.2s ease;
+  }
+  
+  .search-result-item:hover {
+    background-color: #540e0e;
+    color: white;
+  }
+  
