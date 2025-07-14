@@ -3,20 +3,45 @@
     <button color="accent" [routerLink]="['/home']" routerLinkActive="active" class="navbar-button">
       <mat-icon>home</mat-icon>
     </button>
+    <button color="accent" (click)="toggleSearchInput()" class="navbar-button">
+      <mat-icon>search</mat-icon>
+    </button>
+    
+    <div *ngIf="showSearchInput" class="search-wrapper">
+      <input
+        type="text"
+        [(ngModel)]="searchName"
+        (input)="onSearchInput()"
+        placeholder="Search users by username"
+        class="navbar-search-input"
+      />
+    
+      <ul *ngIf="filteredUsers.length > 0" class="search-results-list">
+        <li *ngFor="let user of filteredUsers" (click)="selectUser(user)" class="search-result-item">
+          {{ user.username }}
+        </li>
+      </ul>
+    </div>
+    
+
+
     <div class="navbar-buttons">
       <button *ngIf="user && authService.isAdmin()" color="accent" [routerLink]="['/app-user-account']" routerLinkActive="active" class="navbar-button">All Accounts</button>
       <button color="accent" [routerLink]="['/posts']" routerLinkActive="active" class="navbar-button">Posts</button>
       <button *ngIf="user && authService.isAdmin()" color="accent" [routerLink]="['/admin-analytics']" routerLinkActive="active" class="navbar-button">Analystics</button>
-      <button *ngIf="user && user.username !== ''" color="accent" [routerLink]="['/trends']" routerLinkActive="active" class="navbar-button">Trends</button> 
-      <button *ngIf="user && user.username !== ''" color="accent" [routerLink]="['/nearby-posts']" routerLinkActive="active" class="navbar-button">Nearby Posts</button> 
+      <button *ngIf="user && user.username !== ''" color="accent" [routerLink]="['/trends']" routerLinkActive="active" class="navbar-button">Trends</button>
+      <button *ngIf="user && user.username !== ''" color="accent" [routerLink]="['/nearby-posts']" routerLinkActive="active" class="navbar-button">Nearby Posts</button>
     </div>
+
     <button *ngIf="user && user.username === ''" color="accent" [routerLink]="['/login']" routerLinkActive="active" class="navbar-button">Login</button>
     <button *ngIf="user && user.username !== ''" color="accent" (click)="onLogout()" class="navbar-button">Logout</button>
     <button *ngIf="user && user.username === ''" color="accent" [routerLink]="['/register']" routerLinkActive="active" class="navbar-button">Register</button>
-    <button class="navbar-button" *ngIf="user && user.username !== ''" [routerLink]="['/chat']" >
+
+    <button class="navbar-button" *ngIf="user && user.username !== ''" [routerLink]="['/chat']">
       <mat-icon>chat</mat-icon>
     </button>
-    <button class="navbar-button" *ngIf="user && user.username !== ''" [routerLink]="['/profile']" >
+    <button class="navbar-button" *ngIf="user && user.username !== ''"   (dblclick)="onAccountIconClick()"
+    [routerLink]="['/profile']">
       <mat-icon>account_circle</mat-icon>
     </button>
   </div>

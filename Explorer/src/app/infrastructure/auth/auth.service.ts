@@ -133,7 +133,7 @@ private setUser(): void {
     });
   }
 
-  getFollowers(email: string): Observable<any[]> {
+  /*getFollowers(email: string): Observable<any[]> {
     // Mock metoda - vraća prazan niz
     return new Observable(observer => {
       observer.next([]);
@@ -147,7 +147,7 @@ private setUser(): void {
       observer.next([]);
       observer.complete();
     });
-  }
+  }*/
 
  changePassword(data: { currentPassword: string; newPassword: string }): Observable<any> {
   const email = this.user$.value.email || localStorage.getItem('email') || '';
@@ -178,6 +178,45 @@ updateProfile(userId: number, profileData: any): Observable<any> {
   isGuest(): boolean {
     return !this.tokenStorage.getAccessToken();
   }
+  
+  getUserById(id: number): Observable<UserInfo> {
+    const token = this.tokenStorage.getAccessToken();
+    const headers = { Authorization: `Bearer ${token}` };
+  
+    return this.http.get<UserInfo>(`${environment.apiHost}userAccount/${id}`, { headers });
+  }
+
+  isFollowing(followerId: number, followingId: number) {
+    return this.http.get<boolean>(
+      `${environment.apiHost}follows/isFollowing?followerId=${followerId}&followingId=${followingId}`
+    );
+  }
+  
+  followUser(followerId: number, followingId: number) {
+    return this.http.post(
+      `${environment.apiHost}follows/follow?followerId=${followerId}&followingId=${followingId}`,
+      {}
+    );
+  }
+  
+  unfollowUser(followerId: number, followingId: number) {
+    return this.http.delete(
+      `${environment.apiHost}follows/unfollow?followerId=${followerId}&followingId=${followingId}`
+    );
+  }
+  
+  getFollowers(userId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiHost}follows/followers?userId=${userId}`);
+  }
+  
+  getFollowing(userId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiHost}follows/following?userId=${userId}`);
+  }
+  
+  
+  
+  
+  
   
 
 

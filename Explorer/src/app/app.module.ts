@@ -28,7 +28,7 @@ import { AnalyticsAdminComponent } from './feature-modules/analytics-admin/analy
     TrendsComponent,
     NearbyPostsComponent,
     UserAccountComponent,
-    AnalyticsAdminComponent
+    AnalyticsAdminComponent,
   ],
   imports: [
     BrowserModule,

@@ -11,11 +11,16 @@
       {{ user?.address?.street || '' }} {{ user?.address?.number || '' }}, 
       {{ user?.address?.city || '' }}, {{ user?.address?.country || '' }}
     </p>
+    <div *ngIf="user && !isMyProfile" class="follow-buttons">
+      <button *ngIf="!isFollowing" (click)="followUser()" class="btn btn-primary">Follow</button>
+      <button *ngIf="isFollowing" (click)="unfollowUser()" class="btn btn-secondary">Unfollow</button>
+    </div>
+    
 
     <!-- Statistika -->
     <div class="user-stats">
       <div class="stat-box">
-        <h3>{{ followers.length }}</h3>
+        <h3>{{ followers?.length || 0 }}</h3>
         <p>Followers</p>
       </div>
       <div class="stat-box">
@@ -60,6 +65,10 @@
       <div *ngIf="!followersLoading && followers.length === 0" class="info-box">No followers yet.</div>
       <div *ngFor="let f of followers" class="list-card">{{ f?.username || 'Unknown' }}</div>
     </section>
+    <!-- Dodaj negde ispod osnovnih korisničkih informacija -->
+
+  
+
 
     <!-- Following -->
     <section *ngIf="activeTab === 'following'" class="tab-section">
@@ -70,7 +79,7 @@
     </section>
 
     <!-- Settings -->
-    <section *ngIf="activeTab === 'settings'" class="tab-section">
+    <section *ngIf="activeTab === 'settings' && isMyProfile" class="tab-section">
       <h2><i class="fas fa-user-edit"></i> Settings</h2>
 
       <!-- Edit profile -->

@@ -1,11 +1,9 @@
-// user-profile.component.ts - Popravljena verzija
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../infrastructure/auth/auth.service';
 import { UserInfo } from '../infrastructure/auth/model/userInfo.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-// Privremeno koristimo any tipove dok ne kreirate model fajlove
 interface TempPost {
   id: number;
   content: string;
@@ -18,13 +16,6 @@ interface TempFollower {
   email?: string;
 }
 
-interface TempPasswordChange {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
-
-
 @Component({
   selector: 'user-profile',
   templateUrl: './user-profile.component.html',
@@ -33,45 +24,40 @@ interface TempPasswordChange {
 export class ProfileComponent implements OnInit {
   email: string | null = null;
   user: UserInfo | null = null;
-  isLoading: boolean = false;
+  isLoading = false;
   error: string | null = null;
-  
-  // Tab management
   activeTab: 'profile' | 'posts' | 'followers' | 'following' | 'settings' = 'profile';
   
-  // Data arrays - koristimo any tipove privremeno
+
   userPosts: TempPost[] = [];
   followers: TempFollower[] = [];
   following: TempFollower[] = [];
-  
-  // Loading states for different sections
-  postsLoading: boolean = false;
-  followersLoading: boolean = false;
-  followingLoading: boolean = false;
-  
-  // Forms
+
+  postsLoading = false;
+  followersLoading = false;
+  followingLoading = false;
+
   passwordForm: FormGroup;
   profileEditForm: FormGroup;
-  
-  // Edit modes
-  isEditingProfile: boolean = false;
-  isChangingPassword: boolean = false;
+
+  isFollowing: boolean = false;
+
 
   constructor(
-    private authService: AuthService, 
+    private authService: AuthService,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router:Router
   ) {
-    // Initialize forms
     this.passwordForm = this.fb.group({
-      currentPassword: ['', [Validators.required, Validators.minLength(1)]],
-      newPassword: ['', [Validators.required, Validators.minLength(1)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(1)]]
+      currentPassword: ['', Validators.required],
+      newPassword: ['', Validators.required],
+      confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
 
     this.profileEditForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       street: ['', Validators.required],
       city: ['', Validators.required],
       country: ['', Validators.required],
@@ -80,48 +66,155 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  this.email = this.authService.user$.value.email || localStorage.getItem('email');
-console.log('Email:', this.email);
-this.getUser();
-}
-
-
-  // Custom validator for password confirmation
-  passwordMatchValidator(group: FormGroup) {
-  const newPassword = group.get('newPassword');
-  const confirmPassword = group.get('confirmPassword');
-
-  if (!newPassword || !confirmPassword) return null;
-
-  if (newPassword.value !== confirmPassword.value) {
-    confirmPassword.setErrors({ mismatch: true });
-    return { mismatch: true };
-  } else {
-    confirmPassword.setErrors(null);
-    return null;
+    this.route.queryParams.subscribe(params => {
+      const routeUserId = Number(params['userId']);
+      const loggedUserId = this.authService.getCurrentUserId();
+  
+      if (routeUserId && routeUserId !== loggedUserId) {
+        this.email = null;
+        this.getUserById(routeUserId);
+        this.checkIfFollowing(loggedUserId, routeUserId);
+      } else {
+        this.email = this.authService.user$.value.email || localStorage.getItem('email');
+        this.getUser();
+      }
+    });
   }
-}
+  
 
+  checkIfFollowing(followerId: number, followingId: number): void {
+    this.authService.isFollowing(followerId, followingId).subscribe({
+      next: (result) => {
+        this.isFollowing = result;
+      },
+      error: () => {
+        this.isFollowing = false;
+      }
+    });
+  }
+
+  followUser(): void {
+    const followerId = this.authService.getCurrentUserId();
+    const followingId = this.user?.id;
+  
+    if (!followingId) return;
+  
+    this.authService.followUser(followerId, followingId).subscribe({
+      next: () => {
+        this.isFollowing = true;
+        console.log('Follow success'); // Dodaj
+        this.loadFollowers();
+        this.loadFollowing();
+      },
+      error: () => alert('Failed to follow user')
+    });
+  }
+  
+  
+  
+  unfollowUser(): void {
+    const followerId = this.authService.getCurrentUserId();
+    const followingId = this.user?.id;
+  
+    if (!followingId) return;
+  
+    this.authService.unfollowUser(followerId, followingId).subscribe({
+      next: () => {
+        this.isFollowing = false;
+  
+        this.loadFollowers();
+        this.loadFollowing();
+      },
+      error: () => alert('Failed to unfollow user')
+    });
+  }
+  
+  
+  
+  
+
+  get isMyProfile(): boolean {
+    const currentUserEmail = this.authService.user$.value.email || localStorage.getItem('email');
+    return this.user?.email === currentUserEmail;
+  }
+  
+
+  passwordMatchValidator(group: FormGroup) {
+    const newPassword = group.get('newPassword')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+    return newPassword === confirmPassword ? null : { mismatch: true };
+  }
 
   getUser(): void {
-    if (!this.email) return;
-    
     this.isLoading = true;
-    this.error = null;
-    
-    this.authService.getUser(this.email).subscribe({
-      next: (data: UserInfo) => {
+    this.resetUserRelatedData();
+  
+    const currentUserId = this.authService.getCurrentUserId();
+  
+    if (currentUserId && currentUserId !== 0) {
+      // Ako imamo userId, učitavamo po ID-ju
+      this.authService.getUserById(currentUserId).subscribe({
+        next: (data) => {
+          this.user = data;
+          this.initializeEditForm();
+          this.loadFollowers();
+          this.loadFollowing();
+          this.isLoading = false;
+        },
+        error: () => {
+          this.error = 'Failed to load profile';
+          this.isLoading = false;
+        }
+      });
+    } else if (this.email) {
+      // Ako nemamo userId, pokušavamo po emailu (ako je na raspolaganju)
+      this.authService.getUser(this.email).subscribe({
+        next: (data) => {
+          this.user = data;
+          this.initializeEditForm();
+          this.loadFollowers();
+          this.loadFollowing();
+          this.isLoading = false;
+        },
+        error: () => {
+          this.error = 'Failed to load profile';
+          this.isLoading = false;
+        }
+      });
+    } else {
+      this.error = 'No user info available';
+      this.isLoading = false;
+    }
+  }
+  
+  
+  
+
+  getUserById(id: number): void {
+    this.isLoading = true;
+    this.resetUserRelatedData();
+  
+    this.authService.getUserById(id).subscribe({
+      next: (data) => {
         this.user = data;
-        this.isLoading = false;
         this.initializeEditForm();
+  
+        if (this.user?.id != null) {
+          this.loadFollowers();
+          this.loadFollowing();
+        }
+  
+        this.isLoading = false;
       },
-      error: (error: any) => {
-        console.error('Error fetching user', error);
-        this.error = 'Failed to load user profile';
+      error: () => {
+        this.error = 'Failed to load user by ID';
         this.isLoading = false;
       }
     });
   }
+  
+  
+  
 
   initializeEditForm(): void {
     if (this.user) {
@@ -136,143 +229,151 @@ this.getUser();
     }
   }
 
-  setActiveTab(tab: 'profile' | 'posts' | 'followers' | 'following' | 'settings'): void {
+  setActiveTab(tab: typeof this.activeTab): void {
     this.activeTab = tab;
-    
-    switch (tab) {
-      case 'posts':
-        this.loadUserPosts();
-        break;
-      case 'followers':
-        this.loadFollowers();
-        break;
-      case 'following':
-        this.loadFollowing();
-        break;
-    }
+    if (tab === 'posts') this.loadUserPosts();
+    if (tab === 'followers') this.loadFollowers();
+    if (tab === 'following') this.loadFollowing();
   }
 
   loadUserPosts(): void {
-    if (!this.email || this.userPosts.length > 0) return;
-    
+    if (!this.user || this.userPosts.length > 0) return;
     this.postsLoading = true;
-    this.authService.getUserPosts(this.email).subscribe({
-      next: (posts: any[]) => {
+    this.authService.getUserPosts(this.user.email).subscribe({
+      next: (posts) => {
         this.userPosts = posts;
         this.postsLoading = false;
       },
-      error: (error: any) => {
-        console.error('Error loading posts', error);
-        this.postsLoading = false;
-      }
+      error: () => this.postsLoading = false
     });
   }
 
   loadFollowers(): void {
-    if (!this.email || this.followers.length > 0) return;
-    
+    this.followers = [];
+
+    if (!this.user) return;
     this.followersLoading = true;
-    this.authService.getFollowers(this.email).subscribe({
-      next: (followers: any[]) => {
+    this.authService.getFollowers(this.user.id).subscribe({
+      next: (followers) => {
         this.followers = followers;
         this.followersLoading = false;
       },
-      error: (error: any) => {
-        console.error('Error loading followers', error);
+      error: () => {
         this.followersLoading = false;
+        // Opcionalno: obrada greške, npr alert ili console.error
       }
     });
   }
-
+  
   loadFollowing(): void {
-    if (!this.email || this.following.length > 0) return;
-    
+    this.followers = [];
+
+    if (!this.user) return;
     this.followingLoading = true;
-    this.authService.getFollowing(this.email).subscribe({
-      next: (following: any[]) => {
+    this.authService.getFollowing(this.user.id).subscribe({
+      next: (following) => {
         this.following = following;
         this.followingLoading = false;
       },
-      error: (error: any) => {
-        console.error('Error loading following', error);
+      error: () => {
         this.followingLoading = false;
+        // možeš dodati alert ili console.error ako želiš
       }
     });
   }
-
-onPasswordSubmit(): void {
-  console.log('submit', this.passwordForm.value, this.passwordForm.valid);
-
-  if (this.passwordForm.valid) {
-    const passwordData: TempPasswordChange = this.passwordForm.value;
-
-    // Pošalji sva tri polja jer backend traži i confirmPassword
-    this.authService.changePassword(passwordData).subscribe({
-      next: () => {
-        alert('Password changed successfully');
-        this.isChangingPassword = false;
-        this.passwordForm.reset();
-      },
-      error: (error: any) => {
-        console.error('Error changing password', error);
-        alert(error.error || 'Failed to change password');
-      }
-    });
-  }
-}
+  
 
   onProfileEditSubmit(): void {
-  if (this.profileEditForm.valid && this.user) {
-    const formData = this.profileEditForm.value;
+    if (!this.profileEditForm.valid || !this.user) return;
+
     const profileData = {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
+      firstName: this.profileEditForm.value.firstName,
+      lastName: this.profileEditForm.value.lastName,
       address: {
-        street: formData.street,
-        city: formData.city,
-        country: formData.country,
-        number: formData.number
+        street: this.profileEditForm.value.street,
+        city: this.profileEditForm.value.city,
+        country: this.profileEditForm.value.country,
+        number: this.profileEditForm.value.number
       }
     };
-    
-    const userId = (this.user as any).id || 1;
-    
+
+    const userId = this.user.id;
+
     this.authService.updateProfile(userId, profileData).subscribe({
-      next: (updatedUser: any) => {
-  if (typeof updatedUser.address === 'string') {
-    try {
-      updatedUser.address = JSON.parse(updatedUser.address);
-    } catch {
-      updatedUser.address = null; // ili ostavi staru adresu ako hoćeš
-    }
-  }
+      next: (updatedUser) => {
+        if (typeof updatedUser.address === 'string') {
+          try {
+            updatedUser.address = JSON.parse(updatedUser.address);
+          } catch {
+            updatedUser.address = null;
+          }
+        }
 
-  this.user = { 
-    ...this.user, 
-    ...updatedUser,
-    address: updatedUser.address || profileData.address 
-  };
+        this.user = {
+          ...this.user,
+          ...updatedUser,
+          address: updatedUser.address || profileData.address
+        };
 
-  this.isEditingProfile = false;
-  alert('Profile updated successfully');
-  this.initializeEditForm();
-},
-      error: (error: any) => {
-        console.error('Error updating profile', error);
-        alert('Failed to update profile');
-      }
+        alert('Profile updated');
+        this.initializeEditForm();
+      },
+      error: () => alert('Failed to update profile')
     });
   }
-}
 
+  onPasswordSubmit(): void {
+    if (!this.passwordForm.valid) return;
+
+    const passwordData = this.passwordForm.value;
+
+    this.authService.changePassword(passwordData).subscribe({
+      next: () => {
+        alert('Password changed');
+        this.passwordForm.reset();
+      },
+      error: () => alert('Failed to change password')
+    });
+  }
 
   cancelEdit(): void {
-    this.isEditingProfile = false;
     this.initializeEditForm();
   }
 
   cancelPasswordChange(): void {
-    this.isChangingPassword = false;
     this.passwordForm.reset();
   }
+  onAccountIconClick() {
+    const currentUserId = this.authService.getCurrentUserId();
+  
+    // Proveri trenutno u URL-u da li gledamo tuđi profil (userId parametar)
+    const routeUserIdParam = this.route.snapshot.queryParamMap.get('userId');
+    const routeUserId = routeUserIdParam ? Number(routeUserIdParam) : null;
+  
+    if (routeUserId === currentUserId || !routeUserId) {
+      // Ako je tvoj profil ili nema parametra userId, prebaci na /profile bez parametara (tvoj profil)
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/profile']);
+      });
+    } else {
+      // Ako gledamo profil drugog korisnika, prebaci na svoj profil (/profile bez parametara)
+      this.router.navigate(['/profile']);
+    }
+  }
+
+  private resetUserRelatedData(): void {
+    this.userPosts = [];
+    this.followers = [];
+    this.following = [];
+    this.postsLoading = false;
+    this.followersLoading = false;
+    this.followingLoading = false;
+    this.activeTab = 'posts'; // možeš i drugačije, po želji
+  }
+  
+  
+
+
+
+  
 }
