@@ -1,12 +1,91 @@
 <div class="chat-container">
-    <h2>Chat grupa #{{chatGroupId}}</h2>
-    <div class="messages">
-      <div *ngFor="let msg of messages">
-        <strong>{{msg.senderUsername}}:</strong> {{msg.content}}
-      </div>
+
+  <!-- Definiši ng-template NA VRHU, da Angular zna pre nego što koristi -->
+  <ng-template #noGroupSelected>
+    <div class="chat-box placeholder">
+      <p>Изаберите групу да бисте започели ћаскање.</p>
     </div>
+  </ng-template>
+
+  <div class="sidebar">
+    <h3>Моје групе</h3>
+    <ul>
+      <li *ngFor="let group of groups" (click)="selectGroup(group)" [class.active]="group === selectedGroup">
+        {{ group.name }}
+      </li>
+    </ul>    
+  </div>
+
+  <div class="sidebar" *ngIf="userIsAdmin">
+    <h3>Kreiranje grupe</h3>
   
-    <input [(ngModel)]="newMessage" (keyup.enter)="send()" placeholder="Unesite poruku..." />
-    <button (click)="send()">Pošalji</button>
+    <!-- Forma za kreiranje nove grupe -->
+    <div class="create-group" *ngIf="userIsAdmin">
+      <input type="text" [(ngModel)]="newGroupName" placeholder="Унесите назив нове групе" />
+      <button (click)="createGroup()" [disabled]="!newGroupName.trim()">Креирај групу</button>
+    </div>
+
+    <!-- Lista grupa je OVDE uklonjena -->
   </div>
   
+  <div class="chat-box" *ngIf="selectedGroup; else noGroupSelected">
+
+    <h3>Група: {{ selectedGroup.name }}</h3>
+
+    <!-- Debug informacije -->
+    <div class="debug-info" style="background:#eee; padding:8px; margin-bottom:15px; font-size:0.9rem;">
+      <p><strong>Admin групе:</strong> {{ selectedGroup.admin?.username }}</p>
+    </div>
+
+    <div class="messages" #messagesContainer>
+      <div *ngFor="let msg of messages" class="message">
+        <strong>{{ msg.senderUsername }}:</strong> {{ msg.content }}
+        <span class="timestamp">{{ msg.timestamp | date:'shortTime' }}</span>
+      </div>
+    </div>
+
+    <!-- Ovaj deo je dostupan SAMO adminu -->
+    <div class="admin-panel" *ngIf="userIsAdmin">
+      <h4>Опције управљања групом</h4>
+
+      <div class="add-user">
+        <input [(ngModel)]="usernameToAdd" 
+               placeholder="Корисничко име за додавање" 
+               (input)="searchUsersForAdd()"
+               autocomplete="off"
+        />
+        <button (click)="addUserToGroup()">Додај корисника</button>
+      
+        <ul class="autocomplete-list" *ngIf="showUserSearchDropdown">
+          <li *ngFor="let user of searchedUsers" (click)="selectUserToAdd(user)">
+            {{ user.username }}
+          </li>
+        </ul>
+      </div>
+    
+      <div class="remove-user">
+        <input [(ngModel)]="usernameToRemove" placeholder="Корисничко име за уклањање" readonly />
+        <button (click)="removeUserFromGroup()">Уклони корисника</button>
+      
+        <ul class="members-list">
+          <li *ngFor="let member of groupMembersForRemoval">
+            {{ member.username }}
+            <button (click)="removeUser(member)" title="Уклони корисника">✖</button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="input-area">
+        <input type="text" 
+               placeholder="Унесите поруку..." 
+               [(ngModel)]="newMessage" 
+               (keyup.enter)="sendMessage()"
+               autocomplete="off"
+        />
+        <button [disabled]="!newMessage.trim()" (click)="sendMessage()">Пошаљи</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
