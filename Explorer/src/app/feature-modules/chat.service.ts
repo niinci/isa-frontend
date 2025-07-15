@@ -1,74 +1,87 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Client, IMessage } from '@stomp/stompjs';
-import { Observable, Subject } from 'rxjs';
-import * as SockJS from 'sockjs-client';
-import { AuthService } from '../infrastructure/auth/auth.service';
+import { Observable } from 'rxjs';
+import { User } from '../infrastructure/auth/model/user.model';
 
-export interface ChatMessage {
-  chatGroup: { id: string };
-  senderUsername: string;
+export interface ChatMessageDto {
+  id?: number;
   content: string;
+  senderUsername: string;
+  timestamp?: Date;
+  chatGroupId: number;
+}
+
+export interface ChatGroup {
+  id: number;
+  name: string;
+  members: any[]; // možeš precizirati tip ako imaš User model
+  admin: any;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-  private client: Client;
-  private messageSubject = new Subject<ChatMessage>();
 
-  constructor(private authService: AuthService) {
-    this.client = new Client({
-      webSocketFactory: () => new SockJS('http://localhost:8080/chat-websocket'),
-      connectHeaders: {
-        Authorization: 'Bearer ' + this.authService.getToken()
-      },
-      debug: (str) => { console.log(str); },
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
+  private apiUrl = 'http://localhost:8080/api/chat'; // prilagodi ako se menja
+
+  constructor(private http: HttpClient) {}
+
+  // --- Poruke ---
+
+  sendMessage(message: ChatMessageDto): Observable<ChatMessageDto> {
+    return this.http.post<ChatMessageDto>(`${this.apiUrl}/send`, message);
+  }
+
+  getLastMessages(groupId: number, count: number = 10): Observable<ChatMessageDto[]> {
+    return this.http.get<ChatMessageDto[]>(`${this.apiUrl}/${groupId}/last-messages`);
+  }
+
+  // --- Grupe ---
+
+  getUserGroups(username: string): Observable<ChatGroup[]> {
+    return this.http.get<ChatGroup[]>(`${this.apiUrl}/groups/${username}`);
+  }
+
+  createGroup(groupName: string, adminUsername: string): Observable<ChatGroup> {
+    return this.http.post<ChatGroup>(`${this.apiUrl}/group/create`, null, {
+      params: {
+        groupName,
+        adminUsername
+      }
     });
-  
-    this.client.onConnect = () => {
-      console.log('Connected to WebSocket');
-  
-      this.client.subscribe('/topic/1', (message: IMessage) => {
-        if (message.body) {
-          const chatMessage: ChatMessage = JSON.parse(message.body);
-          this.messageSubject.next(chatMessage);
-        }
-      });
-    };
-  
-    this.client.onStompError = (frame) => {
-      console.error('Broker reported error: ' + frame.headers['message']);
-      console.error('Additional details: ' + frame.body);
-    };
-  
-    this.client.activate();
-  }
-  
-  
-
-  getMessages(): Observable<ChatMessage> {
-    return this.messageSubject.asObservable();
   }
 
-  sendMessage(chatMessage: ChatMessage) {
-    if (this.client.connected) {
-      this.client.publish({
-        destination: '/app/chat.sendMessage',
-        body: JSON.stringify(chatMessage),
-      });
-    }
+  addUserToGroup(groupId: number, usernameToAdd: string, requestingUser: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/group/${groupId}/add-user`, null, {
+      params: {
+        usernameToAdd,
+        requestingUser
+      }
+    });
   }
 
-  addUser(chatMessage: ChatMessage) {
-    if (this.client.connected) {
-      this.client.publish({
-        destination: '/app/chat.addUser',
-        body: JSON.stringify(chatMessage),
-      });
-    }
+  removeUserFromGroup(groupId: number, usernameToRemove: string, requestingUser: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/group/${groupId}/remove-user`, null, {
+      params: {
+        usernameToRemove,
+        requestingUser
+      }
+    });
   }
+
+  getUsernameByEmail(email: string): Observable<string> {
+    return this.http.get(`${this.apiUrl}/username-by-email`, {
+      params: { email },
+      responseType: 'text'  // ovo je jako bitno da Angular tretira odgovor kao čisti tekst
+    });
+  }
+
+  searchUsers(query: string): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/users/search`, {
+      params: { query }
+    });
+  }
+  
+    
 }
