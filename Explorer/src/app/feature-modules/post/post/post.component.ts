@@ -120,20 +120,19 @@ export class PostComponent implements OnInit {
   }
 
   editPost(post: Post): void {
-  const updatedDescription = prompt('Izmeni opis posta:', post.description);
-
-  if (updatedDescription && updatedDescription.trim() !== '' && updatedDescription !== post.description) {
-    const postDTO = { description: updatedDescription }; // možeš dodati i druge podatke ako backend zahteva
-    this.postService.updatePost(post.id, postDTO).subscribe({
-      next: (updatedPost) => {
-        post.description = updatedPost.description;
-      },
-      error: (err) => {
-        console.error('Greška pri izmeni posta:', err);
+    const dialogRef = this.dialog.open(CreatePostComponent, {
+      width: '500px',
+      data: { post: post }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadPosts(); // ili window.location.reload();
       }
     });
   }
-}
+  
+  
 
 deletePost(postId: number): void {
   if (confirm('Da li sigurno želiš da obrišeš ovaj post?')) {
