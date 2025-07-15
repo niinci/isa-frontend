@@ -112,6 +112,7 @@ export class PostComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('Dialog was closed');
+      this.loadPosts(); // osveži postove nakon kreiranja
     });
   }
   

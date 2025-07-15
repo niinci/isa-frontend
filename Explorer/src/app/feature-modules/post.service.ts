@@ -16,7 +16,7 @@ export class PostService {
   constructor(private http: HttpClient) { }
 
   getAllPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(this.apiUrl + '/sorted');
+    return this.http.get<Post[]>(this.apiUrl);
   }
 
   createPost(postDTO: CreatePost, imageBase64: string): Observable<any> {
