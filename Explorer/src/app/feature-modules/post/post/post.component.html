@@ -7,6 +7,13 @@
           <div class="card-body">
             <h2 class="card-title">{{ post.description }}</h2>
 
+            <div *ngIf="isAdminUser" class="advertise-button-wrapper">
+              <button class="advertise-btn"
+                  (click)="toggleAdvertisableStatus(post)">
+                  {{ post.isAdvertisable ? '🔕 Stop Advertising' : '📣 Advertise Post' }}
+              </button>
+            </div>
+
             <img *ngIf="post.imageUrl" [src]="getPostImageUrl(post.imageUrl)" class="card-img-top mb-3" alt="Post image" style="max-height: 300px; object-fit: cover; border-radius: 8px;">
 
             <p class="card-text">

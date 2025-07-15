@@ -56,5 +56,8 @@ export class PostService {
   updatePost(postId: number, postDTO: any): Observable<Post> {
     return this.http.put<Post>(`${this.apiUrl}/${postId}`, postDTO);
   }
-  
+
+  updatePostAdvertisableStatus(postId: number, isAdvertisable: boolean): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${postId}/advertisable`, isAdvertisable);
+  }
 }

@@ -18,8 +18,7 @@ export class PostComponent implements OnInit {
   messages = new Map<number, string>();    // Poruke za prijavu po ID-u posta
 
   userId: number | null = null;
-
-
+  isAdminUser: boolean = false;
 
   constructor(
     private postService: PostService,
@@ -31,6 +30,7 @@ export class PostComponent implements OnInit {
     // Praćenje statusa prijave korisnika
     this.authService.user$.subscribe(user => {
       this.isLoggedIn = !!user.username; // Ako korisnik ima username, smatramo da je prijavljen
+      this.isAdminUser = user.role === 'ADMIN';
 
       if (this.isLoggedIn) {
         this.userId = user.id;  // Pretpostavljam da user objekat ima id polje
@@ -145,6 +145,28 @@ deletePost(postId: number): void {
       }
     });
   }
+}
+
+toggleAdvertisableStatus(post: Post): void {
+  if (post.id === undefined) {
+    console.error('Post ID is undefined.');
+    return;
+  }
+
+  const currentStatus = post.isAdvertisable === true; 
+  const newStatus = !currentStatus; 
+
+  this.postService.updatePostAdvertisableStatus(post.id, newStatus).subscribe({
+    next: () => {
+      post.isAdvertisable = newStatus; 
+      //alert(`Objava "${post.description}" je ${newStatus ? 'označena kao reklamirana' : 'uklonjena iz reklamiranja'}.`);
+      // this.loadPosts();
+    },
+    error: (err) => {
+      console.error('Greška pri ažuriranju statusa reklamiranja:', err);
+      //alert('Došlo je do greške pri ažuriranju statusa reklamiranja.');
+    }
+  });
 }
 
 }

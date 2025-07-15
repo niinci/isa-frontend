@@ -68,3 +68,25 @@
 .card-body button {
     margin-top: 10px;
 }
+
+.card-body {
+    position: relative; 
+    padding: 20px; 
+}
+
+.advertise-button-wrapper {
+    position: absolute; 
+    top: 15px; 
+    right: 15px; 
+    z-index: 10; 
+}
+
+.advertise-btn {
+    color: black;  
+    background-color: #ff99b3;  
+    border-color: #ff3366;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 170px;
+}

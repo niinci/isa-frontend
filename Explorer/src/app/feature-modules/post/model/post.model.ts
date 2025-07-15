@@ -7,6 +7,7 @@ export class Post {
   comments: Comment[];  
   deleted: boolean;  
   userId: number; 
+  isAdvertisable?: boolean;
 
   constructor() {
     this.likesCount = 0;  
