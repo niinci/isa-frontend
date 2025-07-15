@@ -266,7 +266,7 @@ export class ProfileComponent implements OnInit {
   }
   
   loadFollowing(): void {
-    this.followers = [];
+    this.following = [];
 
     if (!this.user) return;
     this.followingLoading = true;
