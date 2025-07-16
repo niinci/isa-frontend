@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@ang
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { ChatGroup, ChatMessageDto, ChatService } from '../chat.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
+import { WebSocketService } from '../web-socket.service';
 
 @Component({
   selector: 'app-chat',
@@ -28,7 +29,8 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
-  constructor(private chatService: ChatService, private authService: AuthService) {}
+  constructor(private chatService: ChatService, private authService: AuthService, private websocketService: WebSocketService
+  ) {}
 
   ngOnInit(): void {
     this.authService.user$.subscribe(user => {
@@ -71,9 +73,13 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   selectGroup(group: ChatGroup): void {
     this.selectedGroup = group;
     this.loadMessages(group.id);
-    this.loadGroupMembersForRemoval();  // nova funkcija za listu članova
-  }
-   
+    this.loadGroupMembersForRemoval();
+  
+    this.websocketService.subscribeToGroupMessages(group.id).subscribe(newMessage => {
+      this.messages.push(newMessage);
+      setTimeout(() => this.scrollToBottom(), 50);
+    });
+  }   
 
   loadMessages(groupId: number): void {
     this.chatService.getLastMessages(groupId, 10).subscribe(messages => {
@@ -91,16 +97,11 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       content: this.newMessage.trim(),
       senderUsername: this.currentUsername,
       chatGroupId: this.selectedGroup.id
+      //timestamp: new Date()
     };
 
-    this.chatService.sendMessage(message).subscribe(sent => {
-      this.messages.push(sent);
-      this.newMessage = '';
-      this.scrollToBottom();
-      console.log('Poslata poruka:', sent);
-    }, err => {
-      console.error('Greška pri slanju poruke:', err);
-    });
+    this.websocketService.sendMessage(message);
+    this.newMessage = '';
   }
 
   private scrollToBottom(): void {
