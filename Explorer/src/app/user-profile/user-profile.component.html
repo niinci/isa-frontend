@@ -49,14 +49,47 @@
   <!-- Tab sadržaj -->
   <div class="tab-content">
     <!-- Posts -->
-    <section *ngIf="activeTab === 'posts'" class="tab-section">
-      <h2><i class="fas fa-pen"></i> My Posts</h2>
-      <div *ngIf="postsLoading" class="info-box">Loading posts...</div>
-      <div *ngIf="!postsLoading && userPosts.length === 0" class="info-box">No posts yet.</div>
-      <div *ngFor="let post of userPosts" class="post-card">
-        <p>{{ post?.content || 'No content' }}</p>
+   <section *ngIf="activeTab === 'posts'" class="tab-section">
+  <h2><i class="fas fa-pen"></i> My Posts</h2>
+
+  <div *ngIf="postsLoading" class="info-box">Loading posts...</div>
+  <div *ngIf="!postsLoading && userPosts.length === 0" class="info-box">No posts yet.</div>
+
+  <div *ngFor="let post of userPosts" class="post-card modern-post">
+
+    <!-- Opis posta iznad -->
+    <p class="post-description">{{ post.description || 'No description' }}</p>
+
+    <!-- Horizontalni raspored slike i desnog bloka -->
+    <div class="post-horizontal-layout">
+
+      <!-- Slika -->
+      <div class="post-image-wrapper" *ngIf="post.imageUrl">
+        <img [src]="post.imageUrl" alt="Post image" class="post-image" />
       </div>
-    </section>
+
+      <!-- Desni blok: komentari i meta -->
+      <div class="post-side-content">
+        <div class="post-meta">
+          <span class="likes">❤️ {{ post.likesCount }}</span>
+          <span class="comments-count">💬 {{ post.comments?.length || 0 }}</span>
+          <span *ngIf="post.isAdvertisable" class="advertisable">📢 Advertisable</span>
+        </div>
+
+        <!-- Komentari -->
+        <div *ngIf="post.comments?.length" class="comments-section">
+          <strong>Comments:</strong>
+          <ul>
+            <li *ngFor="let comment of post.comments">
+              <strong>{{ comment.username || 'Anonymous' }}:</strong> {{ comment.content }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 
     <!-- Followers -->
     <section *ngIf="activeTab === 'followers'" class="tab-section">
@@ -66,9 +99,6 @@
       <div *ngFor="let f of followers" class="list-card">{{ f?.username || 'Unknown' }}</div>
     </section>
     <!-- Dodaj negde ispod osnovnih korisničkih informacija -->
-
-  
-
 
     <!-- Following -->
     <section *ngIf="activeTab === 'following'" class="tab-section">

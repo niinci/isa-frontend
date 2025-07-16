@@ -13,7 +13,9 @@ import { Registration } from './model/registration.model';
 import { UserInfo } from './model/userInfo.model';
 import { PasswordChange } from './model/password-change.model';
 import { ProfileEdit } from './model/profile-edit.model';
+import { Post } from 'src/app/feature-modules/post/model/post.model';
 
+const backendBaseUrl = 'http://localhost:8080/';
 
 @Injectable({
   providedIn: 'root'
@@ -125,14 +127,6 @@ private setUser(): void {
     return this.user$.value.id;
   }
 
-  getUserPosts(email: string): Observable<any[]> {
-    // Mock metoda - vraća prazan niz
-    return new Observable(observer => {
-      observer.next([]);
-      observer.complete();
-    });
-  }
-
   /*getFollowers(email: string): Observable<any[]> {
     // Mock metoda - vraća prazan niz
     return new Observable(observer => {
@@ -213,9 +207,17 @@ updateProfile(userId: number, profileData: any): Observable<any> {
     return this.http.get<any[]>(`${environment.apiHost}follows/following?userId=${userId}`);
   }
   
-  
-  
-  
+getUsernamesByUserIds(userIds: number[]): Observable<{ userId: number; username: string }[]> {
+  return this.http.post<{ userId: number; username: string }[]>(backendBaseUrl + 'api/comments/usernames', userIds);
+}
+  getUsernameById(userId: number): Observable<string> {
+  return this.http.get<string>(`/api/userAccount/${userId}/username`);
+}
+  // auth.service.ts
+getUserPosts(userId: number): Observable<Post[]> {
+  return this.http.get<Post[]>(`${environment.apiHost}posts/user/${userId}`);
+}
+
   
   
 
