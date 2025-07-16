@@ -3,12 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../infrastructure/auth/auth.service';
 import { UserInfo } from '../infrastructure/auth/model/userInfo.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Post } from '../feature-modules/post/model/post.model';
+import { Comment } from '../feature-modules/post/model/comment.model';
 
-interface TempPost {
-  id: number;
-  content: string;
-  author?: string;
-}
+const backendBaseUrl = 'http://localhost:8080/';
 
 interface TempFollower {
   id: number;
@@ -26,10 +24,10 @@ export class ProfileComponent implements OnInit {
   user: UserInfo | null = null;
   isLoading = false;
   error: string | null = null;
-  activeTab: 'profile' | 'posts' | 'followers' | 'following' | 'settings' = 'profile';
+  activeTab: string = 'posts';
   
 
-  userPosts: TempPost[] = [];
+  userPosts: Post[] = [];
   followers: TempFollower[] = [];
   following: TempFollower[] = [];
 
@@ -159,6 +157,9 @@ export class ProfileComponent implements OnInit {
           this.initializeEditForm();
           this.loadFollowers();
           this.loadFollowing();
+
+          this.loadUserPosts();
+
           this.isLoading = false;
         },
         error: () => {
@@ -174,6 +175,9 @@ export class ProfileComponent implements OnInit {
           this.initializeEditForm();
           this.loadFollowers();
           this.loadFollowing();
+
+          this.loadUserPosts();
+
           this.isLoading = false;
         },
         error: () => {
@@ -229,24 +233,58 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  setActiveTab(tab: typeof this.activeTab): void {
-    this.activeTab = tab;
-    if (tab === 'posts') this.loadUserPosts();
-    if (tab === 'followers') this.loadFollowers();
-    if (tab === 'following') this.loadFollowing();
-  }
+    setActiveTab(tabName: string) {
+    this.activeTab = tabName;}
+
 
   loadUserPosts(): void {
-    if (!this.user || this.userPosts.length > 0) return;
-    this.postsLoading = true;
-    this.authService.getUserPosts(this.user.email).subscribe({
-      next: (posts) => {
+  if (!this.user) return;
+  this.postsLoading = true;
+
+  this.authService.getUserPosts(this.user.id).subscribe({
+    next: posts => {
+      // Izvući userId-jeve iz komentara
+      const userIds = Array.from(new Set(posts.flatMap(post => post.comments?.map(c => c.userId) || [])));
+
+      if (userIds.length === 0) {
+        console.log('Nema komentara sa userId.');
         this.userPosts = posts;
         this.postsLoading = false;
-      },
-      error: () => this.postsLoading = false
-    });
-  }
+        return;
+      }
+
+      this.authService.getUsernamesByUserIds(userIds).subscribe({
+        next: usernamesList => {
+          console.log('Dobijeni username-i:', usernamesList);
+
+          const userIdToUsername = new Map(usernamesList.map(u => [u.userId, u.username]));
+
+          posts.forEach(post => {
+            if (post.imageUrl && !post.imageUrl.startsWith('http')) {
+              post.imageUrl = backendBaseUrl + post.imageUrl;
+            }
+
+            post.comments?.forEach(comment => {
+              comment.username = userIdToUsername.get(comment.userId) || 'Anonymous';
+            });
+          });
+
+          this.userPosts = posts;
+          this.postsLoading = false;
+        },
+        error: err => {
+          console.error('Greška pri dohvatu username-a:', err);
+          this.userPosts = posts; // fallback
+          this.postsLoading = false;
+        }
+      });
+    },
+    error: err => {
+      console.error('Greška pri dohvatu postova:', err);
+      this.postsLoading = false;
+    }
+  });
+} 
 
   loadFollowers(): void {
     this.followers = [];
