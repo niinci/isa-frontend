@@ -11,18 +11,20 @@ import { Comment } from './post/model/comment.model';
 export class PostService {
 
   private apiUrl = 'http://localhost:8080/api/posts'; // URL tvoje Spring Boot aplikacije
+  private loadBalancerURL = 'http://localhost:8080/lb/api/posts';
+
   private commentsUrl = 'http://localhost:8080/api/comments';
 
   constructor(private http: HttpClient) { }
 
   getAllPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(this.apiUrl);
+    return this.http.get<Post[]>(this.loadBalancerURL);
   }
 
   createPost(postDTO: CreatePost, imageBase64: string): Observable<any> {
     postDTO.imageBase64 = imageBase64;
 
-    return this.http.post<CreatePost>(this.apiUrl, postDTO);
+    return this.http.post<CreatePost>(this.loadBalancerURL, postDTO);
   }
 
   likePost(postId: number): Observable<{ liked: boolean }> {
@@ -51,11 +53,11 @@ export class PostService {
   }
 
   deletePost(postId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${postId}`);
+    return this.http.delete<void>(`${this.loadBalancerURL}/${postId}`);
   }
   
   updatePost(postId: number, postDTO: any): Observable<Post> {
-    return this.http.put<Post>(`${this.apiUrl}/${postId}`, postDTO);
+    return this.http.put<Post>(`${this.loadBalancerURL}/${postId}`, postDTO);
   }
 
   updatePostAdvertisableStatus(postId: number, isAdvertisable: boolean): Observable<void> {
