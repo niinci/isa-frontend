@@ -40,6 +40,7 @@ export class PostService {
         comment.userId = c.userId;
         comment.postId = c.postId; // bolje iz backend-a nego fiksno postId
         comment.username = c.username;  // OVDE
+        comment.commentedAt = c.commentedAt;
         return comment;
       }))
     );
