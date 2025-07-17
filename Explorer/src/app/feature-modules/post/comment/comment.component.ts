@@ -6,91 +6,90 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-  selector: 'xp-comment',
-  templateUrl: './comment.component.html',
-  styleUrls: ['./comment.component.css']
+  selector: 'xp-comment',
+  templateUrl: './comment.component.html',
+  styleUrls: ['./comment.component.css']
 })
 export class CommentComponent implements OnInit, OnDestroy  {
 
-  @Input() postId!: number;
-  @Input() isLoggedIn: boolean = false;
+  @Input() postId!: number;
+  @Input() isLoggedIn: boolean = false;
 
-  comments: Comment[] = [];
-  newComment: Comment = new Comment();
-  commentsLoaded = false;
-  username: string = '';
-  messages: string | null = null;
-  commentingDisabled: boolean = false;
-  private commentingTimeout: any;
+  comments: Comment[] = [];
+  newComment: Comment = new Comment();
+  commentsLoaded = false;
+  username: string = '';
+  messages: string | null = null;
+  commentingDisabled: boolean = false;
+  private commentingTimeout: any;
 
-  constructor(
-    private route: ActivatedRoute,
-    private postService: PostService,
-    private authService : AuthService
-  ) {}
+  constructor(
+    private route: ActivatedRoute,
+    private postService: PostService,
+    private authService : AuthService
+  ) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {
 
-    console.log('CommentComponent ngOnInit pokrenut, postId:', this.postId);
-    this.authService.user$.subscribe(user => {
-      this.username = user.username;
-    });    
+    console.log('CommentComponent ngOnInit pokrenut, postId:', this.postId);
+    this.authService.user$.subscribe(user => {
+    this.username = user.username;
+    }); 
 
-    if (!this.postId || isNaN(this.postId)) {
-      console.error('Nevalidan postId:', this.postId);
-      return;
-    }
-    const userId = this.authService.getCurrentUserId();
-    if (!userId || userId === 0) {
-      console.error('Korisnik nije prijavljen ili ID nije validan.');
-      this.loadComments();
-      return;
-    }
-    this.newComment.userId = userId;
-    this.loadComments();
-  
-  }
-  
+    if (!this.postId || isNaN(this.postId)) {
+      console.error('Nevalidan postId:', this.postId);
+      return;
+    }
+    const userId = this.authService.getCurrentUserId();
+    if (!userId || userId === 0) {
+      console.error('Korisnik nije prijavljen ili ID nije validan.');
+      this.loadComments();
+      return;
+    }
+     this.newComment.userId = userId;
+   this.loadComments();
+  }
+
   loadComments(): void {
-    if (!this.postId) return;
+    if (!this.postId) return;
 
-    this.postService.getCommentsByPost(this.postId).subscribe({
-      next: (commentsData) => {
-        this.comments = commentsData.map(c => {
-          const comment = new Comment();
-          Object.assign(comment, c);
+    this.postService.getCommentsByPost(this.postId).subscribe({
+      next: (commentsData) => {
+        this.comments = commentsData.map(c => {
+          const comment = new Comment();
+          Object.assign(comment, c);
 
-          if (Array.isArray(comment.commentedAt) && comment.commentedAt.length >= 6) {
-            const [year, month, day, hour, minute, second, nano] = comment.commentedAt;
-            comment.formattedCommentedAt = new Date(year, month - 1, day, hour, minute, second, Math.floor(nano / 1_000_000));
-          } else if (typeof comment.commentedAt === 'string') {
-              comment.formattedCommentedAt = new Date(comment.commentedAt);
-          }
-          return comment;
-        });
+          if (Array.isArray(comment.commentedAt) && comment.commentedAt.length >= 6) {
+            const [year, month, day, hour, minute, second, nano] = comment.commentedAt;
+            comment.formattedCommentedAt = new Date(year, month - 1, day, hour, minute, second, Math.floor(nano / 1_000_000));
+          } else if (typeof comment.commentedAt === 'string') {
+            comment.formattedCommentedAt = new Date(comment.commentedAt);
+          }
+          return comment;
+        });
 
-        this.comments.sort((a, b) => {
-            const dateA = a.formattedCommentedAt instanceof Date ? a.formattedCommentedAt.getTime() : 0;
-            const dateB = b.formattedCommentedAt instanceof Date ? b.formattedCommentedAt.getTime() : 0;
-            return dateB - dateA;
-        });
+          this.comments.sort((a, b) => {
+            const dateA = a.formattedCommentedAt instanceof Date ? a.formattedCommentedAt.getTime() : 0;
+            const dateB = b.formattedCommentedAt instanceof Date ? b.formattedCommentedAt.getTime() : 0;
+            return dateB - dateA;
+        });
 
-        this.commentsLoaded = true;
+        this.commentsLoaded = true;
 
-        if(this.isLoggedIn) {
-          this.newComment = new Comment();
-          this.newComment.postId = this.postId;
-          this.newComment.userId = this.authService.getCurrentUserId();
-          this.newComment.username = this.username;
-          console.log('Priprema novog komentara za korisnika:', this.username);
-        }
-        console.log('Učitani i parsirani komentari:', this.comments);
-      },
-      error: (err) => {
-        console.error('Greška pri učitavanju komentara:', err);
-      },
-    });
-  }
+        if(this.isLoggedIn) {
+          this.newComment = new Comment();
+          this.newComment.postId = this.postId;
+          this.newComment.userId = this.authService.getCurrentUserId();
+          this.newComment.username = this.username;
+           console.log('Priprema novog komentara za korisnika:', this.username);
+        }
+        console.log('Učitani i parsirani komentari:', this.comments);
+      },
+      error: (err) => {
+        console.error('Greška pri učitavanju komentara:', err);
+       },
+     });
+   }
 
   submitComment(): void {
     if (!this.isLoggedIn) {
