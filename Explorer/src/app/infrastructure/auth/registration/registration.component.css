@@ -1,72 +1,93 @@
-/* Container styling */
 .form-container {
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-    background-color: #f7f9fc;
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+  background-color: #fdf5f6;
 }
 
 .registration-form {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
+  background-color: #ffffff;
+  padding: 50px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(84, 14, 14, 0.1);
+  width: 100%;
+  max-width: 700px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #540e0e;
 }
 
-/* Field styling */
+.form-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.form-field {
+  flex: 1 1 48%;
+  min-width: 250px;
+}
+
+/* Field visuals */
 .mat-form-field {
-    width: 100%;
-    margin-bottom: 20px;
+  width: 100%;
+}
+
+.mat-form-field-label {
+  color: #540e0e;
+  font-size: 16px;
+}
+
+.mat-input-element {
+  font-size: 16px;
+  padding: 12px;
 }
 
 .mat-form-field.mat-focused .mat-form-field-label {
-    color: #e7a0b2 !important; /* Highlight label on focus */
+  color: #a33636 !important;
 }
 
-/* Increase input field size */
-.mat-input-element {
-    font-size: 16px;
-    padding: 12px 14px;
-}
-
-/* Label and legend styling */
-.mat-form-field-label {
-    font-size: 16px;
+.address-group {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #e6bcbc;
+  border-radius: 12px;
+  background-color: #fff9fa;
 }
 
 .address-group legend {
-    font-size: 20px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #540e0e;
+  margin-bottom: 10px;
+  padding: 0 10px;
 }
 
-/* Error message styling */
+/* Error messages */
 .error {
-    color: #e57373;
-    font-size: 14px;
-    margin-top: 5px;
+  color: #d32f2f;
+  font-size: 14px;
+  margin-top: 4px;
 }
 
-/* Submit button styling */
+/* Submit button */
 .submit-button {
-    width: 100%;
-    font-size: 18px;
-    padding: 15px 0;
-    background-color: #e7a0b2;
-    color: #ffffff;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  width: 100%;
+  font-size: 18px;
+  padding: 14px 0;
+  background-color: #a33636;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(84, 14, 14, 0.2);
+  transition: background-color 0.3s ease;
 }
 
 .submit-button:disabled {
-    background-color: #cccccc;
+  background-color: #ccc;
+  color: #666;
 }
 
 .submit-button:hover:not(:disabled) {
-    background-color:#e7a0b2;
-    
+  background-color: #8d2e2e;
 }

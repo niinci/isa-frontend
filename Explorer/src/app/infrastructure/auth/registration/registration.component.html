@@ -1,77 +1,77 @@
 <div class="form-container">
-    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="registration-form">
-        <div class="form-group">
-            <mat-form-field appearance="outline" class="small-field">
-                <mat-label>First Name</mat-label>
-                <input matInput id="firstName" formControlName="firstName" />
-                <div *ngIf="firstName?.invalid && firstName?.touched" class="error">First Name is required</div>
-            </mat-form-field>
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="registration-form">
+    <div class="form-group">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>First Name</mat-label>
+        <input matInput id="firstName" formControlName="firstName" />
+        <div *ngIf="firstName?.invalid && firstName?.touched" class="error">First Name is required</div>
+      </mat-form-field>
 
-            <mat-form-field appearance="outline">
-                <mat-label>Last Name</mat-label>
-                <input matInput id="lastName" formControlName="lastName"/>
-                <div *ngIf="lastName?.invalid && lastName?.touched" class="error">Last Name is required</div>
-            </mat-form-field>
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Last Name</mat-label>
+        <input matInput id="lastName" formControlName="lastName" />
+        <div *ngIf="lastName?.invalid && lastName?.touched" class="error">Last Name is required</div>
+      </mat-form-field>
 
-            <mat-form-field appearance="outline">
-                <mat-label>Username</mat-label>
-                <input matInput id="username" formControlName="username"/>
-                <div *ngIf="username?.invalid && username?.touched" class="error">Username is required</div>
-            </mat-form-field>
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Username</mat-label>
+        <input matInput id="username" formControlName="username" />
+        <div *ngIf="username?.invalid && username?.touched" class="error">Username is required</div>
+      </mat-form-field>
 
-            <mat-form-field appearance="outline" class="small-field">
-                <mat-label>Email</mat-label>
-                <input matInput id="email" formControlName="email" type="email" />
-                <div *ngIf="email?.invalid && email?.touched" class="error">Valid Email is required</div>
-            </mat-form-field>
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Email</mat-label>
+        <input matInput id="email" formControlName="email" type="email" />
+        <div *ngIf="email?.invalid && email?.touched" class="error">Valid Email is required</div>
+      </mat-form-field>
+    </div>
+
+    <fieldset formGroupName="address" class="address-group">
+      <legend>Address</legend>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Country</mat-label>
+        <input matInput id="country" formControlName="country" />
+        <div *ngIf="country?.invalid && country?.touched" class="error">Country is required</div>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>City</mat-label>
+        <input matInput id="city" formControlName="city" />
+        <div *ngIf="city?.invalid && city?.touched" class="error">City is required</div>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Street</mat-label>
+        <input matInput id="street" formControlName="street" />
+        <div *ngIf="street?.invalid && street?.touched" class="error">Street is required</div>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Number</mat-label>
+        <input matInput id="number" type="number" formControlName="number" />
+        <div *ngIf="number?.invalid && number?.touched" class="error">Number is required and must be valid</div>
+      </mat-form-field>
+    </fieldset>
+
+    <div class="form-group">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Password</mat-label>
+        <input matInput id="password" formControlName="password" type="password" />
+        <div *ngIf="password?.invalid && password?.touched" class="error">Password is required</div>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput id="confirmPassword" formControlName="confirmPassword" type="password" />
+        <div *ngIf="confirmPassword?.invalid && confirmPassword?.touched" class="error">
+          Confirm Password is required and must match Password
         </div>
+      </mat-form-field>
+    </div>
 
-        <fieldset formGroupName="address" class="address-group">
-            <legend>Address</legend>
-            
-            <mat-form-field appearance="outline" class="small-field">
-                <mat-label>Country</mat-label>
-                <input matInput id="country" formControlName="country" />
-                <div *ngIf="country?.invalid && country?.touched" class="error">Country is required</div>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="small-field">
-                <mat-label>City</mat-label>
-                <input matInput id="city" formControlName="city" />
-                <div *ngIf="city?.invalid && city?.touched" class="error">City is required</div>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="small-field">
-                <mat-label>Street</mat-label>
-                <input matInput id="street" formControlName="street" />
-                <div *ngIf="street?.invalid && street?.touched" class="error">Street is required</div>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="small-field">
-                <mat-label>Number</mat-label>
-                <input matInput id="number" type="number" formControlName="number" />
-                <div *ngIf="number?.invalid && number?.touched" class="error">Number is required and must be a valid number</div>
-            </mat-form-field>
-        </fieldset>
-
-        <div class="form-group">
-            <mat-form-field appearance="outline" class="small-field">
-                <mat-label>Password</mat-label>
-                <input matInput id="password" formControlName="password" type="password" />
-                <div *ngIf="password?.invalid && password?.touched" class="error">Password is required</div>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="small-field">
-                <mat-label>Confirm Password</mat-label>
-                <input matInput id="confirmPassword" formControlName="confirmPassword" type="password" />
-                <div *ngIf="confirmPassword?.invalid && confirmPassword?.touched" class="error">
-                    Confirm Password is required and must match Password
-                </div>
-            </mat-form-field>
-        </div>
-
-        <button type="submit" [disabled]="registrationForm.invalid" mat-raised-button color="primary" class="submit-button">
-            Register
-        </button>
-    </form>
+    <button type="submit" [disabled]="registrationForm.invalid" mat-raised-button color="primary" class="submit-button">
+      Register
+    </button>
+  </form>
 </div>

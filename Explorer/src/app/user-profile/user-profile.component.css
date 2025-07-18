@@ -1,16 +1,16 @@
 .profile-page {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #fff0f5;
+  background-color: #fdf6f6;
   min-height: 100vh;
   padding-top: 50px;
 }
 
 .banner {
   height: 150px;
-  background: linear-gradient(135deg, #ff5c8d, #ff2e63);
+  background: linear-gradient(135deg, #540e0e, #7a1a1a);
   border-bottom-left-radius: 50% 20px;
   border-bottom-right-radius: 50% 20px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
   position: absolute;
   width: 100%;
   top: 0;
@@ -25,7 +25,6 @@
   width: 1000px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
   text-align: center;
-  
 }
 
 .profile-picture {
@@ -35,16 +34,17 @@
   border-radius: 50%;
   margin-bottom: 1rem;
   border: 4px solid white;
-  background: #ff9eb3;
+  background: #8e2a2a;
 }
 
 .user-name {
   font-size: 2rem;
-  color: #b30059;
+  color: #540e0e;
 }
 
-.user-email, .user-location {
-  color: #ff4d88;
+.user-email,
+.user-location {
+  color: #8e2a2a;
   font-style: italic;
 }
 
@@ -56,7 +56,7 @@
 }
 
 .stat-box h3 {
-  color: #ff1a66;
+  color: #7a1a1a;
   font-size: 1.5rem;
   margin-bottom: 0.2rem;
 }
@@ -70,7 +70,7 @@
 }
 
 .tab-button {
-  background: #ffd6e8;
+  background: #f7e6e6;
   border: none;
   padding: 0.6rem 1.2rem;
   border-radius: 20px;
@@ -78,15 +78,17 @@
   font-weight: bold;
   transition: 0.3s;
   font-size: 1rem;
+  color: #540e0e;
 }
 
 .tab-button.active {
-  background: #ff4d88;
+  background: #540e0e;
   color: white;
 }
 
 .tab-button:hover {
-  background: #ff99bb;
+  background: #b00e0e;
+  color: white;
 }
 
 .tab-content {
@@ -96,43 +98,43 @@
 }
 
 .tab-section h2 {
-  color: #c7005e;
+  color: #540e0e;
   margin-bottom: 1rem;
 }
 
 .post-card {
-  background: #fff5f8;
+  background: #fdf4f4;
   padding: 1rem;
   border-radius: 10px;
   margin-bottom: 1rem;
-  box-shadow: 0 2px 6px rgba(255, 0, 102, 0.1);
+  box-shadow: 0 2px 6px rgba(84, 14, 14, 0.1);
   height: 550px;
   width: 1000px;
 }
+
 .list-card {
-  width: 600px; 
+  width: 600px;
   margin: 0 auto 10px auto;
   padding: 1rem;
-  background: #fff5f8;
+  background: #fdf4f4;
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(255, 0, 102, 0.1);
+  box-shadow: 0 2px 6px rgba(84, 14, 14, 0.1);
   text-align: center;
 }
-
 
 .info-box {
   text-align: center;
   font-style: italic;
-  color: #d6336c;
+  color: #540e0e;
   margin-bottom: 1rem;
 }
 
 .modern-form {
-  background: #fffafc;
+  background: #fdf8f8;
   border-radius: 12px;
   padding: 1.5rem;
   margin-top: 1.5rem;
-  box-shadow: 0 4px 12px rgba(255, 128, 170, 0.2);
+  box-shadow: 0 4px 12px rgba(84, 14, 14, 0.1);
 }
 
 .form-group {
@@ -143,25 +145,25 @@
   display: block;
   font-weight: 600;
   margin-bottom: 0.4rem;
-  color: #b30059;
+  color: #540e0e;
 }
 
 .form-group input {
   width: 100%;
   padding: 0.6rem 0.8rem;
-  border: 1.5px solid #ffb3cc;
+  border: 1.5px solid #b00e0e;
   border-radius: 8px;
   font-size: 1rem;
   transition: 0.3s;
 }
 
 .form-group input:focus {
-  border-color: #ff4d88;
+  border-color: #540e0e;
   outline: none;
 }
 
 .error-msg {
-  color: #d6336c;
+  color: #b00e0e;
   font-size: 0.9rem;
   margin-top: -0.5rem;
   margin-bottom: 0.8rem;
@@ -183,57 +185,14 @@
 }
 
 .btn-primary {
-  background-color: #ff4d88;
+  background-color: #540e0e;
   color: white;
 }
 
 .btn-secondary {
-  background-color: #ffe0eb;
-  color: #c7005e;
+  background-color: #f7e6e6;
+  color: #540e0e;
 }
-.post-card {
-  margin-bottom: 50px;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  background-color: #fff;
-}
-
-.post-description {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.post-image-wrapper {
-  flex: 0 0 500px; 
-}
-
-
-.post-image {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.post-comments-wrapper {
-  flex: 2;
-}
-
-
-.comments-section ul {
-  padding-left: 0;
-  list-style: none;
-}
-
-.comments-section li {
-  background-color: #f5f5f5;
-  padding: 8px;
-  margin-bottom: 6px;
-  border-radius: 5px;
-}
-
 
 .post-description {
   font-size: 20px;
@@ -243,10 +202,14 @@
 
 .post-horizontal-layout {
   display: flex;
-  gap: 40px;
+  gap: 30px;
   align-items: flex-start;
-  flex-wrap: wrap;
-  
+  flex-wrap: nowrap;
+  max-width: 1000px;
+}
+
+.post-image-wrapper {
+  flex: 0 0 500px;
 }
 
 .post-image {
@@ -254,29 +217,29 @@
   height: 460px;
   object-fit: cover;
   border-radius: 10px;
-  border: 2px solid #ffc1d6;
+  border: 2px solid #b00e0e;
 }
 
+.post-side-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: flex-start;
+  align-items: flex-end;
+  max-width: 480px;
+  width: 100%;
+}
 
 .comments-section {
-  background-color: #fef4f8;
+  background-color: #fdf4f4;
   padding: 10px;
   border-radius: 8px;
   max-height: 400px;
   overflow-y: auto;
-  box-shadow: 0 1px 4px rgba(255, 0, 102, 0.1);
-  width: 300px; 
-}
-
-
-
-.post-meta {
-  font-size: 20px;
-  color: #555;
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
-  
+  box-shadow: 0 1px 4px rgba(84, 14, 14, 0.1);
+  width: 100%;
+  max-width: 480px;
 }
 
 .comments-section ul {
@@ -294,43 +257,17 @@
 }
 
 .comments-section strong {
-  display: block;              
+  display: block;
   font-size: 18px;
-  margin-bottom: 12px;         
+  margin-bottom: 12px;
   font-weight: bold;
-  /*color: #c7005e;*/
+  color: #540e0e;
 }
 
-.post-horizontal-layout {
+.post-meta {
+  font-size: 20px;
+  color: #555;
   display: flex;
-  gap: 30px; 
-  align-items: flex-start;
-  flex-wrap: nowrap;
-  max-width: 1000px; 
-}
-
-.post-image-wrapper {
-  flex: 0 0 500px; 
-}
-
-.post-side-content {
-  flex: 1; 
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  justify-content: flex-start;
-  align-items: flex-end;
-  max-width: 480px; 
-  width: 100%;
-}
-
-.comments-section {
-  background-color: #fef4f8;
-  padding: 10px;
-  border-radius: 8px;
-  max-height: 400px;
-  overflow-y: auto;
-  box-shadow: 0 1px 4px rgba(255, 0, 102, 0.1);
-  width: 100%;  
-  max-width: 480px; 
+  flex-direction: row;
+  gap: 5px;
 }
