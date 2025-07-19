@@ -143,14 +143,12 @@ export class CreatePostComponent implements OnInit {
       locationAddress: JSON.stringify(this.selectedLocationAddress)
     };
   
-    // EDIT POST
     if (this.data?.post) {
       const postId = this.data.post.id;
       this.postService.updatePost(postId, postPayload).subscribe({
-        next: () => {
+        next: (updatedPost) => {
           console.log('Post updated!');
-          this.dialogRef.close(true);
-          window.location.reload();
+          this.dialogRef.close(updatedPost);  // ← VRATI POST UMESTO true
         },
         error: err => {
           console.error('Error updating post:', err);
@@ -158,20 +156,22 @@ export class CreatePostComponent implements OnInit {
       });
       return;
     }
+    
   
     // CREATE POST
-    if (!this.imageBase64) return;
-  
-    this.postService.createPost(postPayload, this.imageBase64).subscribe({
-      next: (createdPost) => {
-        console.log('Post created successfully:', createdPost);
-        this.dialogRef.close(true);
-        window.location.reload();
-      },
-      error: (error) => {
-        console.error('Error creating post:', error);
-      }
-    });
+ // CREATE POST
+  if (!this.imageBase64) return;
+
+  this.postService.createPost(postPayload, this.imageBase64).subscribe({
+    next: (createdPost) => {
+      console.log('Post created successfully:', createdPost);
+      this.dialogRef.close(createdPost); // ✅ Pošalji kreirani post nazad
+    },
+    error: (error) => {
+      console.error('Error creating post:', error);
+    }
+  });
+
   }
   
 
