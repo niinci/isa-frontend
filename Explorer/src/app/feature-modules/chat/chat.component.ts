@@ -120,7 +120,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   
     this.chatService.addUserToGroup(this.selectedGroup.id, this.usernameToAdd.trim(), this.currentUsername)
       .subscribe(() => {
-        alert(`Корисник ${this.usernameToAdd} је додат у групу.`);
         this.usernameToAdd = '';
   
         this.loadGroups();
@@ -136,7 +135,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         }, 500);
   
       }, err => {
-        alert('Грешка приликом додавања корисника: ' + err.message);
         console.error('Greška pri dodavanju korisnika:', err);
       });
   }
@@ -149,7 +147,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   
     this.chatService.removeUserFromGroup(this.selectedGroup.id, username, this.currentUsername)
       .subscribe(() => {
-        alert(`Корисник ${username} је уклоњен из групе.`);
         this.usernameToRemove = '';
   
         // Ažuriraj članove u selectedGroup direktno
@@ -164,7 +161,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         this.loadGroups();
   
       }, err => {
-        alert('Грешка приликом уклањања корисника: ' + err.message);
         console.error('Greška pri uklanjanju korisnika:', err);
       });
   }
@@ -174,7 +170,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   
     this.chatService.removeUserFromGroup(this.selectedGroup.id, user.username, this.currentUsername)
       .subscribe(() => {
-        alert(`Корисник ${user.username} је уклоњен из групе.`);
         
         // Ažuriraj članove u selectedGroup direktno
         if (this.selectedGroup?.members) {
@@ -188,7 +183,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         this.loadGroups();
   
       }, err => {
-        alert('Грешка приликом уклањања корисника: ' + err.message);
         console.error('Greška pri uklanjanju korisnika:', err);
       });
   }
@@ -199,11 +193,9 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       if (!this.newGroupName.trim()) return;
   
       this.chatService.createGroup(this.newGroupName.trim(), this.currentUsername).subscribe(newGroup => {
-        alert(`Група '${newGroup.name}' је успешно креирана.`);
         this.groups.push(newGroup);    // dodajemo novu grupu u listu
         this.newGroupName = '';         // resetujemo input
       }, err => {
-        alert('Грешка приликом креирања групе: ' + err.message);
         console.error('Greška pri kreiranju grupe:', err);
       });
     }
