@@ -5,7 +5,7 @@
   <div class="profile-card">
 
     <h1 class="user-name">{{ user?.firstName || 'N/A' }} {{ user?.lastName || 'N/A' }}</h1>
-    <p class="user-email"><i class="fas fa-envelope"></i> {{ email || 'N/A' }}</p>
+    <p class="user-email"><i class="fas fa-envelope"></i> {{ user?.email || 'N/A' }}</p>
     <p class="user-location" *ngIf="user?.address">
       <i class="fas fa-map-marker-alt"></i>
       {{ user?.address?.street || '' }} {{ user?.address?.number || '' }}, 
