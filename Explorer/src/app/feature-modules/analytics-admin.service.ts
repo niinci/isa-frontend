@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from 'src/env/environment'; 
+
 
 export interface AnalyticsCountsDTO {
   weeklyComments: number;
@@ -22,7 +24,7 @@ export interface UserActivityDistributionDTO {
 })
 export class AnalyticsAdminService {
 
-  private apiUrl = 'http://localhost:8080/api/analytics';
+  private apiUrl = environment.apiHost + 'analytics'; 
 
   constructor(private http: HttpClient) {}
 
