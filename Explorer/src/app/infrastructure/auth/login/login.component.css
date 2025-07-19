@@ -1,28 +1,61 @@
-/* Form styling */
 form {
-    margin-top: 150px;
-    display: flex;
-    justify-content: center;
+  margin-top: 150px;
+  display: flex;
+  justify-content: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-div {
-    width: 400px;
-    display: flex;
-    flex-direction: column;
+.login-container {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f9f9;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.1);
 }
 
-p {
-    margin-top: 10px;
+mat-form-field {
+  margin-bottom: 20px;
 }
 
-.pink-button {
-    background-color: #ffd4e5 !important; 
-    color: #ffffff !important; 
-    border-color: transparent !important; 
-    box-shadow: none !important; 
+/* Bordo dugme */
+.bordo-button {
+  background-color: #800020 !important;
+  color: #ffffff !important;
+  border: none;
+  border-radius: 4px;
+  padding: 12px;
+  box-shadow: 0 4px 10px rgba(128, 0, 32, 0.3);
+  transition: background-color 0.3s ease;
 }
 
-.pink-button:hover {
-    background-color: #ffc1d4 !important; 
+.bordo-button:hover {
+  background-color: #a3002c !important;
 }
 
+/* Tekst ispod forme */
+.register-text {
+  margin-top: 15px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.register-text a {
+  color: #800020;
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+.register-text a:hover {
+  text-decoration: underline;
+}
+
+.form-container {
+  justify-content: center;
+  padding: 40px;
+  background-color: #fdf5f6;
+  height: 83%;
+  
+}
