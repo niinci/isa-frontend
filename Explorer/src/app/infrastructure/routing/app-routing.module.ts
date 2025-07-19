@@ -19,7 +19,8 @@ import { NavbarComponent } from 'src/app/feature-modules/layout/navbar/navbar.co
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   {path: 'home', component: HomeComponent},
-  {path: 'posts', component: PostComponent},
+  { path: 'posts', component: PostComponent, data: { adminView: false } },
+  { path: 'all-posts', component: PostComponent, data: { adminView: true } },
   {path: 'login', component: LoginComponent},
   {path: 'create-post', component: CreatePostComponent},
   {path: 'register', component: RegistrationComponent},
