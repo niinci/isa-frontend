@@ -30,7 +30,10 @@
 
             <div class="comments-section">
               <div class="post-details-section">
-              <div class="post-description-actions">
+                <p style="font-size: 1.0rem;">
+                  <i class="bi bi-person-circle"></i>&nbsp;Posted by: <strong>{{ usernameMap.get(post.userId) || 'Loading...' }}</strong>
+                </p>
+                <div class="post-description-actions">
                 <h2 class="card-title">{{ post.description }}</h2>
                 <div *ngIf="post.userId === userId || isAdminUser" class="post-action-buttons">
                   <button *ngIf="post.userId === userId" class="btn custom-edit-btn" (click)="editPost(post)">✏️ Edit</button>

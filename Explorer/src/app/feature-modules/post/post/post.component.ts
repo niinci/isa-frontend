@@ -4,6 +4,7 @@ import { PostService } from '../../post.service';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreatePostComponent } from '../create-post/create-post.component';
+import { UserAccountService } from 'src/app/user-account.service';
 
 @Component({
   selector: 'xp-post',
@@ -23,10 +24,12 @@ export class PostComponent implements OnInit {
   username: string;
   @Input() adminView: boolean = false;  // <--- novo
 
+  usernameMap = new Map<number, string>();
+
   constructor(
     private postService: PostService,
     private authService: AuthService,
-    public dialog: MatDialog
+    public dialog: MatDialog,private userAcountService:UserAccountService
   ) { }
 
   ngOnInit(): void {
@@ -48,26 +51,30 @@ export class PostComponent implements OnInit {
   
 
   loadPosts(): void {
+    const loadPostsCallback = (data: Post[]) => {
+      this.posts = data;
+      data.forEach(post => {
+        this.loadUsername(post.userId);
+      });
+    };
+  
     if (this.adminView) {
       this.postService.getAllPostsFromAllUsers().subscribe(
-        (data) => {
-          this.posts = data;
-        },
+        loadPostsCallback,
         (error) => {
           console.error('Greška pri učitavanju svih postova:', error);
         }
       );
     } else {
       this.postService.getAllPosts().subscribe(
-        (data) => {
-          this.posts = data;
-        },
+        loadPostsCallback,
         (error) => {
           console.error('Greška pri učitavanju feed postova:', error);
         }
       );
     }
   }
+  
   
 
   likePost(post: Post): void {
@@ -181,5 +188,19 @@ toggleAdvertisableStatus(post: Post): void {
     }
   });
 }
+
+loadUsername(userId: number): void {
+  if (!this.usernameMap.has(userId)) {
+    this.userAcountService.getUsernameById(userId).subscribe({
+      next: (username) => {
+        this.usernameMap.set(userId, username);
+      },
+      error: () => {
+        this.usernameMap.set(userId, 'Unknown');
+      }
+    });
+  }
+}
+
 
 }
