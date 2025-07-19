@@ -13,15 +13,18 @@
       <button (click)="searchUsers()" class="custom-btn primary-btn">
         <i class="bi bi-search"></i> Search
       </button>
+      <button (click)="resetSearch()" class="custom-btn primary-btn">
+        <i class="bi bi-x-circle"></i> Reset
+      </button>      
     </div>
 
     <div class="sort-controls modern-controls">
-      <button (click)="sortUsersByFollowingCount()" class="custom-btn secondary-btn">
+      <button (click)="sortUsersByFollowingCount()" class="custom-btn secondary-btn" >
         <i class="bi bi-person-lines-fill"></i> Sort by Followers
       </button>
-      <button (click)="sortUsersByEmail()" class="custom-btn secondary-btn">
+      <button (click)="sortUsersByEmail()" class="custom-btn secondary-btn" style="margin-top: 10px;">
         <i class="bi bi-at"></i> Sort by Email
-      </button>
+      </button>      
     </div>
   </div>
 
