@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreatePostComponent } from '../create-post/create-post.component';
 import { UserAccountService } from 'src/app/user-account.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'xp-post',
@@ -29,14 +30,20 @@ export class PostComponent implements OnInit {
   constructor(
     private postService: PostService,
     private authService: AuthService,
-    public dialog: MatDialog,private userAcountService:UserAccountService
+    public dialog: MatDialog,private userAcountService:UserAccountService,
+    private route: ActivatedRoute  // <-- dodaj
+
   ) { }
 
   ngOnInit(): void {
+    this.route.data.subscribe(data => {
+      this.adminView = data['adminView'] ?? false;
+      this.loadPosts();
+    });
+  
     this.authService.user$.subscribe(user => {
       this.isLoggedIn = !!user.username;
       this.isAdminUser = user.role === 'ADMIN';
-      // this.username = user.username; - ovo vraca EMAIL, popraviti :)
       if (this.isLoggedIn) {
         this.userId = user.id;
         this.loadLikedPosts();
@@ -44,10 +51,9 @@ export class PostComponent implements OnInit {
         this.userId = null;
         this.likedPosts.clear();
       }
-  
-      this.loadPosts(); // pozivamo ovde kad znamo sve
     });
   }
+  
   
 
   loadPosts(): void {
