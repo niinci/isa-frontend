@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserAccountService } from '../user-account.service';
 import { AuthService } from '../infrastructure/auth/auth.service';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-user-account',
   templateUrl: './users-list.component.html',
@@ -21,7 +23,8 @@ export class UserAccountComponent implements OnInit {
   };
 
   constructor(private userAccountService: UserAccountService,
-             public authService : AuthService
+    public authService : AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -66,5 +69,10 @@ export class UserAccountComponent implements OnInit {
       this.page = newPage;
       this.loadUsers();
     }
+  }
+
+  viewProfile(userId: string): void {  
+    console.log('Viewing profile for user ID:', userId);
+    this.router.navigate(['/profile', userId]);
   }
 }
