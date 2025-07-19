@@ -1,51 +1,56 @@
-<div class="container my-4">
-  <button *ngIf="isLoggedIn" class="btn btn-primary" (click)="openCreatePostDialog()">Create Your Post</button>
+<div class="container my-4 custom-post-page-container">
+  <button *ngIf="isLoggedIn" class="create-post-btn" (click)="openCreatePostDialog()">
+    <i class="bi bi-plus-circle"></i> Create Your Post </button>
+
   <div *ngIf="posts.length > 0; else noPosts">
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="row row-cols-1 row-cols-md-2 g-5 justify-content-center">
       <div *ngFor="let post of posts" class="col">
-        <div class="card shadow-sm h-100">
-          <div class="card-body">
-            <h2 class="card-title">{{ post.description }}</h2>
+        <div class="card modern-card shadow-lg h-100">
+          <div class="card-content-wrapper">
+            <div class="post-image-section">
+              <img *ngIf="post.imageUrl" [src]="getPostImageUrl(post.imageUrl)" class="post-image" alt="Post image">
+              <div *ngIf="!post.imageUrl" class="no-image-placeholder">
+                <span>No Image</span>
+              </div>
 
-            <div *ngIf="isAdminUser" class="advertise-button-wrapper">
-              <button class="advertise-btn"
-                  (click)="toggleAdvertisableStatus(post)">
-                  {{ post.isAdvertisable ? '🔕 Stop Advertising' : '📣 Advertise Post' }}
-              </button>
+              <div class="post-footer">
+                <div class="post-interaction-buttons mb-3">
+                  <button *ngIf="!post.deleted"
+                    class="btn custom-like-btn d-flex align-items-center gap-2"
+                    [ngClass]="likedPosts.get(post.id) ? 'btn-unlike' : 'btn-like'"
+                    (click)="likePost(post)">
+                    <i [ngClass]="likedPosts.get(post.id) ? 'bi bi-hand-thumbs-down-fill' : 'bi bi-hand-thumbs-up-fill'"></i>
+                    {{ likedPosts.get(post.id) ? 'Unlike' : 'Like' }}
+                  </button>
+                  <span class="likes-count-text"><strong>Likes:</strong> {{ post.likesCount }}</span>
+                </div>
+              </div>
             </div>
 
-            <img *ngIf="post.imageUrl" [src]="getPostImageUrl(post.imageUrl)" class="card-img-top mb-3" alt="Post image" style="max-height: 300px; object-fit: cover; border-radius: 8px;">
-
-            <p class="card-text">
-              <strong>Likes:</strong> {{ post.likesCount }}
-            </p>
-
-            <!-- Prikaz poruke ako korisnik nije prijavljen, samo za konkretan post -->
-            <div *ngIf="messages.get(post.id)" class="alert alert-warning p-2">
-              {{ messages.get(post.id) }}
+            <div class="comments-section">
+              <div class="post-details-section">
+              <div class="post-description-actions">
+                <h2 class="card-title">{{ post.description }}</h2>
+                <div *ngIf="post.userId === userId || isAdminUser" class="post-action-buttons">
+                  <button *ngIf="post.userId === userId" class="btn custom-edit-btn" (click)="editPost(post)">✏️ Edit</button>
+                  <button *ngIf="post.userId === userId" class="btn custom-delete-btn" (click)="deletePost(post.id)">🗑️ Delete</button>
+                  <button *ngIf="isAdminUser" class="advertise-btn" (click)="toggleAdvertisableStatus(post)">
+                    {{ post.isAdvertisable ? '🔕 Stop Advertising' : '📣 Advertise Post' }}
+                  </button>
+                </div>
+              </div>
+                <xp-comment [postId]="post.id" [isLoggedIn]="isLoggedIn"></xp-comment>
+                <div *ngIf="messages.get(post.id)" class="alert custom-alert-warning p-2 mb-3">
+                  {{ messages.get(post.id) }}
+                </div>
+              </div>
             </div>
-
-            <button *ngIf="!post.deleted"
-            class="btn d-flex align-items-center gap-2"
-            [ngClass]="likedPosts.get(post.id) ? 'btn-outline-danger' : 'btn-outline-primary'"
-            (click)="likePost(post)">
-      <i [ngClass]="likedPosts.get(post.id) ? 'bi bi-hand-thumbs-down-fill' : 'bi bi-hand-thumbs-up-fill'"></i>
-      {{ likedPosts.get(post.id) ? 'Unlike' : 'Like' }}
-    </button>              
-        
-    <!-- Prikaz dugmadi za izmenu i brisanje samo ako je korisnik autor -->
-      <div *ngIf="post.userId === userId" >
-        <button class="btn btn-outline-warning btn-sm" (click)="editPost(post)">✏️ Izmeni</button>
-        <button class="btn btn-outline-danger btn-sm" (click)="deletePost(post.id)">🗑️ Obriši</button>
-      </div>
-
-             <!-- OVDE UBACI KOMPONENTU ZA KOMENTARE -->
-             <xp-comment [postId]="post.id" [isLoggedIn]="isLoggedIn"></xp-comment>
           </div>
         </div>
       </div>
     </div>
   </div>
+  
 
   <ng-template #noPosts>
     <div class="text-center my-4">
