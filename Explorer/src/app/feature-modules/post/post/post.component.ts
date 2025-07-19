@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Post } from '../model/post.model';
 import { PostService } from '../../post.service';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
@@ -21,6 +21,7 @@ export class PostComponent implements OnInit {
   isAdminUser: boolean = false;
 
   username: string;
+  @Input() adminView: boolean = false;  // <--- novo
 
   constructor(
     private postService: PostService,
@@ -29,37 +30,45 @@ export class PostComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Praćenje statusa prijave korisnika
     this.authService.user$.subscribe(user => {
-      this.isLoggedIn = !!user.username; // Ako korisnik ima username, smatramo da je prijavljen
+      this.isLoggedIn = !!user.username;
       this.isAdminUser = user.role === 'ADMIN';
       // this.username = user.username; - ovo vraca EMAIL, popraviti :)
-
       if (this.isLoggedIn) {
-        this.userId = user.id;  // Pretpostavljam da user objekat ima id polje
+        this.userId = user.id;
         this.loadLikedPosts();
       } else {
         this.userId = null;
         this.likedPosts.clear();
       }
+  
+      this.loadPosts(); // pozivamo ovde kad znamo sve
     });
-
-    // Učitavanje postova
-    this.loadPosts();
-    //this.loadLikedPosts();
   }
+  
 
   loadPosts(): void {
-    this.postService.getAllPosts().subscribe(
-      (data) => {
-        this.posts = data;
-        console.log("Učitani postovi:", this.posts); 
-      },
-      (error) => {
-        console.error('Došlo je do greške pri učitavanju postova!', error);
-      }
-    );
+    if (this.adminView) {
+      this.postService.getAllPostsFromAllUsers().subscribe(
+        (data) => {
+          this.posts = data;
+        },
+        (error) => {
+          console.error('Greška pri učitavanju svih postova:', error);
+        }
+      );
+    } else {
+      this.postService.getAllPosts().subscribe(
+        (data) => {
+          this.posts = data;
+        },
+        (error) => {
+          console.error('Greška pri učitavanju feed postova:', error);
+        }
+      );
+    }
   }
+  
 
   likePost(post: Post): void {
     console.log('likePost called for post:', post.id);

@@ -63,4 +63,9 @@ export class PostService {
   updatePostAdvertisableStatus(postId: number, isAdvertisable: boolean): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${postId}/advertisable`, isAdvertisable);
   }
+  
+  getAllPostsFromAllUsers(): Observable<Post[]> {
+    return this.http.get<Post[]>(`${this.apiUrl}/all`);
+  }
+  
 }
