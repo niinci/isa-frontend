@@ -1,40 +1,61 @@
-<div class="search-controls">
-  <input [(ngModel)]="searchParams.firstName" placeholder="Search by first name" />
-  <input [(ngModel)]="searchParams.lastName" placeholder="Search by last name" />
-  <input [(ngModel)]="searchParams.email" placeholder="Search by email" />
-  <input [(ngModel)]="searchParams.minPosts" placeholder="Min posts" type="number" />
-  <input [(ngModel)]="searchParams.maxPosts" placeholder="Max posts" type="number" />
-  <button (click)="searchUsers()">Search</button>
-</div>
+<div class="user-list-page-container">
+  <div class="header-section">
+    <h2>Discover Users</h2>
+  </div>
 
-<div class="sort-controls">
-  <button (click)="sortUsersByFollowingCount()">Sort by followers count</button>
-  <button (click)="sortUsersByEmail()">Sort by email</button>
-</div>
+  <div class="controls-wrapper">
+    <div class="search-controls modern-controls">
+      <input [(ngModel)]="searchParams.firstName" placeholder="Search by First Name" class="custom-input" />
+      <input [(ngModel)]="searchParams.lastName" placeholder="Search by Last Name" class="custom-input" />
+      <input [(ngModel)]="searchParams.email" placeholder="Search by Email" class="custom-input" />
+      <input [(ngModel)]="searchParams.minPosts" placeholder="Min Posts" type="number" class="custom-input" />
+      <input [(ngModel)]="searchParams.maxPosts" placeholder="Max Posts" type="number" class="custom-input" />
+      <button (click)="searchUsers()" class="custom-btn primary-btn">
+        <i class="bi bi-search"></i> Search
+      </button>
+    </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Email</th>
-      <th>Post Count</th>
-      <th>Followers Count</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of users">
-      <td>{{ user.firstName }}</td>
-      <td>{{ user.lastName }}</td>
-      <td>{{ user.email }}</td>
-      <td>{{ user.postCount }}</td>
-      <td>{{ user.followersCount }}</td>
-    </tr>
-  </tbody>
-</table>
+    <div class="sort-controls modern-controls">
+      <button (click)="sortUsersByFollowingCount()" class="custom-btn secondary-btn">
+        <i class="bi bi-person-lines-fill"></i> Sort by Followers
+      </button>
+      <button (click)="sortUsersByEmail()" class="custom-btn secondary-btn">
+        <i class="bi bi-at"></i> Sort by Email
+      </button>
+    </div>
+  </div>
 
-<div class="pagination-controls">
-  <button (click)="onPageChange(page - 1)" [disabled]="page === 0">Previous</button>
-  <span>Page {{ page + 1 }} of {{ totalPages }}</span>
-  <button (click)="onPageChange(page + 1)" [disabled]="(page + 1) >= totalPages">Next</button>
+  <div *ngIf="users.length > 0; else noUsers">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 user-cards-grid">
+      <div *ngFor="let user of users" class="col">
+        <div class="user-card modern-card shadow-lg h-100">
+          <div class="card-body">
+            <h3 class="user-name">{{ user.firstName }} {{ user.lastName }}</h3>
+            <p class="user-detail"><i class="bi bi-envelope"></i> {{ user.email }}</p>
+            <p class="user-detail"><i class="bi bi-file-earmark-text"></i> Post Count: <strong>{{ user.postCount }}</strong></p>
+            <p class="user-detail"><i class="bi bi-people-fill"></i> Followers: <strong>{{ user.followersCount }}</strong></p>
+            <!--<button (click)="viewProfile(user.id)" class="custom-btn primary-btn view-profile-btn">
+              View Profile <i class="bi bi-arrow-right"></i>
+            </button>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noUsers>
+    <div class="text-center my-5">
+      <p class="text-muted no-users-message">No users found matching your criteria.</p>
+    </div>
+  </ng-template>
+
+  <div class="pagination-controls modern-controls">
+    <button (click)="onPageChange(page - 1)" [disabled]="page === 0" class="custom-btn primary-btn page-btn">
+      <i class="bi bi-chevron-left"></i> Previous
+    </button>
+    <span class="page-info">Page {{ page + 1 }} of {{ totalPages }}</span>
+    <button (click)="onPageChange(page + 1)" [disabled]="(page + 1) >= totalPages" class="custom-btn primary-btn page-btn">
+      Next <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
 </div>
