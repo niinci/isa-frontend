@@ -12,9 +12,9 @@
   border: 1px solid #e0e6ed;
 }
 
-/* Sidebar za grupe */
+/* Sidebar za grupe i opcije */
 .sidebar {
-  width: 230px;
+  width: 380px; /* Povećana širina sidebara */
   background-color: #273c75;
   color: #f5f6fa;
   padding: 25px 15px;
@@ -22,29 +22,32 @@
   flex-direction: column;
   box-sizing: border-box;
   border-right: 2px solid #192a56;
+  gap: 25px; /* Dodaje razmak između sekcija sidebara */
 }
 
 .sidebar h3 {
   margin-bottom: 20px;
   font-weight: 700;
-  font-size: 1.3rem;
+  font-size: 1.5rem; /* Povećan font za "Moje grupe" */
   border-bottom: 2px solid #40739e;
   padding-bottom: 12px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   user-select: none;
+
 }
 
 .sidebar ul {
   list-style: none;
   padding: 0;
-  margin: 0;
-  flex-grow: 1;
+  margin-right: 10xpx;
+  flex-grow: 1; 
   overflow-y: auto;
+  
 }
 
 .sidebar ul li {
-  padding: 12px 18px;
+  padding: 14px 20px; /* Povećan padding za dugme "Moje grupe" */
   border-radius: 8px;
   margin: 8px 10px;
   cursor: pointer;
@@ -52,11 +55,13 @@
   position: relative;
   font-weight: 600;
   user-select: none;
+  font-size: 1.05rem; /* Malo veći font za grupe */
 }
 
 .sidebar ul li:hover {
   background-color: #40739e;
   color: #f0f0f0;
+
 }
 
 .sidebar ul li.active {
@@ -64,11 +69,12 @@
   font-weight: 800;
   color: white;
   box-shadow: 0 0 10px #00a8ffaa;
+
 }
 
 .sidebar ul li.active::before {
   content: "\f0c0"; /* FontAwesome icon for users */
-  font-family: "Font Awesome 5 Free"; 
+  font-family: "Font Awesome 5 Free";
   font-weight: 900;
   position: absolute;
   left: 8px;
@@ -78,16 +84,271 @@
   font-size: 1rem;
 }
 
-/* Glavni deo chata */
+/* Stil za opšte sekcije unutar sidebara (npr. Kreiranje grupe, Admin panel) */
+.sidebar-section {
+    padding-top: 0; /* Razmak kontroliše sidebar gap */
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Suptilni separator */
+    margin-top: 0; /* Razmak kontroliše sidebar gap */
+}
+
+.sidebar-section:first-of-type { /* Prva sekcija unutar sidebara (može biti kreiranje grupe) */
+    border-top: none;
+}
+
+.sidebar-section h3,
+.sidebar-section h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #f5f6fa;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #40739e;
+    padding-bottom: 10px;
+}
+
+/* Stilovi za kreiranje grupe */
+.create-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.create-group input {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: 1.5px solid #40739e;
+    border-radius: 8px;
+    outline: none;
+    background-color: #35508c;
+    color: #f5f6fa;
+    box-sizing: border-box;
+}
+
+.create-group input::placeholder {
+    color: #a4b0be;
+}
+
+.create-group input:focus {
+    border-color: #00a8ff;
+    box-shadow: 0 0 5px #00a8ffaa;
+}
+
+.create-group button {
+    width: 100%;
+    background-color: #0097e6;
+    border: none;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+.create-group button:hover {
+    background-color: #0080ff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.create-group button:disabled {
+    background-color: #a4b0be;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.groups-list li {
+  padding: 10px 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 5px; /* Dodaje razmak od 5 piksela ispod svake stavke */
+  margin-right: 500px; /* Dodaje razmak od 5 piksela desno od svake stavke (ako želite horizontalni razmak) */
+}
+
+.groups-list li.active {
+  background-color: #e0e0e0;
+  font-weight: bold;
+  margin-left: 500px;
+}
+
+/* Admin panel - sada u sidebar-u */
+.admin-panel {
+    background-color: #273c75;
+    padding: 0;
+    border-radius: 0;
+    margin-bottom: 0;
+    box-shadow: none;
+    font-weight: 600;
+    color: #f5f6fa;
+}
+
+.admin-panel h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #f5f6fa;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #40739e;
+    padding-bottom: 10px;
+}
+
+/* Zajednički stilovi za add-user i remove-user sekcije unutar admin-panel-a */
+.add-user, .remove-user {
+    margin-bottom: 20px;
+}
+
+.add-user {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    position: relative;
+}
+
+.add-user input {
+    flex-grow: 1;
+    min-width: 100px;
+    padding: 10px 15px;
+    font-size: 0.95rem;
+    border: 1.5px solid #40739e;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    background-color: #35508c;
+    color: #f5f6fa;
+    box-sizing: border-box;
+}
+
+.add-user input::placeholder {
+    color: #a4b0be;
+}
+
+.add-user input:focus {
+    border-color: #00a8ff;
+    box-shadow: 0 0 5px #00a8ffaa;
+}
+
+.add-user button {
+    background-color: #0097e6;
+    border: none;
+    color: white;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+.add-user button:hover {
+    background-color: #0080ff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Remove user sekcija specifični stilovi */
+.remove-user {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.remove-user p {
+    margin-bottom: 5px;
+    font-weight: 700;
+    color: #a4b0be;
+}
+
+.members-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #40739e;
+    border-radius: 8px;
+    background-color: #35508c;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+}
+
+/* Scroll za listu članova */
+.members-list.scrollable-list {
+    max-height: 120px; /* Visina za 3-4 korisnika, prilagoditi po potrebi */
+    overflow-y: auto;
+}
+
+.members-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid #40739e;
+    color: #f5f6fa;
+    font-size: 0.9rem;
+}
+
+.members-list li:last-child {
+    border-bottom: none;
+}
+
+.members-list button {
+    background: none;
+    border: none;
+    color: #ff6b6b;
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1;
+    transition: color 0.2s ease;
+    padding: 0 5px;
+}
+
+.members-list button:hover {
+    color: #eb4d4b;
+}
+
+/* Autocomplete lista stilizacija za sidebar */
+.autocomplete-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #35508c;
+    border: 1px solid #00a8ff;
+    border-radius: 8px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    list-style-type: none;
+    padding: 5px 0;
+    margin-top: 5px;
+}
+
+.autocomplete-list li {
+    padding: 8px 15px;
+    cursor: pointer;
+    color: #f5f6fa;
+    transition: background-color 0.2s ease;
+}
+
+.autocomplete-list li:hover {
+    background-color: #40739e;
+}
+
+/* Glavni chat deo */
 .chat-box {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   padding: 25px 30px;
   box-sizing: border-box;
-  background-color: #ffffff;
   border-radius: 0 10px 10px 0;
-  box-shadow: inset 0 0 15px #f0f0f0;
+
+  background-image: url('/assets/images/buns.webp'); 
+  background-size: cover; 
+  background-position: center;
+  background-repeat: no-repeat; 
 }
 
 .chat-box h3 {
@@ -99,6 +360,26 @@
   letter-spacing: 0.05em;
 }
 
+/* Debug info u chat box-u */
+.debug-info {
+    background: #e0f7fa;
+    padding: 8px 15px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    border: 1px solid #b2ebf2;
+    color: #2f3640;
+    width: 180px;
+    height: 80px;
+}
+.debug-info p {
+    margin: 0;
+}
+.debug-info strong {
+    color: #0097e6;
+}
+
+/* Kontejner poruka sa skrolom */
 /* Kontejner poruka sa skrolom */
 .messages {
   flex-grow: 1;
@@ -108,9 +389,8 @@
   scroll-behavior: smooth;
 }
 
-/* Pojedinačna poruka */
+/* Pojedinačna poruka (opšti stil) */
 .message {
-  background-color: #dff9fb;
   border-radius: 16px;
   padding: 12px 18px;
   margin-bottom: 14px;
@@ -119,24 +399,46 @@
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   position: relative;
   font-size: 0.95rem;
-  color: #2f3640;
   line-height: 1.3;
   user-select: text;
+  color: #2f3640; /* Podrazumevana boja teksta */
 }
+
+.message.my-message {
+  background-color: #0097e6; /* Plava pozadina */
+  color: white; /* Beli tekst */
+  margin-left: auto; /* Poravnaj desno */
+}
+
+.message.my-message strong {
+    color: #dff9fb; /* Svetlija boja pošiljaoca za moje poruke */
+}
+
+/* PORUKE DRUGIH (sive) */
+.message.other-message {
+  background-color: gray; /* Intenzivna crvena */
+  color: white; /* Beli tekst */
+  margin-right: auto; /* poravnaj desno */
+
+}
+
+.message.other-message strong {
+    color: white; /* Plava boja pošiljaoca za druge poruke */
+}
+
 
 /* Sender name */
 .message strong {
   display: block;
   font-weight: 700;
   margin-bottom: 6px;
-  color: #0097e6;
   font-size: 1rem;
 }
 
 /* Timestamp */
 .timestamp {
   font-size: 0.7rem;
-  color: #718093;
+  color: rgba(255, 255, 255, 0.7); /* Svetlija boja za timestamp na plavim porukama */
   position: absolute;
   right: 14px;
   bottom: 6px;
@@ -144,59 +446,10 @@
   user-select: none;
 }
 
-/* Admin panel */
-.admin-panel {
-  background-color: #f1f2f6;
-  padding: 15px 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  box-shadow: inset 0 0 6px #dcdde1;
-  font-weight: 600;
-  color: #2f3640;
+.message.other-message .timestamp {
+    color: white; /* Tamnija boja za timestamp na sivim porukama */
 }
 
-.admin-panel h4 {
-  margin-top: 0;
-  margin-bottom: 12px;
-  color: #40739e;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-/* Dodavanje i uklanjanje korisnika */
-.admin-panel input {
-  width: calc(100% - 120px);
-  padding: 10px 15px;
-  font-size: 1rem;
-  border: 1.5px solid #dcdde1;
-  border-radius: 25px;
-  outline: none;
-  transition: border-color 0.3s ease;
-  margin-right: 10px;
-}
-
-.admin-panel input:focus {
-  border-color: #00a8ff;
-  box-shadow: 0 0 8px #00a8ff88;
-}
-
-.admin-panel button {
-  background-color: #00a8ff;
-  border: none;
-  color: white;
-  font-weight: 700;
-  font-size: 1rem;
-  padding: 10px 22px;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 3px 8px #0097e6aa;
-}
-
-.admin-panel button:hover {
-  background-color: #0080ff;
-  box-shadow: 0 4px 12px #006dcccc;
-}
 
 /* Polje za unos i dugme za slanje */
 .input-area {
@@ -257,7 +510,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #718093;
+  color: black;
   font-style: italic;
   font-size: 1.2rem;
   user-select: none;
@@ -294,12 +547,20 @@
 
   .sidebar {
     width: 100%;
-    height: 120px;
+    height: auto;
     display: flex;
-    overflow-x: auto;
+    flex-direction: column;
     padding: 10px 15px;
     border-right: none;
     border-bottom: 2px solid #192a56;
+    gap: 15px;
+  }
+
+  .sidebar h3 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    padding-bottom: 8px;
+    text-align: center;
   }
 
   .sidebar ul {
@@ -309,47 +570,43 @@
     padding: 0;
     margin: 0;
     width: 100%;
+    flex-grow: 0;
+    max-height: unset;
   }
 
   .sidebar ul li {
     margin: 0 8px;
     white-space: nowrap;
     flex-shrink: 0;
+    padding: 8px 12px;
+    font-size: 0.9rem;
   }
 
-  .chat-box {
-    flex-grow: 1;
-    padding: 20px 15px;
-    border-radius: 0;
+  .sidebar ul li.active::before {
+    display: none;
   }
+
+  .sidebar-section {
+    padding-top: 15px;
+    margin-top: 15px;
+  }
+
+  .sidebar-section h3,
+  .sidebar-section h4 {
+    font-size: 1rem;
+    padding-bottom: 8px;
+    text-align: center;
+  }
+
+  .create-group input,
+  .admin-panel input,
+  .create-group button,
+  .admin-panel button {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+
   .autocomplete-list, .members-list {
-    border: 1px solid #ccc;
-    max-height: 150px;
-    overflow-y: auto;
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
+    max-height: 100px;
   }
-  
-  .autocomplete-list li, .members-list li {
-    padding: 5px 10px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .autocomplete-list li:hover {
-    background-color: #eee;
-  }
-  
-  .members-list button {
-    background: transparent;
-    border: none;
-    color: red;
-    cursor: pointer;
-    font-size: 1.2rem;
-    line-height: 1;
-  }
-  
 }

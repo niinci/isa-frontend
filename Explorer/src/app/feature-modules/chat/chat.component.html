@@ -1,93 +1,85 @@
 <div class="chat-container">
 
-  <!-- Definiši ng-template NA VRHU -->
   <ng-template #noGroupSelected>
     <div class="chat-box placeholder">
-      <p>Изаберите групу да бисте започели ћаскање.</p>
+      <p>Select a group to start chatting.</p>
     </div>
   </ng-template>
 
-  <!-- Sidebar: Moje grupe -->
   <div class="sidebar">
-    <h3>Моје групе</h3>
+    <h3>My groups</h3>
     <ul>
-      <li *ngFor="let group of groups" 
-          (click)="selectGroup(group)" 
+      <li *ngFor="let group of groups"
+          (click)="selectGroup(group)"
           [class.active]="group === selectedGroup">
         {{ group.name }}
       </li>
     </ul>
-  </div>
 
-  <!-- Sidebar: Kreiranje grupe (vidi samo admin) -->
-  <div class="sidebar" *ngIf="userIsAdmin">
-    <h3>Креирање групе</h3>
-
-    <div class="create-group">
-      <input type="text" [(ngModel)]="newGroupName" placeholder="Унесите назив нове групе" />
-      <button (click)="createGroup()" [disabled]="!newGroupName.trim()">Креирај групу</button>
-    </div>
-  </div>
-
-  <!-- Glavni chat deo -->
-  <div class="chat-box" *ngIf="selectedGroup; else noGroupSelected">
-
-    <h3>Група: {{ selectedGroup.name }}</h3>
-
-    <!-- Debug info -->
-    <div class="debug-info" style="background:#eee; padding:8px; margin-bottom:15px; font-size:0.9rem;">
-      <p><strong>Админ групе:</strong> {{ selectedGroup.admin?.username }}</p>
-    </div>
-
-    <!-- Poruke -->
-    <div class="messages" #messagesContainer>
-      <div *ngFor="let msg of messages" class="message">
-        <strong>{{ msg.senderUsername }}:</strong> {{ msg.content }}
-        <span class="timestamp">{{ msg.timestamp | date:'shortTime' }}</span>
+    <div class="sidebar-section" *ngIf="userIsAdmin">
+      <h3>Creating a group</h3>
+      <div class="create-group">
+        <input type="text" [(ngModel)]="newGroupName" placeholder="Enter a name for the new group." />
+        <button (click)="createGroup()" [disabled]="!newGroupName.trim()">Create a group</button>
       </div>
     </div>
 
-    <!-- Panel za dodavanje/uklanjanje korisnika – SAMO za admina -->
-    <div class="admin-panel" *ngIf="userIsAdmin">
-      <h4>Опције управљања групом</h4>
+    <div class="admin-panel sidebar-section" *ngIf="userIsAdmin && selectedGroup">
+      <h4>Group management options</h4>
 
       <div class="add-user">
-        <input [(ngModel)]="usernameToAdd" 
-               placeholder="Корисничко име за додавање" 
+        <input [(ngModel)]="usernameToAdd"
+               placeholder="Username to add"
                (input)="searchUsersForAdd()"
                autocomplete="off"
         />
-        <button (click)="addUserToGroup()">Додај корисника</button>
+        <button (click)="addUserToGroup()">Add</button>
 
         <ul class="autocomplete-list" *ngIf="showUserSearchDropdown">
           <li *ngFor="let user of searchedUsers" (click)="selectUserToAdd(user)">
-            {{ user.username }}
+            👤 {{ user.username }}
           </li>
         </ul>
       </div>
 
       <div class="remove-user">
-        <input [(ngModel)]="usernameToRemove" placeholder="Корисничко име за уклањање" readonly />
-        <button (click)="removeUserFromGroup()">Уклони корисника</button>
-
-        <ul class="members-list">
+        <p><strong>Group members:</strong></p>
+        <ul class="members-list scrollable-list">
           <li *ngFor="let member of groupMembersForRemoval">
-            {{ member.username }}
-            <button (click)="removeUser(member)" title="Уклони корисника">✖</button>
+            👤{{ member.username }}
+            <button (click)="removeUser(member)" title="Remove user">✖</button>
           </li>
         </ul>
       </div>
     </div>
+  </div>
 
-    <!-- Polje za unos poruke – dostupno svima -->
+  <div class="chat-box" *ngIf="selectedGroup; else noGroupSelected">
+
+    <h3>{{ selectedGroup.name }}</h3>
+
+    <div class="debug-info">
+      <p><strong>Admin group:</strong> {{ selectedGroup.admin?.username }}</p>
+    </div>
+
+    <div class="messages" #messagesContainer>
+      <div *ngFor="let msg of messages"
+           class="message"
+           [class.my-message]="msg.senderUsername === currentUsername"
+           [class.other-message]="msg.senderUsername !== currentUsername"> 
+        <strong>{{ msg.senderUsername }}:</strong> {{ msg.content }}
+        <span class="timestamp">{{ msg.timestamp | date:'shortTime' }}</span>
+      </div>
+    </div>
+
     <div class="input-area">
-      <input type="text" 
-             placeholder="Унесите поруку..." 
-             [(ngModel)]="newMessage" 
+      <input type="text"
+             placeholder="Enter a message..."
+             [(ngModel)]="newMessage"
              (keyup.enter)="sendMessage()"
              autocomplete="off"
       />
-      <button [disabled]="!newMessage.trim()" (click)="sendMessage()">Пошаљи</button>
+      <button [disabled]="!newMessage.trim()" (click)="sendMessage()">Send</button>
     </div>
 
   </div>
