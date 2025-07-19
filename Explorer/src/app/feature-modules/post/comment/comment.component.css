@@ -1,20 +1,37 @@
 .comment-section {
   margin-top: 1rem;
+  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
+.comments-list-wrapper {
+  border: 1px solid rgba(84, 14, 14, 0.5);
+  border-radius: 6px;
+  height: 170px;
+  overflow-y: auto;
+  padding: 6px;  
+}
+
+/* Ostalo ostaje isto */
 .comment-card {
-  border: 1px solid #ddd;
   border-radius: 6px;
   padding: 0.75rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
   background-color: #f9f9f9;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .comment-content {
   margin: 0 0 0.25rem 0;
 }
 
-.comment-meta {
+.comment-meta, .comment-time {
   font-size: 0.8rem;
   color: #555;
 }
@@ -28,6 +45,7 @@
   margin-top: 1rem;
   display: flex;
   flex-direction: column;
+  width: 97%;
 }
 
 .comment-textarea {
@@ -37,21 +55,51 @@
   margin-bottom: 0.5rem;
   resize: vertical;
   border-radius: 4px;
-  border: 1px solid #ccc;
+  border: 1px solid rgba(84, 14, 14, 0.5);
 }
 
 .submit-button {
   align-self: flex-end;
   padding: 0.4rem 1rem;
-  font-size: 1rem;
-  background-color: #007bff;
+  width: 100px;  
+  background-color: #540e0e;  
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 25px;  
+  font-size: 1.1rem;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);  
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+.submit-button:hover {
+    background-color: #b00e0e;  
+    transform: translateY(-2px);  
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.submit-button i {
+    font-size: 1.3rem;
 }
 
 .submit-button:disabled {
   background-color: #aaa;
   cursor: not-allowed;
+}
+
+.alert-warning {
+    background-color: #e7a0b2;  
+    color: #850404;             
+    border: 1px solid #4f2525; 
+    border-radius: 16px;          
+    padding: 12px 16px;          
+    font-size: 1rem;            
+    font-weight: 600;            
+    margin-top: 60px;            
+    user-select: none;           
+    text-align: center;
 }
