@@ -58,7 +58,7 @@ body {
     display: flex;
     flex-direction: row; 
     padding: 20px; 
-    height: 490px;
+    height: 550px;
 }
 
 .col {

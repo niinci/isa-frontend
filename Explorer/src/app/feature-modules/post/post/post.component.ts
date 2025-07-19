@@ -20,6 +20,8 @@ export class PostComponent implements OnInit {
   userId: number | null = null;
   isAdminUser: boolean = false;
 
+  username: string;
+
   constructor(
     private postService: PostService,
     private authService: AuthService,
@@ -31,6 +33,7 @@ export class PostComponent implements OnInit {
     this.authService.user$.subscribe(user => {
       this.isLoggedIn = !!user.username; // Ako korisnik ima username, smatramo da je prijavljen
       this.isAdminUser = user.role === 'ADMIN';
+      // this.username = user.username; - ovo vraca EMAIL, popraviti :)
 
       if (this.isLoggedIn) {
         this.userId = user.id;  // Pretpostavljam da user objekat ima id polje

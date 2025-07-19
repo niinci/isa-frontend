@@ -3,10 +3,11 @@
     <i class="bi bi-plus-circle"></i> Create Your Post </button>
 
   <div *ngIf="posts.length > 0; else noPosts">
-    <div class="row row-cols-1 row-cols-md-2 g-5 justify-content-center">
+    <div class="row row-cols-1 row-cols-md-1 g-5 justify-content-center">
       <div *ngFor="let post of posts" class="col">
         <div class="card modern-card shadow-lg h-100">
           <div class="card-content-wrapper">
+            <!--<p>{{username}}</p>-->
             <div class="post-image-section">
               <img *ngIf="post.imageUrl" [src]="getPostImageUrl(post.imageUrl)" class="post-image" alt="Post image">
               <div *ngIf="!post.imageUrl" class="no-image-placeholder">
