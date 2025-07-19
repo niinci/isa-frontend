@@ -45,7 +45,7 @@
   margin-top: 1rem;
   display: flex;
   flex-direction: column;
-  width: 97%;
+  width: 100%;
 }
 
 .comment-textarea {
