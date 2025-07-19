@@ -129,10 +129,12 @@ export class PostComponent implements OnInit {
       width: '500px'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('Dialog was closed');
-      this.loadPosts(); // osveži postove nakon kreiranja
-    });
+    dialogRef.afterClosed().subscribe((newPost: Post) => {
+      if (newPost) {
+        this.posts.unshift(newPost); // ✅ Dodaj novi post na početak liste
+        this.loadUsername(newPost.userId); // 🔁 Učitaj ime korisnika
+      }
+    });    
   }
   
   getPostImageUrl(imageName: string): string {
@@ -145,11 +147,14 @@ export class PostComponent implements OnInit {
       data: { post: post }
     });
   
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadPosts(); // ili window.location.reload();
+    dialogRef.afterClosed().subscribe((updatedPost: Post) => {
+      if (updatedPost) {
+        const index = this.posts.findIndex(p => p.id === updatedPost.id);
+        if (index !== -1) {
+          this.posts[index] = updatedPost;
+        }
       }
-    });
+    });    
   }
   
   
