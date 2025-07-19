@@ -75,4 +75,16 @@ export class UserAccountComponent implements OnInit {
     console.log('Viewing profile for user ID:', userId);
     this.router.navigate(['/profile', userId]);
   }
+  resetSearch(): void {
+    this.searchParams = {
+      firstName: '',
+      lastName: '',
+      email: '',
+      minPosts: null,
+      maxPosts: null
+    };
+    this.page = 0;
+    this.loadUsers();
+  }
+  
 }

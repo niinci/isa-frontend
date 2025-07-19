@@ -1,22 +1,22 @@
 body {
-  background-color: #fcf0f2; 
-}
-
-.user-list-page-container {
+    background-color: #fcf0f2; 
+  }
+  
+  .user-list-page-container {
     max-width: 1400px; 
     margin: 30px auto; 
     padding: 40px; 
     background-color: #ffeef1; 
     border-radius: 15px; 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
-}
-
-.header-section {
+  }
+  
+  .header-section {
     text-align: center;
     margin-bottom: 40px;
-}
-
-.header-section h2 {
+  }
+  
+  .header-section h2 {
     font-size: 2.5rem;
     color: #540e0e;
     font-weight: 700;
@@ -24,9 +24,9 @@ body {
     border-bottom: 3px solid #e7a0b2; 
     padding-bottom: 10px;
     display: inline-block;
-}
-
-.controls-wrapper {
+  }
+  
+  .controls-wrapper {
     display: flex;
     flex-direction: column;
     gap: 25px;
@@ -35,15 +35,25 @@ body {
     background-color: #fce2e6; 
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-}
-
-.modern-controls {
+  }
+  
+  /* Ovo je glavni fleks kontejner za search inpute i dugmad */
+  .search-controls {
     display: flex;
-    flex-wrap: wrap; 
-    gap: 15px; 
-}
-
-.custom-input {
+    flex-wrap: nowrap;        /* Drži sve u jednoj liniji */
+    gap: 15px;
+    align-items: center;      /* Vertikalno centriraj */
+  }
+  
+  /* Za mobilne uređaje omogućava da se prelomi u kolone */
+  @media (max-width: 991px) {
+    .search-controls {
+      flex-wrap: wrap;        /* Omogući wrap na manjim ekranima */
+    }
+  }
+  
+  /* Stil za input polja */
+  .custom-input {
     padding: 10px 15px;
     border: 1px solid #e7a0b2; 
     border-radius: 20px;
@@ -51,21 +61,24 @@ body {
     color: #540e0e; 
     background-color: #fff;
     transition: all 0.3s ease;
-    flex-grow: 1; 
-    max-width: 200px; 
-}
-
-.custom-input::placeholder {
+    
+    flex: 1 1 150px;          /* Fleksibilno širina sa osnovom 150px */
+    min-width: 150px;
+    max-width: 200px;
+  }
+  
+  .custom-input::placeholder {
     color: #a0a0a0; 
-}
-
-.custom-input:focus {
+  }
+  
+  .custom-input:focus {
     border-color: #540e0e; 
     outline: none;
     box-shadow: 0 0 8px rgba(84, 14, 14, 0.2);
-}
-
-.custom-btn {
+  }
+  
+  /* Dugmad da budu fiksne širine, ne rastu */
+  .custom-btn {
     padding: 10px 20px;
     border: none;
     border-radius: 25px; 
@@ -76,60 +89,62 @@ body {
     display: flex;
     align-items: center;
     gap: 8px; 
-}
-
-.custom-btn i {
+    flex: 0 0 auto;           /* Fiksna širina */
+    white-space: nowrap;      /* Ne prelamaj tekst u dugmetu */
+  }
+  
+  .custom-btn i {
     font-size: 1.1rem;
-}
-
-.primary-btn {
+  }
+  
+  .primary-btn {
     background-color: #540e0e; 
     color: white;
     box-shadow: 0 4px 10px rgba(84, 14, 14, 0.2);
-}
-
-.primary-btn:hover {
+  }
+  
+  .primary-btn:hover {
     background-color: #b00e0e; 
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(84, 14, 14, 0.3);
-}
-
-.primary-btn:disabled {
+  }
+  
+  .primary-btn:disabled {
     background-color: #ccc;
     cursor: not-allowed;
     box-shadow: none;
     transform: none;
-}
-
-.secondary-btn {
+  }
+  
+  .secondary-btn {
     background-color: #e7a0b2; 
     color: #540e0e; 
     border: 1px solid #540e0e; 
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.secondary-btn:hover {
+  }
+  
+  .secondary-btn:hover {
     background-color: #ffeef1; 
     border-color: #b00e0e;
     color: #b00e0e;
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-}
-
-.secondary-btn:disabled {
+  }
+  
+  .secondary-btn:disabled {
     background-color: #ccc;
     color: #888;
     border-color: #aaa;
     cursor: not-allowed;
     box-shadow: none;
     transform: none;
-}
-
-.user-cards-grid {
+  }
+  
+  .user-cards-grid {
     margin-top: 30px; 
-}
-
-.user-card {
+  }
+  
+  .user-card {
     border: none; 
     border-radius: 15px; 
     background-color: #ffe1f0; 
@@ -140,121 +155,125 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between; 
-}
-
-.user-card:hover {
+  }
+  
+  .user-card:hover {
     transform: translateY(-5px); 
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
-}
-
-.user-card .card-body {
+  }
+  
+  .user-card .card-body {
     padding: 0; 
-}
-
-.user-name {
+  }
+  
+  .user-name {
     font-size: 1.6rem;
     color: #540e0e; 
     font-weight: 700;
     margin-bottom: 15px;
     border-bottom: 1px dashed #e7a0b2; 
     padding-bottom: 10px;
-}
-
-.user-detail {
+  }
+  
+  .user-detail {
     font-size: 1rem;
     color: #333;
     margin-bottom: 10px;
     display: flex;
     align-items: center;
     gap: 8px; 
-}
-
-.user-detail i {
+  }
+  
+  .user-detail i {
     color: #e7a0b2; 
     font-size: 1.1rem;
-}
-
-.user-detail strong {
+  }
+  
+  .user-detail strong {
     color: #540e0e; 
-}
-
-.view-profile-btn {
+  }
+  
+  .view-profile-btn {
     margin-top: 20px; 
     width: 100%;
-}
-
-.no-users-message {
+  }
+  
+  .no-users-message {
     font-size: 1.2rem;
     color: #540e0e;
     font-weight: 600;
-}
-
-.pagination-controls {
+  }
+  
+  .pagination-controls {
     justify-content: center; 
     margin-top: 40px; 
     gap: 20px; 
-}
-
-.pagination-controls .page-btn {
+    display: flex;
+    align-items: center;
+  }
+  
+  .pagination-controls .page-btn {
     min-width: 120px; 
-}
-
-.pagination-controls .page-info {
+  }
+  
+  .pagination-controls .page-info {
     font-size: 1.1rem;
     color: #540e0e;
     font-weight: 600;
     white-space: nowrap; 
-}
-
-@media (max-width: 991px) {
+  }
+  
+  @media (max-width: 991px) {
     .user-list-page-container {
-        padding: 25px;
+      padding: 25px;
     }
     .search-controls,
     .sort-controls {
-        flex-direction: column;  
-        align-items: stretch;  
-        gap: 10px;
+      flex-direction: column;  
+      align-items: stretch;  
+      gap: 10px;
+      flex-wrap: nowrap; 
     }
     .custom-input {
-        max-width: 100%;  
+      max-width: 100%;  
     }
     .custom-btn {
-        width: 100%;  
+      width: 100%;  
     }
     .modern-controls {
-        gap: 10px;  
+      gap: 10px; 
     }
-}
-
-@media (max-width: 767px) {
+  }
+  
+  @media (max-width: 767px) {
     .header-section h2 {
-        font-size: 2rem;
+      font-size: 2rem;
     }
     .user-card {
-        padding: 20px;  
+      padding: 20px;  
     }
     .user-name {
-        font-size: 1.4rem;
+      font-size: 1.4rem;
     }
     .user-detail {
-        font-size: 0.95rem;
+      font-size: 0.95rem;
     }
     .pagination-controls {
-        flex-wrap: wrap;  
-        gap: 15px;
+      flex-wrap: wrap;  
+      gap: 15px;
     }
     .pagination-controls .page-btn {
-        min-width: unset;  
-        flex-grow: 1;  
+      min-width: unset;  
+      flex-grow: 1;  
     }
-}
-
-@media (max-width: 575px) {
+  }
+  
+  @media (max-width: 575px) {
     .user-list-page-container {
-        padding: 15px;
+      padding: 15px;
     }
     .header-section h2 {
-        font-size: 1.8rem;
+      font-size: 1.8rem;
     }
-}
+  }
+  
