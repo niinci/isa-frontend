@@ -5,7 +5,7 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreatePostComponent } from '../create-post/create-post.component';
 import { UserAccountService } from 'src/app/user-account.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'xp-post',
@@ -31,7 +31,8 @@ export class PostComponent implements OnInit {
     private postService: PostService,
     private authService: AuthService,
     public dialog: MatDialog,private userAcountService:UserAccountService,
-    private route: ActivatedRoute  // <-- dodaj
+    private route: ActivatedRoute,  // <-- dodaj
+    private router: Router
 
   ) { }
 
@@ -213,5 +214,10 @@ loadUsername(userId: number): void {
   }
 }
 
+goToUserProfile(userId: number): void {
+  if (userId) {
+    this.router.navigate(['/profile'], { queryParams: { userId: userId } });
+  }
+}
 
 }

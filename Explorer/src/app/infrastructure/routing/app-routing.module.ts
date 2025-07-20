@@ -15,6 +15,7 @@ import { NearbyPostsComponent } from 'src/app/feature-modules/nearby-posts/nearb
 import { UserAccountComponent } from 'src/app/users-list/users-list.component';
 import { AnalyticsAdminComponent } from 'src/app/feature-modules/analytics-admin/analytics-admin/analytics-admin.component';
 import { NavbarComponent } from 'src/app/feature-modules/layout/navbar/navbar.component';
+import { RegisterAdminComponent } from '../register-admin/register-admin.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -30,6 +31,7 @@ const routes: Routes = [
   {path: 'nearby-posts', component: NearbyPostsComponent},
   {path: 'app-user-account', component: UserAccountComponent},
   {path: 'admin-analytics', component: AnalyticsAdminComponent },
+  {path: 'register-admin', component: RegisterAdminComponent}
 
 
 

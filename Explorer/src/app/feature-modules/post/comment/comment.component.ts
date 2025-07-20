@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, OnDestroy  } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnInit, OnDestroy, Output, EventEmitter  } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Comment } from '../model/comment.model';
 import { PostService } from '../../post.service';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
@@ -14,6 +14,7 @@ export class CommentComponent implements OnInit, OnDestroy  {
 
   @Input() postId!: number;
   @Input() isLoggedIn: boolean = false;
+  @Output() usernameClicked = new EventEmitter<number>();
 
   comments: Comment[] = [];
   newComment: Comment = new Comment();
@@ -26,7 +27,8 @@ export class CommentComponent implements OnInit, OnDestroy  {
   constructor(
     private route: ActivatedRoute,
     private postService: PostService,
-    private authService : AuthService
+    private authService : AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -165,5 +167,10 @@ export class CommentComponent implements OnInit, OnDestroy  {
       clearTimeout(this.commentingTimeout);
     }
   }
+  onUsernameClick(userId: number): void {
+    if (userId) {
+      this.usernameClicked.emit(userId); 
+    }
+  }
   
 }

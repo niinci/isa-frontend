@@ -28,10 +28,11 @@
     <div class="navbar-buttons">
       <button *ngIf="user && authService.isAdmin()" color="accent" [routerLink]="['/app-user-account']" routerLinkActive="active" class="navbar-button">All Accounts</button>
       <button color="accent" [routerLink]="['/posts']" routerLinkActive="active" class="navbar-button">Feed</button>
-      <button *ngIf="user && authService.isAdmin()" color="accent" [routerLink]="['/all-posts']" routerLinkActive="active" class="navbar-button">All posts</button>
+      <button *ngIf="user && authService.isAdmin()" color="accent" [routerLink]="['/all-posts']" routerLinkActive="active" class="navbar-button">All Posts</button>
       <button *ngIf="user && authService.isAdmin()" color="accent" [routerLink]="['/admin-analytics']" routerLinkActive="active" class="navbar-button">Analystics</button>
       <button *ngIf="user && user.username !== ''" color="accent" [routerLink]="['/trends']" routerLinkActive="active" class="navbar-button">Trends</button>
       <button *ngIf="user && user.username !== ''" color="accent" [routerLink]="['/nearby-posts']" routerLinkActive="active" class="navbar-button">Nearby Posts</button>
+      <button *ngIf="user && authService.isAdmin()" color="accent" [routerLink]="['/register-admin']" routerLinkActive="active" class="navbar-button">Register Admin</button>
     </div>
 
     <button *ngIf="user && user.username === ''" color="accent" [routerLink]="['/login']" routerLinkActive="active" class="navbar-button">Login</button>

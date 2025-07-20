@@ -19,6 +19,7 @@ import { ProfileComponent } from './user-profile/user-profile.component';
 import { UserAccountComponent } from './users-list/users-list.component';
 import { NgChartsModule } from 'ng2-charts';
 import { AnalyticsAdminComponent } from './feature-modules/analytics-admin/analytics-admin/analytics-admin.component';
+import { RegisterAdminComponent } from './infrastructure/register-admin/register-admin.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { AnalyticsAdminComponent } from './feature-modules/analytics-admin/analy
     NearbyPostsComponent,
     UserAccountComponent,
     AnalyticsAdminComponent,
+    RegisterAdminComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,6 +43,7 @@ import { AnalyticsAdminComponent } from './feature-modules/analytics-admin/analy
     ReactiveFormsModule,
     MatDialogModule,
     NgChartsModule, 
+    PostModule
   ],
   providers: [
   {  provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

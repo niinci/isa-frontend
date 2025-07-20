@@ -103,3 +103,13 @@
     user-select: none;           
     text-align: center;
 }
+.clickable-username {
+  cursor: pointer;
+  color: #540e0e; 
+  text-decoration: none; 
+  transition: color 0.2s ease, text-decoration 0.2s ease; 
+}
+
+.clickable-username:hover {
+  color: #b00e0e;
+}

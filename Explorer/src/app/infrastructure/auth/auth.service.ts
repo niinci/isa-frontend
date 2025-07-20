@@ -173,11 +173,14 @@ updateProfile(userId: number, profileData: any): Observable<any> {
     return !this.tokenStorage.getAccessToken();
   }
   
-  getUserById(id: number): Observable<UserInfo> {
-    const token = this.tokenStorage.getAccessToken();
-    const headers = { Authorization: `Bearer ${token}` };
-  
-    return this.http.get<UserInfo>(`${environment.apiHost}userAccount/${id}`, { headers });
+   getUserById(id: number): Observable<UserInfo> {
+   const token = this.tokenStorage.getAccessToken();
+    let headers: { [name: string]: string } = {};
+
+    if (token && token.length > 0) {
+    headers['Authorization'] = `Bearer ${token}`;
+    }
+  return this.http.get<UserInfo>(`${environment.apiHost}userAccount/${id}`, { headers });
   }
 
   isFollowing(followerId: number, followingId: number) {
@@ -210,16 +213,23 @@ updateProfile(userId: number, profileData: any): Observable<any> {
 getUsernamesByUserIds(userIds: number[]): Observable<{ userId: number; username: string }[]> {
   return this.http.post<{ userId: number; username: string }[]>(backendBaseUrl + 'api/comments/usernames', userIds);
 }
-  getUsernameById(userId: number): Observable<string> {
-  return this.http.get<string>(`/api/userAccount/${userId}/username`);
+  ggetUsernameById(userId: number): Observable<string> {
+  return this.http.get<string>(`${environment.apiHost}userAccount/${userId}/username`);
 }
   // auth.service.ts
 getUserPosts(userId: number): Observable<Post[]> {
   return this.http.get<Post[]>(`${environment.apiHost}posts/user/${userId}`);
 }
 
+registerAdmin(adminData: any): Observable<any> { // Možete definisati specifičan tip za adminData ako imate DTO
+    // Backend endpoint je /api/userAccount/admin/register
+    return this.http.post(`${environment.apiHost}userAccount/admin/register`, adminData);
+  }
   
-  
+  isLoggedIn(): boolean {
+    const user = this.user$.value;
+    return user !== undefined && user.username !== ''; // Proverava da li je korisnik ulogovan (ima username)
+  }
 
 
 
