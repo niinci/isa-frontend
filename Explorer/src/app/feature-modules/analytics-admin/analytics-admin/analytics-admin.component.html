@@ -1,12 +1,35 @@
-<h2>Analytics Counts</h2>
-<div *ngIf="counts">
-  <p>Nedeljni komentari: {{ counts.weeklyComments }}</p>
-  <p>Mesecni komentari: {{ counts.monthlyComments }}</p>
-  <p>Godisnji komentari: {{ counts.yearlyComments }}</p>
-  <p>Nedeljni postovi: {{ counts.weeklyPosts }}</p>
-  <p>Mesecni postovi: {{ counts.monthlyPosts }}</p>
-  <p>Godisnji postovi: {{ counts.yearlyPosts }}</p>
+<h2 style="margin-left: 770px; margin-top: 35px;">Overview of activities</h2>
+
+<div *ngIf="counts" class="analytics-section">
+  <table class="analytics-table no-border">
+    <thead>
+      <tr>
+        <th>Period</th>
+        <th>Posts</th>
+        <th>Comments</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Weekly</td>
+        <td>{{ counts.weeklyPosts }}</td>
+        <td>{{ counts.weeklyComments }}</td>
+      </tr>
+      <tr>
+        <td>Monthly</td>
+        <td>{{ counts.monthlyPosts }}</td>
+        <td>{{ counts.monthlyComments }}</td>
+      </tr>
+      <tr>
+        <td>Yearly</td>
+        <td>{{ counts.yearlyPosts }}</td>
+        <td>{{ counts.yearlyComments }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
-<h2>Distribucija aktivnosti korisnika</h2>
-<canvas #chart></canvas>
+<h2 style="margin-left: 770px;">User activity distribution</h2>
+<div class="chart-container">
+  <canvas #chart></canvas>
+</div>
