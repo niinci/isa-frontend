@@ -38,7 +38,7 @@
                 <h2 class="card-title">{{ post.description }}</h2>
                 <div *ngIf="post.userId === userId || isAdminUser" class="post-action-buttons">
                   <button *ngIf="post.userId === userId" class="btn custom-edit-btn" (click)="editPost(post)">✏️ Edit</button>
-                  <button *ngIf="post.userId === userId" class="btn custom-delete-btn" (click)="deletePost(post.id)">🗑️ Delete</button>
+                  <button *ngIf="post.userId === userId || isAdminUser" class="btn custom-delete-btn" (click)="deletePost(post.id)">🗑️ Delete</button>
                   <button *ngIf="isAdminUser" class="advertise-btn" (click)="toggleAdvertisableStatus(post)">
                     {{ post.isAdvertisable ? '🔕 Stop Advertising' : '📣 Advertise Post' }}
                   </button>

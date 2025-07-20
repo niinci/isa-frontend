@@ -6,6 +6,9 @@
           <p class="comment-meta">Author: 
                         <strong class="clickable-username" (click)="onUsernameClick(comment.userId)">{{ comment.username }}</strong>
           <p class="comment-time">{{ comment.formattedCommentedAt | date:'medium' }} </p>
+          <button class="deleteCommentBtn" *ngIf="isAdminUser" (click)="deleteComment(comment.id)">
+            🗑️ Delete
+          </button>
         </div>
           <p class="comment-content">{{ comment.content }}</p>
           <hr class="hr" />
