@@ -171,15 +171,14 @@ export class CommentComponent implements OnInit, OnDestroy  {
       clearTimeout(this.commentingTimeout);
     }
   }
-<<<<<<< HEAD
+
   onUsernameClick(userId: number): void {
     if (userId) {
       this.usernameClicked.emit(userId); 
     }
   }
   
-}
-=======
+
 
   deleteComment(commentId: number): void {
     if (confirm('Are you sure you want to delete this comment ?')) {
@@ -197,4 +196,4 @@ export class CommentComponent implements OnInit, OnDestroy  {
     }
   }
 }
->>>>>>> main
+
