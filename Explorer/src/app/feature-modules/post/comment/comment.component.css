@@ -99,7 +99,18 @@
     padding: 12px 16px;          
     font-size: 1rem;            
     font-weight: 600;            
-    margin-top: 60px;            
+    top: 30px;            
     user-select: none;           
     text-align: center;
+}
+
+.deleteCommentBtn {
+  background-color: #ffeef1; 
+  color: #540e0e;
+}
+
+.deleteCommentBtn:hover {
+  background-color: #ff99b3; 
+  border-color: #b00e0e;
+  color: #b00e0e;
 }
