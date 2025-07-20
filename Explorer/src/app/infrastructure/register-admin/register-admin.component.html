@@ -1,0 +1,92 @@
+<div class="register-admin-container">
+  <h2>Register New Administrator</h2>
+  <form [formGroup]="adminRegisterForm" (ngSubmit)="onSubmit()" class="admin-registration-form">
+
+    <div class="form-group">
+      <label for="firstName">First Name</label>
+      <input id="firstName" type="text" formControlName="firstName" placeholder="Enter first name">
+      <div *ngIf="adminRegisterForm.get('firstName')?.invalid && adminRegisterForm.get('firstName')?.touched" class="error-message">
+        First name is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="lastName">Last Name</label>
+      <input id="lastName" type="text" formControlName="lastName" placeholder="Enter last name">
+      <div *ngIf="adminRegisterForm.get('lastName')?.invalid && adminRegisterForm.get('lastName')?.touched" class="error-message">
+        Last name is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input id="username" type="text" formControlName="username" placeholder="Enter username">
+      <div *ngIf="adminRegisterForm.get('username')?.invalid && adminRegisterForm.get('username')?.touched" class="error-message">
+        Username is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" placeholder="Enter email">
+      <div *ngIf="adminRegisterForm.get('email')?.invalid && adminRegisterForm.get('email')?.touched" class="error-message">
+        <span *ngIf="adminRegisterForm.get('email')?.errors?.['required']">Email is required.</span>
+        <span *ngIf="adminRegisterForm.get('email')?.errors?.['email']">Enter a valid email address.</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" placeholder="Enter password">
+      <div *ngIf="adminRegisterForm.get('password')?.invalid && adminRegisterForm.get('password')?.touched" class="error-message">
+        <span *ngIf="adminRegisterForm.get('password')?.errors?.['required']">Password is required.</span>
+        <span *ngIf="adminRegisterForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters long.</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="confirmPassword">Confirm Password</label>
+      <input id="confirmPassword" type="password" formControlName="confirmPassword" placeholder="Confirm password">
+      <div *ngIf="adminRegisterForm.get('confirmPassword')?.invalid && adminRegisterForm.get('confirmPassword')?.touched" class="error-message">
+        Confirm password is required.
+      </div>
+      <div *ngIf="adminRegisterForm.errors?.['mismatch'] && adminRegisterForm.get('confirmPassword')?.touched" class="error-message">
+        Passwords do not match.
+      </div>
+    </div>
+
+    <div formGroupName="address" class="address-group">
+      <h3>Address</h3>
+      <div class="form-group">
+        <label for="street">Street</label>
+        <input id="street" type="text" formControlName="street" placeholder="Enter street">
+        <div *ngIf="adminRegisterForm.get('address.street')?.invalid && adminRegisterForm.get('address.street')?.touched" class="error-message">
+          Street is required.
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="number">Number</label>
+        <input id="number" type="text" formControlName="number" placeholder="Enter number">
+        <div *ngIf="adminRegisterForm.get('address.number')?.invalid && adminRegisterForm.get('address.number')?.touched" class="error-message">
+          Number is required.
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="city">City</label>
+        <input id="city" type="text" formControlName="city" placeholder="Enter city">
+        <div *ngIf="adminRegisterForm.get('address.city')?.invalid && adminRegisterForm.get('address.city')?.touched" class="error-message">
+          City is required.
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="country">Country</label>
+        <input id="country" type="text" formControlName="country" placeholder="Enter country">
+        <div *ngIf="adminRegisterForm.get('address.country')?.invalid && adminRegisterForm.get('address.country')?.touched" class="error-message">
+          Country is required.
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="adminRegisterForm.invalid" class="submit-button">Register Admin</button>
+  </form>
+</div>

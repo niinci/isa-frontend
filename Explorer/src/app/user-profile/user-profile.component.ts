@@ -5,6 +5,7 @@ import { UserInfo } from '../infrastructure/auth/model/userInfo.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../feature-modules/post/model/post.model';
 import { Comment } from '../feature-modules/post/model/comment.model';
+import { PostService } from '../feature-modules/post.service';
 
 const backendBaseUrl = 'http://localhost:8080/';
 
@@ -39,13 +40,18 @@ export class ProfileComponent implements OnInit {
   profileEditForm: FormGroup;
 
   isFollowing: boolean = false;
+  newCommentContent: { [postId: number]: string } = {}; // Map to store comment text for each post ID
+  likedPosts = new Map<number, boolean>(); // To track liked posts on the profile
+  messages = new Map<number, string>(); // Messages for login requirement or errors
+   isLoggedIn: boolean = false; // Add this line!
 
 
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private router:Router
+    private router:Router,
+    private postService: PostService
   ) {
     this.passwordForm = this.fb.group({
       currentPassword: ['', Validators.required],
@@ -64,17 +70,23 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService.user$.subscribe(user => {
+      this.isLoggedIn = user.id !== 0; // Set isLoggedIn based on user ID presence
+    });
     this.route.queryParams.subscribe(params => {
       const routeUserId = Number(params['userId']);
       const loggedUserId = this.authService.getCurrentUserId();
   
       if (routeUserId && routeUserId !== loggedUserId) {
+        this.loadLikedPostsForDisplayedUser(routeUserId);
         this.email = null;
         this.getUserById(routeUserId);
         this.checkIfFollowing(loggedUserId, routeUserId);
       } else {
         this.email = this.authService.user$.value.email || localStorage.getItem('email');
         this.getUser();
+        this.loadLikedPostsForDisplayedUser(loggedUserId);
+
       }
     });
   }
@@ -159,6 +171,7 @@ export class ProfileComponent implements OnInit {
           this.loadFollowing();
 
           this.loadUserPosts();
+          this.loadLikedPostsForDisplayedUser(currentUserId);
 
           this.isLoading = false;
         },
@@ -177,6 +190,7 @@ export class ProfileComponent implements OnInit {
           this.loadFollowing();
 
           this.loadUserPosts();
+          this.loadLikedPostsForDisplayedUser(this.user.id);
 
           this.isLoading = false;
         },
@@ -206,6 +220,9 @@ export class ProfileComponent implements OnInit {
         if (this.user?.id != null) {
           this.loadFollowers();
           this.loadFollowing();
+          this.loadUserPosts();
+          this.loadLikedPostsForDisplayedUser(this.authService.getCurrentUserId());
+
         }
   
         this.isLoading = false;
@@ -409,9 +426,100 @@ export class ProfileComponent implements OnInit {
     this.activeTab = 'posts'; // možeš i drugačije, po želji
   }
   
-  
+  loadLikedPostsForDisplayedUser(userId: number): void {
+    if (!this.isLoggedIn || userId === 0) { // Ensure user is logged in to check likes
+      this.likedPosts.clear();
+      return;
+    }
+
+    this.postService.getLikedPosts(userId).subscribe(posts => {
+      this.likedPosts.clear(); // Clear previous state
+      posts.forEach(post => this.likedPosts.set(post.id, true));
+    });
+  }
+
+  likePost(post: Post): void {
+    if (!this.isLoggedIn) {
+      this.messages.set(post.id, 'You need to log in to like this post');
+      setTimeout(() => this.messages.delete(post.id), 3000);
+      return;
+    }
+
+    if (this.isMyProfile) {
+      // Prevent liking your own posts if that's the desired behavior
+      return;
+    }
+
+    // Call PostService to toggle like
+    this.postService.likePost(post.id!).subscribe({
+      next: (response) => {
+        const liked = response.liked;
+        this.likedPosts.set(post.id!, liked);
+        post.likesCount += liked ? 1 : -1;
+      },
+      error: () => {
+        this.messages.set(post.id!, 'An error occurred while liking the post');
+        setTimeout(() => this.messages.delete(post.id!), 3000);
+      }
+    });
+  }
+
+  addComment(post: Post): void {
+    if (!this.isLoggedIn) {
+      this.messages.set(post.id!, 'You need to log in to comment on this post');
+      setTimeout(() => this.messages.delete(post.id!), 3000);
+      return;
+    }
+
+    if (this.isMyProfile) {
+      // Prevent commenting on your own posts if that's the desired behavior
+      return;
+    }
+
+      const commentContent = this.newCommentContent[post.id!];
+    if (!commentContent || commentContent.trim() === '') {
+      this.messages.set(post.id!, 'Comment cannot be empty.');
+      setTimeout(() => this.messages.delete(post.id!), 3000);
+      return;
+    }
+
+    // Create an instance of the Comment class
+    const newCommentInstance = new Comment();
+    newCommentInstance.id = 0; // ID will be assigned by the backend
+    newCommentInstance.content = commentContent;
+    newCommentInstance.userId = this.authService.getCurrentUserId();
+    newCommentInstance.postId = post.id!;
+    newCommentInstance.username = this.authService.user$.value.username || 'Anonymous';
+    newCommentInstance.commentedAt = new Date(); // Set it as a Date object initially
+
+    // You might need to call parseCommentedAt() here if it's meant to process
+    // the 'commentedAt' field for 'formattedCommentedAt' *before* sending to the backend,
+    // or rely on the backend to return the correct format.
+    // Given your `loadComments` logic, it seems `parseCommentedAt` is called
+    // when data is *received*. So, you likely don't need to call it here.
+
+    this.postService.addComment(post.id!, newCommentInstance).subscribe({ // Pass the class instance
+      next: (comment) => {
+        if (!post.comments) {
+          post.comments = [];
+        }
+        // When you receive the comment from the backend, it might come as a plain object.
+        // You should convert it to a Comment class instance and then parse the date.
+        const receivedComment = new Comment();
+        Object.assign(receivedComment, comment); // Copy properties from backend response
+        receivedComment.parseCommentedAt(); // Now parse the date on the received object
+
+        post.comments.push(receivedComment); // Push the correctly formatted instance
+        this.newCommentContent[post.id!] = ''; // Clear the input field
+        this.messages.delete(post.id!); // Clear any previous messages
+      },
+      error: () => {
+        this.messages.set(post.id!, 'Failed to add comment.');
+        setTimeout(() => this.messages.delete(post.id!), 3000);
+      }
+    })
 
 
-
+  }
   
 }

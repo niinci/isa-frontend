@@ -3,7 +3,8 @@
     <div *ngIf="comments.length > 0; else noComments">
       <div *ngFor="let comment of comments" class="comment-card">
         <div class="comment-header">
-          <p class="comment-meta">Author: {{ comment.username }} </p>
+          <p class="comment-meta">Author: 
+                        <strong class="clickable-username" (click)="onUsernameClick(comment.userId)">{{ comment.username }}</strong>
           <p class="comment-time">{{ comment.formattedCommentedAt | date:'medium' }} </p>
           <button class="deleteCommentBtn" *ngIf="isAdminUser" (click)="deleteComment(comment.id)">
             🗑️ Delete

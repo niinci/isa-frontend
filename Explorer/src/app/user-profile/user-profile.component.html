@@ -40,18 +40,18 @@
       <button class="tab-button" [class.active]="activeTab === 'following'" (click)="setActiveTab('following')">
         <i class="fas fa-user-friends"></i> Following
       </button>
-      <button class="tab-button" [class.active]="activeTab === 'settings'" (click)="setActiveTab('settings')">
-        <i class="fas fa-cog"></i> Settings
-      </button>
+           <button class="tab-button" [class.active]="activeTab === 'settings'" (click)="setActiveTab('settings')" *ngIf="isMyProfile">
+       <i class="fas fa-cog"></i> Settings
+    </button>
     </nav>
   </div>
 
   <!-- Tab sadržaj -->
   <div class="tab-content">
     <!-- Posts -->
-   <section *ngIf="activeTab === 'posts'" class="tab-section">
-  <h2><i class="fas fa-pen"></i> My Posts</h2>
-
+   <div class="tab-content">
+    <section *ngIf="activeTab === 'posts'" class="tab-section">
+   <h2><i class="fas fa-pen"></i> {{ isMyProfile ? 'My Posts' : 'Posts' }}</h2>
   <div *ngIf="postsLoading" class="info-box">Loading posts...</div>
   <div *ngIf="!postsLoading && userPosts.length === 0" class="info-box">No posts yet.</div>
 
@@ -69,12 +69,19 @@
       </div>
 
       <!-- Desni blok: komentari i meta -->
-      <div class="post-side-content">
-        <div class="post-meta">
-          <span class="likes">❤️ {{ post.likesCount }}</span>
-          <span class="comments-count">💬 {{ post.comments?.length || 0 }}</span>
-          <span *ngIf="post.isAdvertisable" class="advertisable">📢 Advertisable</span>
-        </div>
+     <div class="post-side-content">
+      <div class="post-meta">
+        <span class="likes">
+          <i class="fa-heart"
+             [class.far]="!likedPosts.get(post.id)"
+             [class.fas]="likedPosts.get(post.id)"
+             (click)="likePost(post)"
+             [class.liked]="likedPosts.get(post.id)"
+             *ngIf="!isMyProfile && isLoggedIn"></i> ❤️ {{ post.likesCount }}
+        </span>
+        <span class="comments-count">💬 {{ post.comments?.length || 0 }}</span>
+        <span *ngIf="post.isAdvertisable" class="advertisable">📢 Advertisable</span>
+      </div>
 
         <!-- Komentari -->
         <div *ngIf="post.comments?.length" class="comments-section">
@@ -85,6 +92,13 @@
             </li>
           </ul>
         </div>
+         <div class="comment-input-section" *ngIf="!isMyProfile && isLoggedIn">
+        <input type="text"
+               placeholder="Add a comment..."
+               [(ngModel)]="newCommentContent[post.id!]"
+               (keyup.enter)="addComment(post)" />
+        <button class="btn btn-sm btn-primary" (click)="addComment(post)">Post</button>
+      </div>
       </div>
 
     </div>
@@ -96,8 +110,10 @@
       <h2><i class="fas fa-heart"></i> My Followers</h2>
       <div *ngIf="followersLoading" class="info-box">Loading followers...</div>
       <div *ngIf="!followersLoading && followers.length === 0" class="info-box">No followers yet.</div>
-      <div *ngFor="let f of followers" class="list-card">{{ f?.username || 'Unknown' }}</div>
-    </section>
+      <div *ngFor="let f of followers" class="list-card"> 
+        <a [routerLink]="['/profile']" [queryParams]="{ userId: f.id }">{{ f?.username || 'Unknown' }}</a>
+       </div> 
+       </section>
     <!-- Dodaj negde ispod osnovnih korisničkih informacija -->
 
     <!-- Following -->
@@ -105,7 +121,9 @@
       <h2><i class="fas fa-user-check"></i> Following</h2>
       <div *ngIf="followingLoading" class="info-box">Loading following...</div>
       <div *ngIf="!followingLoading && following.length === 0" class="info-box">Not following anyone yet.</div>
-      <div *ngFor="let u of following" class="list-card">{{ u?.username || 'Unknown' }}</div>
+      <div *ngFor="let u of following" class="list-card">
+         <a [routerLink]="['/profile']" [queryParams]="{ userId: u.id }">{{ u?.username || 'Unknown' }}</a>
+         </div> 
     </section>
 
     <!-- Settings -->

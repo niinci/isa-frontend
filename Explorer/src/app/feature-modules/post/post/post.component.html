@@ -31,7 +31,8 @@
             <div class="comments-section">
               <div class="post-details-section">
                 <p class="posted-by">
-                  <i class="bi bi-person-circle"></i>&nbsp;Posted by: <strong>{{ usernameMap.get(post.userId) || 'Loading...' }}</strong>
+                  <i class="bi bi-person-circle"></i>&nbsp;Posted by: 
+                                    <strong class="clickable-username" (click)="goToUserProfile(post.userId)">{{ usernameMap.get(post.userId) || 'Loading...' }}</strong>
                 </p>
                 <div class="post-description-actions">
                 <h2 class="card-title">{{ post.description }}</h2>
@@ -43,7 +44,7 @@
                   </button>
                 </div>
               </div>
-                <xp-comment [postId]="post.id" [isLoggedIn]="isLoggedIn"></xp-comment>
+                <xp-comment [postId]="post.id" [isLoggedIn]="isLoggedIn" (usernameClicked)="goToUserProfile($event)"></xp-comment>
                 <div *ngIf="messages.get(post.id)" class="alert custom-alert-warning p-2 mb-3">
                   {{ messages.get(post.id) }}
                 </div>

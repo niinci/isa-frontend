@@ -6,6 +6,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RegistrationComponent } from './registration/registration.component';
 import { FormsModule } from '@angular/forms';
 import { ProfileComponent } from 'src/app/user-profile/user-profile.component';
+import { AppComponent } from 'src/app/app.component';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -19,10 +21,12 @@ import { ProfileComponent } from 'src/app/user-profile/user-profile.component';
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    RouterModule,
   ],
   exports: [
-    LoginComponent
+    LoginComponent,
+    ProfileComponent
   ]
 })
 export class AuthModule { }
