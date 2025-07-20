@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { ChatGroup, ChatMessageDto, ChatService } from '../chat.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { WebSocketService } from '../web-socket.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -28,6 +29,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
 
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
+  private groupMessagesSubscription?: Subscription;
 
   constructor(private chatService: ChatService, private authService: AuthService, private websocketService: WebSocketService
   ) {}
@@ -75,11 +77,18 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     this.loadMessages(group.id);
     this.loadGroupMembersForRemoval();
   
-    this.websocketService.subscribeToGroupMessages(group.id).subscribe(newMessage => {
-      this.messages.push(newMessage);
-      setTimeout(() => this.scrollToBottom(), 50);
-    });
-  }   
+    // Otkaži prethodnu pretplatu ako postoji
+    if (this.groupMessagesSubscription) {
+      this.groupMessagesSubscription.unsubscribe();
+    }
+  
+    // Nova pretplata
+    this.groupMessagesSubscription = this.websocketService.subscribeToGroupMessages(group.id)
+      .subscribe(newMessage => {
+        this.messages.push(newMessage);
+        setTimeout(() => this.scrollToBottom(), 50);
+      });
+  } 
 
   loadMessages(groupId: number): void {
     this.chatService.getLastMessages(groupId, 10).subscribe(messages => {
