@@ -22,6 +22,7 @@ export class CommentComponent implements OnInit, OnDestroy  {
   messages: string | null = null;
   commentingDisabled: boolean = false;
   private commentingTimeout: any;
+  isAdminUser: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,6 +31,9 @@ export class CommentComponent implements OnInit, OnDestroy  {
   ) {}
 
   ngOnInit(): void {
+    this.authService.user$.subscribe(user => {
+      this.isAdminUser = user.role === 'ADMIN';
+    });
 
     console.log('CommentComponent ngOnInit pokrenut, postId:', this.postId);
     this.authService.user$.subscribe(user => {
@@ -165,5 +169,20 @@ export class CommentComponent implements OnInit, OnDestroy  {
       clearTimeout(this.commentingTimeout);
     }
   }
-  
+
+  deleteComment(commentId: number): void {
+    if (confirm('Are you sure you want to delete this comment ?')) {
+      this.postService.deleteComment(commentId).subscribe({
+        next: () => {
+          this.messages = 'Comment deleted successfully!';
+          this.loadComments(); 
+          setTimeout(() => this.messages = null, 5000); 
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error('Error deleting comment!', err);
+          setTimeout(() => this.messages = null, 60000);
+        }
+      });
+    }
+  }
 }
