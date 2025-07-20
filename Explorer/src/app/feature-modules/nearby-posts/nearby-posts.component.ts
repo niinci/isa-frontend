@@ -74,13 +74,13 @@ export class NearbyPostsComponent implements AfterViewInit {
         });
 
         // Prikaz lokacija za brigu o zečevima
-        this.http.get<CareLocationDTO[]>('http://localhost:8080/api/care-locations', { headers })
+        this.http.get<CareLocationDTO[]>('http://localhost:8080/api/rabbit-care-locations', { headers })
           .subscribe({
             next: locations => {
               locations.forEach(loc => {
                 L.marker([loc.latitude, loc.longitude], { icon: this.bunnyIcon2 })
                   .addTo(this.map)
-                  .bindPopup(`<b>${loc.name}</b><br>${loc.address}`);
+                  .bindPopup(`<b>${loc.name}</b><br>`);
               });
             },
             error: err => {
