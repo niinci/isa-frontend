@@ -518,8 +518,11 @@ export class ProfileComponent implements OnInit {
         setTimeout(() => this.messages.delete(post.id!), 3000);
       }
     })
-
-
+   
+  }
+  getPostImageUrl(imageName: string): string
+  {
+    return `http:///localhost:8080/${imageName}`;
   }
   
 }

@@ -64,8 +64,8 @@
     <div class="post-horizontal-layout">
 
       <!-- Slika -->
-      <div class="post-image-wrapper" *ngIf="post.imageUrl">
-        <img [src]="post.imageUrl" alt="Post image" class="post-image" />
+      <div class="post-image-wrapper" *ngIf="getPostImageUrl(post.imageUrl)">
+        <img [src]="getPostImageUrl(post.imageUrl)" alt="Post image" class="post-image" />
       </div>
 
       <!-- Desni blok: komentari i meta -->
